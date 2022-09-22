@@ -137,6 +137,7 @@
     <Compile Include="Helpers\_utils\Logger.cs" />
     <Compile Include="Models\GRID_EDIT_SPLIT.cs" />
     <Compile Include="Models\GRID_SPLIT.cs" />
+    <Compile Include="Models\GRID_TRANSFER_NPB.cs" />
     <Compile Include="Models\TABEL_DC_HH_T.cs" />
     <Compile Include="Models\TABEL_DC_PICKBL_DTL_T.cs" />
     <Compile Include="Models\TABEL_DC_PICKBL_HDR_T.cs" />

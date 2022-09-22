@@ -52,9 +52,13 @@ namespace DCTRNNPBBL.Panels {
 
         /* Edit Split */
 
-        private BindingList<CMODEL_TABEL_DC_HH_T> blAvailableEditSplitHhPick = null;
-        private BindingList<CMODEL_TABEL_DC_HH_T> blAvailableEditSplitHhScan = null;
-        private BindingList<CMODEL_GRID_EDIT_SPLIT> blEditSplit = null;
+        private List<CMODEL_TABEL_DC_HH_T> listAvailableEditSplitHhPick = null;
+        private List<CMODEL_TABEL_DC_HH_T> listAvailableEditSplitHhScan = null;
+        private List<CMODEL_GRID_EDIT_SPLIT> listEditSplit = null;
+
+        private BindingList<CMODEL_TABEL_DC_HH_T> bindAvailableEditSplitHhPick = null;
+        private BindingList<CMODEL_TABEL_DC_HH_T> bindAvailableEditSplitHhScan = null;
+        private BindingList<CMODEL_GRID_EDIT_SPLIT> bindEditSplit = null;
 
         /* ** */
 
@@ -79,7 +83,6 @@ namespace DCTRNNPBBL.Panels {
             /* Split */
 
             listAvailableSplitHh = new List<CMODEL_TABEL_DC_HH_T>();
-
             listSelectedSplitHhPick = new List<CMODEL_TABEL_DC_HH_T>();
             listSplit = new List<CMODEL_GRID_SPLIT>(); ;
 
@@ -89,9 +92,13 @@ namespace DCTRNNPBBL.Panels {
 
             /* Edit Split */
 
-            blAvailableEditSplitHhPick = new BindingList<CMODEL_TABEL_DC_HH_T>();
-            blAvailableEditSplitHhScan = new BindingList<CMODEL_TABEL_DC_HH_T>();
-            blEditSplit = new BindingList<CMODEL_GRID_EDIT_SPLIT>();
+            listAvailableEditSplitHhPick = new List<CMODEL_TABEL_DC_HH_T>();
+            listAvailableEditSplitHhScan = new List<CMODEL_TABEL_DC_HH_T>();
+            listEditSplit = new List<CMODEL_GRID_EDIT_SPLIT>();
+
+            bindAvailableEditSplitHhPick = new BindingList<CMODEL_TABEL_DC_HH_T>(listAvailableEditSplitHhPick);
+            bindAvailableEditSplitHhScan = new BindingList<CMODEL_TABEL_DC_HH_T>(listAvailableEditSplitHhScan);
+            bindEditSplit = new BindingList<CMODEL_GRID_EDIT_SPLIT>(listEditSplit);
 
             /* ** */
 
@@ -430,8 +437,7 @@ namespace DCTRNNPBBL.Panels {
                         throw new Exception($"Gagal Set Tanggal Split");
                     }
                     _oracle.MarkSuccessExecQueryAndCommit();
-                    MessageBox.Show("Selesai", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    txtSplitNoRpb.Text = "0";
+                    MessageBox.Show("Selesai Proses", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadSplit(false);
                 }
                 catch (Exception ex) {
@@ -449,18 +455,13 @@ namespace DCTRNNPBBL.Panels {
 
         private async void LoadEditSplit(bool showEmptyMessageDialog = true) {
             SetIdleBusyStatus(false);
-            await LoadHandHeld();
-
             string ctx = "Pencarian Edit Split RPB ...";
-            DataTable dtEditSplit = new DataTable();
-
-            blAvailableEditSplitHhPick.Clear();
-            blAvailableEditSplitHhScan.Clear();
-            blEditSplit.Clear();
-
+            await LoadHandHeld();
+            listAvailableEditSplitHhPick.Clear();
+            listAvailableEditSplitHhScan.Clear();
+            listEditSplit.Clear();
             if (!string.IsNullOrEmpty(txtEditSplitNoRpb.Text)) {
-
-                // Fetch DC_PICKBL_HDR_T
+                DataTable dtEditSplit = new DataTable();
                 await Task.Run(async () => {
                     dtEditSplit = await _oracle.GetDataTableAsync($@"
                         SELECT
@@ -468,12 +469,13 @@ namespace DCTRNNPBBL.Panels {
                             a.DOC_DATE,
                             b.PLU_ID,
                             c.MBR_SINGKATAN SINGKATAN,
+                            a.TGL_SPLIT,
                             (PLA_LINE || '.' || PLA_RAK || '.' || PLA_SHELF || '.' || PLA_CELL) LOKASI,
                             b.QTY_RPB,
+                            b.TIME_PICKING,
                             b.IP_PICKING HH_PICK,
-                            b.QTY_PICKING,
-                            b.IP_SCANNING HH_SCAN,
-                            b.QTY_SCANNING
+                            b.TIME_SCANNING,
+                            b.IP_SCANNING HH_SCAN
                         FROM
                             DC_PICKBL_HDR_T a,
                             DC_PICKBL_DTL_T b,
@@ -490,7 +492,6 @@ namespace DCTRNNPBBL.Panels {
                         new CDbQueryParamBind { NAME = "doc_no", VALUE = txtEditSplitNoRpb.Text }
                     });
                 });
-
                 if (dtEditSplit.Rows.Count <= 0) {
                     if (showEmptyMessageDialog) {
                         MessageBox.Show("Tidak Ada Data Edit Split", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
@@ -499,31 +500,28 @@ namespace DCTRNNPBBL.Panels {
                 else {
                     List<CMODEL_GRID_EDIT_SPLIT> lsEditSplit = _converter.ConvertDataTableToList<CMODEL_GRID_EDIT_SPLIT>(dtEditSplit);
                     lsEditSplit.Sort((x, y) => x.PLU_ID.CompareTo(y.PLU_ID));
-
-                    await Task.Run(() => {
-                        foreach (CMODEL_TABEL_DC_HH_T hh in lsAllHh) {
-                            blAvailableEditSplitHhPick.Add(hh);
-                            blAvailableEditSplitHhScan.Add(hh);
-                        }
-                    });
-
+                    lsEditSplit.Sort((x, y) => x.TIME_SCANNING.CompareTo(y.TIME_SCANNING));
+                    lsEditSplit.Sort((x, y) => x.TIME_PICKING.CompareTo(y.TIME_PICKING));
+                    foreach (CMODEL_TABEL_DC_HH_T hh in lsAllHh) {
+                        listAvailableEditSplitHhPick.Add(hh);
+                        listAvailableEditSplitHhScan.Add(hh);
+                    }
                     txtEditSplitNoSeq.Text = lsEditSplit.First().SEQ_NO.ToString();
                     dtPckrEditSplitTglRpb.Value = lsEditSplit.First().DOC_DATE;
-
                     foreach (CMODEL_GRID_EDIT_SPLIT split in lsEditSplit) {
-                        blEditSplit.Add(split);
+                        listEditSplit.Add(split);
                     }
-                    dtGrdEditSplit.DataSource = blEditSplit;
-
+                    dtGrdEditSplit.DataSource = bindEditSplit;
                     dtGrdEditSplit.Columns["SEQ_NO"].Visible = false;
                     dtGrdEditSplit.Columns["DOC_DATE"].Visible = false;
                     dtGrdEditSplit.Columns["HH_PICK"].Visible = false;
                     dtGrdEditSplit.Columns["HH_SCAN"].Visible = false;
-
                     dtGrdEditSplit.Columns["PLU_ID"].ReadOnly = true;
                     dtGrdEditSplit.Columns["SINGKATAN"].ReadOnly = true;
+                    dtGrdEditSplit.Columns["TGL_SPLIT"].ReadOnly = true;
                     dtGrdEditSplit.Columns["LOKASI"].ReadOnly = true;
-
+                    dtGrdEditSplit.Columns["TIME_PICKING"].ReadOnly = true;
+                    dtGrdEditSplit.Columns["TIME_SCANNING"].ReadOnly = true;
                     if (!dtGrdEditSplit.Columns.Contains("IP_HH_PICK")) {
                         dtGrdEditSplit.Columns.Add(new DataGridViewComboBoxColumn {
                             Name = "IP_HH_PICK",
@@ -531,10 +529,10 @@ namespace DCTRNNPBBL.Panels {
                             DataPropertyName = "HH_PICK",
                             DisplayMember = "HH",
                             ValueMember = "HH",
-                            DataSource = blAvailableEditSplitHhPick
+                            DataSource = bindAvailableEditSplitHhPick,
+                            DisplayIndex = dtGrdEditSplit.Columns.Count - 3
                         });
                     }
-
                     if (!dtGrdEditSplit.Columns.Contains("IP_HH_SCAN")) {
                         dtGrdEditSplit.Columns.Add(new DataGridViewComboBoxColumn {
                             Name = "IP_HH_SCAN",
@@ -542,7 +540,7 @@ namespace DCTRNNPBBL.Panels {
                             DataPropertyName = "HH_SCAN",
                             DisplayMember = "HH",
                             ValueMember = "HH",
-                            DataSource = blAvailableEditSplitHhScan
+                            DataSource = bindAvailableEditSplitHhScan
                         });
                     }
                 }
@@ -550,34 +548,20 @@ namespace DCTRNNPBBL.Panels {
             else {
                 MessageBox.Show("Harap Isi DOC_NO Rpb", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            
-            if (blEditSplit != null) {
-                blEditSplit.ResetBindings();
-            }
-            if (blAvailableEditSplitHhPick != null) {
-                blAvailableEditSplitHhPick.ResetBindings();
-            }
-            if (blAvailableEditSplitHhScan != null) {
-                blAvailableEditSplitHhScan.ResetBindings();
-            }
-
+            bindAvailableEditSplitHhPick.ResetBindings();
+            bindAvailableEditSplitHhScan.ResetBindings();
+            bindEditSplit.ResetBindings();
             foreach (DataGridViewRow row in dtGrdEditSplit.Rows) {
-                // row.Cells[dtGrdEditSplit.Columns["QTY_PICKING"].Index].Value = (decimal)40;
-                // row.Cells[dtGrdEditSplit.Columns["QTY_SCANNING"].Index].Value = (decimal)20;
-                if (decimal.Parse(row.Cells[dtGrdEditSplit.Columns["QTY_PICKING"].Index].Value.ToString()) > 0) {
-                    row.Cells[dtGrdEditSplit.Columns["IP_HH_PICK"].Index].ReadOnly = true;
-                }
-                if (decimal.Parse(row.Cells[dtGrdEditSplit.Columns["QTY_SCANNING"].Index].Value.ToString()) > 0) {
-                    row.Cells[dtGrdEditSplit.Columns["IP_HH_SCAN"].Index].ReadOnly = true;
-                }
-                if (row.Cells[dtGrdEditSplit.Columns["IP_HH_PICK"].Index].ReadOnly || row.Cells[dtGrdEditSplit.Columns["IP_HH_SCAN"].Index].ReadOnly) {
-                    row.DefaultCellStyle.BackColor = Color.Empty;
-                }
-                else {
+                DateTime pickTime = DateTime.Parse(row.Cells[dtGrdEditSplit.Columns["TIME_PICKING"].Index].Value.ToString());
+                DateTime scanTime = DateTime.Parse(row.Cells[dtGrdEditSplit.Columns["TIME_SCANNING"].Index].Value.ToString());
+                if (pickTime == DateTime.MinValue && scanTime == DateTime.MinValue) {
                     row.DefaultCellStyle.BackColor = Color.FromArgb(255, 204, 0);
                 }
+                else {
+                    row.Cells[dtGrdEditSplit.Columns["IP_HH_PICK"].Index].ReadOnly = true;
+                    row.Cells[dtGrdEditSplit.Columns["IP_HH_SCAN"].Index].ReadOnly = true;
+                }
             }
-
             SetIdleBusyStatus(true);
         }
 
@@ -585,8 +569,60 @@ namespace DCTRNNPBBL.Panels {
             LoadEditSplit();
         }
 
-        private void btnEditSplitUpdate_Click(object sender, EventArgs e) {
-            //
+        private async void btnEditSplitUpdate_Click(object sender, EventArgs e) {
+            SetIdleBusyStatus(false);
+            string ctx = "Update Edit Split ...";
+            bool safeForUpdate = false;
+            List<CMODEL_GRID_EDIT_SPLIT> updateAbleSplit = new List<CMODEL_GRID_EDIT_SPLIT>();
+            foreach (CMODEL_GRID_EDIT_SPLIT data in listEditSplit) {
+                if (string.IsNullOrEmpty(data.HH_PICK) || string.IsNullOrEmpty(data.HH_SCAN)) {
+                    MessageBox.Show("Masih Ada Yang Belum Di Assign HH", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    safeForUpdate = false;
+                    break;
+                }
+                DateTime pickTime = DateTime.Parse(data.TIME_PICKING.ToString());
+                DateTime scanTime = DateTime.Parse(data.TIME_SCANNING.ToString());
+                if (pickTime == DateTime.MinValue && scanTime == DateTime.MinValue) {
+                    updateAbleSplit.Add(data);
+                    safeForUpdate = true;
+                }
+            }
+            if (safeForUpdate && updateAbleSplit.Count > 0) {
+                try {
+                    await _oracle.MarkBeforeExecQueryCommitAndRollback();
+                    foreach (CMODEL_GRID_EDIT_SPLIT data in updateAbleSplit) {
+                        bool update1 = false;
+                        await Task.Run(async () => {
+                            update1 = await _oracle.ExecQueryAsync($@"
+                                UPDATE DC_PICKBL_DTL_T
+                                    SET IP_PICKING = :ip_picking, IP_SCANNING = :ip_scanning
+                                WHERE SEQ_FK_NO = :seq_fk_no AND PLU_ID = :plu_id AND
+                                    (TIME_PICKING IS NULL OR TIME_PICKING = '') AND
+                                    (TIME_SCANNING IS NULL OR TIME_SCANNING = '')
+                            ", new List<CDbQueryParamBind> {
+                                new CDbQueryParamBind { NAME = "ip_picking", VALUE = data.HH_PICK },
+                                new CDbQueryParamBind { NAME = "ip_scanning", VALUE = data.HH_SCAN },
+                                new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = data.SEQ_NO },
+                                new CDbQueryParamBind { NAME = "plu_id", VALUE = data.PLU_ID }
+                            }, false);
+                        });
+                        if (!update1) {
+                            throw new Exception($"Gagal Mengatur HH Untuk {data.SINGKATAN}");
+                        }
+                    }
+                    _oracle.MarkSuccessExecQueryAndCommit();
+                    MessageBox.Show("Selesai Update", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadEditSplit(false);
+                }
+                catch (Exception ex) {
+                    _oracle.MarkFailExecQueryAndRollback();
+                    MessageBox.Show(ex.Message, ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else {
+                MessageBox.Show("Tidak Ada Data Yang Di Perbaharui", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            SetIdleBusyStatus(true);
         }
 
         /* ** */

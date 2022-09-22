@@ -61,6 +61,7 @@ namespace DCTRNNPBBL.Panels {
             this.label3 = new System.Windows.Forms.Label();
             this.dtGrdSplit = new System.Windows.Forms.DataGridView();
             this.tabEditSplit = new System.Windows.Forms.TabPage();
+            this.label14 = new System.Windows.Forms.Label();
             this.txtEditSplitNoSeq = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.btnEditSplitUpdate = new System.Windows.Forms.Button();
@@ -69,7 +70,6 @@ namespace DCTRNNPBBL.Panels {
             this.btnEditSplitLoad = new System.Windows.Forms.Button();
             this.dtPckrEditSplitTglRpb = new System.Windows.Forms.DateTimePicker();
             this.label8 = new System.Windows.Forms.Label();
-            this.btnEditSplitCariRpb = new System.Windows.Forms.Button();
             this.txtEditSplitNoRpb = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.tabTransferNpb = new System.Windows.Forms.TabPage();
@@ -82,7 +82,6 @@ namespace DCTRNNPBBL.Panels {
             this.button1 = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.userInfo = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdSplitHhPicking)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDomar)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -489,7 +488,6 @@ namespace DCTRNNPBBL.Panels {
             this.tabEditSplit.Controls.Add(this.btnEditSplitLoad);
             this.tabEditSplit.Controls.Add(this.dtPckrEditSplitTglRpb);
             this.tabEditSplit.Controls.Add(this.label8);
-            this.tabEditSplit.Controls.Add(this.btnEditSplitCariRpb);
             this.tabEditSplit.Controls.Add(this.txtEditSplitNoRpb);
             this.tabEditSplit.Controls.Add(this.label9);
             this.tabEditSplit.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -500,6 +498,18 @@ namespace DCTRNNPBBL.Panels {
             this.tabEditSplit.TabIndex = 1;
             this.tabEditSplit.Text = "EDIT SPLIT";
             this.tabEditSplit.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
+            this.label14.Location = new System.Drawing.Point(17, 348);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(278, 13);
+            this.label14.TabIndex = 34;
+            this.label14.Text = "* Dapat diubah jika belum pick && scan (warna kuning)";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtEditSplitNoSeq
             // 
@@ -593,27 +603,12 @@ namespace DCTRNNPBBL.Panels {
             this.label8.Text = "Tgl. RPB :";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // btnEditSplitCariRpb
-            // 
-            this.btnEditSplitCariRpb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEditSplitCariRpb.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnEditSplitCariRpb.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnEditSplitCariRpb.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnEditSplitCariRpb.Location = new System.Drawing.Point(183, 17);
-            this.btnEditSplitCariRpb.Name = "btnEditSplitCariRpb";
-            this.btnEditSplitCariRpb.Size = new System.Drawing.Size(50, 25);
-            this.btnEditSplitCariRpb.TabIndex = 21;
-            this.btnEditSplitCariRpb.Text = "Cari";
-            this.btnEditSplitCariRpb.UseVisualStyleBackColor = true;
-            // 
             // txtEditSplitNoRpb
             // 
             this.txtEditSplitNoRpb.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtEditSplitNoRpb.Location = new System.Drawing.Point(87, 17);
             this.txtEditSplitNoRpb.Name = "txtEditSplitNoRpb";
-            this.txtEditSplitNoRpb.Size = new System.Drawing.Size(90, 25);
+            this.txtEditSplitNoRpb.Size = new System.Drawing.Size(146, 25);
             this.txtEditSplitNoRpb.TabIndex = 20;
             // 
             // label9
@@ -756,18 +751,6 @@ namespace DCTRNNPBBL.Panels {
             this.userInfo.Text = ".: KodeDc - NamaDc :: UserName :.";
             this.userInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
-            this.label14.Location = new System.Drawing.Point(17, 348);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(220, 13);
-            this.label14.TabIndex = 34;
-            this.label14.Text = "* Dapat diubah jika belum piking (kuning)";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // MainApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -838,7 +821,6 @@ namespace DCTRNNPBBL.Panels {
         private System.Windows.Forms.Button btnEditSplitLoad;
         private System.Windows.Forms.DateTimePicker dtPckrEditSplitTglRpb;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button btnEditSplitCariRpb;
         private System.Windows.Forms.TextBox txtEditSplitNoRpb;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;

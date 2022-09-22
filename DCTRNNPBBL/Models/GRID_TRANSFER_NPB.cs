@@ -15,18 +15,16 @@ using System;
 
 namespace DCTRNNPBBL.Models {
 
-    public class CMODEL_GRID_EDIT_SPLIT {
-        public decimal SEQ_NO { set; get; }
-        public DateTime DOC_DATE { set; get; }
+    class CMODEL_GRID_TRANSFER_NPB {
         public decimal PLU_ID { set; get; }
         public string SINGKATAN { set; get; }
-        public DateTime TGL_SPLIT { set; get; }
         public string LOKASI { set; get; }
         public decimal QTY_RPB { set; get; }
-        public DateTime TIME_PICKING { set; get; }
-        public string HH_PICK { set; get; }
-        public DateTime TIME_SCANNING{ set; get; }
-        public string HH_SCAN { set; get; }
+        public decimal QTY_PICKING { set; get; }
+        public decimal QTY_SCANNING { set; get; }
+        public decimal PRICE { set; get; }
+        public decimal GROSS { set; get; }
+        public decimal PPN { set; get; }
     }
 
 }
