@@ -132,6 +132,7 @@
     <Compile Include="Helpers\_models\DbQueryParamBind.cs" />
     <Compile Include="Helpers\_models\ReturnDataType.cs" />
     <Compile Include="Helpers\_utils\App.cs" />
+    <Compile Include="Helpers\_utils\BindingListInvoked.cs" />
     <Compile Include="Helpers\_utils\Converter.cs" />
     <Compile Include="Helpers\_utils\Logger.cs" />
     <Compile Include="Models\GRID_EDIT_SPLIT.cs" />

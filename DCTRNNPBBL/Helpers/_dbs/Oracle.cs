@@ -164,8 +164,11 @@ namespace DCTRNNPBBL.Helpers._db {
         }
 
         public async Task<string> CekVersi() {
-            // TODO :: Bikin Cek Versi
-            return "OKE";
+            string resCekVersi = null;
+            await Task.Run(async () => {
+                resCekVersi = _app.CekVersiOracle(DbConnectionString, await GetKodeDc());
+            });
+            return resCekVersi;
         }
 
         public async Task<bool> LoginUser(string userNameNik, string password) {

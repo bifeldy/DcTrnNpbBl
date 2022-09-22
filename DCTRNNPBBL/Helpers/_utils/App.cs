@@ -18,6 +18,7 @@ using System.Windows.Forms;
 namespace DCTRNNPBBL.Helpers._utils {
 
     public interface IApp {
+        string CekVersiOracle(string connectionString, string kodeDc);
         string GetVariabelOraSql(string key);
         string GetVariabelPg(string key);
         string AppName { get; }
@@ -65,6 +66,14 @@ namespace DCTRNNPBBL.Helpers._utils {
 
         public string GetVariabelPg(string key) {
             return _SettingLibRest.GetVariabel(key);
+        }
+
+        public string CekVersiOracle(string connectionString, string kodeDc) {
+            #if !DEBUG
+                return _SettingLib.GetVersiODP(connectionString, kodeDc, AppName, AppVersion, IpAddress);
+            #else
+                return "OKE";
+            #endif
         }
 
         string IApp.AppName => AppName;
