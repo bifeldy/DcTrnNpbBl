@@ -387,8 +387,7 @@ namespace DCTRNNPBBL.Panels {
             SetIdleBusyStatus(false);
             string ctx = "Proses Split ...";
             bool safeForUpdate = false;
-
-            foreach (CMODEL_GRID_SPLIT data in blSplit) {
+            foreach (CMODEL_GRID_SPLIT data in listSplit) {
                 if (string.IsNullOrEmpty(data.HH_PICK) || string.IsNullOrEmpty(data.HH_SCAN)) {
                     MessageBox.Show("Masih Ada Yang Belum Di Assign HH", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     safeForUpdate = false;
@@ -396,12 +395,10 @@ namespace DCTRNNPBBL.Panels {
                 }
                 safeForUpdate = true;
             }
-
-            if (safeForUpdate) {
+            if (safeForUpdate && listSplit.Count > 0) {
                 try {
                     await _oracle.MarkBeforeExecQueryCommitAndRollback();
-
-                    foreach (CMODEL_GRID_SPLIT data in blSplit) {
+                    foreach (CMODEL_GRID_SPLIT data in listSplit) {
                         bool update1 = false;
                         await Task.Run(async () => {
                             update1 = await _oracle.ExecQueryAsync($@"
@@ -419,7 +416,6 @@ namespace DCTRNNPBBL.Panels {
                             throw new Exception($"Gagal Mengatur HH Untuk {data.SINGKATAN}");
                         }
                     }
-
                     bool update2 = false;
                     await Task.Run(async () => {
                         update2 = await _oracle.ExecQueryAsync($@"
@@ -433,9 +429,7 @@ namespace DCTRNNPBBL.Panels {
                     if (!update2) {
                         throw new Exception($"Gagal Set Tanggal Split");
                     }
-
                     _oracle.MarkSuccessExecQueryAndCommit();
-
                     MessageBox.Show("Selesai", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     txtSplitNoRpb.Text = "0";
                     LoadSplit(false);
@@ -448,7 +442,6 @@ namespace DCTRNNPBBL.Panels {
             else {
                 MessageBox.Show("Tidak Ada Data Yang Di Proses", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
             SetIdleBusyStatus(true);
         }
 
