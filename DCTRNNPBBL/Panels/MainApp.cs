@@ -46,9 +46,9 @@ namespace DCTRNNPBBL.Panels {
         private List<CMODEL_TABEL_DC_HH_T> listSelectedSplitHhPick = null;
         private List<CMODEL_GRID_SPLIT> listSplit = null;
 
-        private BindingList<CMODEL_TABEL_DC_HH_T> blAvailableSplitHh = null;
-        private BindingList<CMODEL_TABEL_DC_HH_T> blSelectedSplitHhPick = null;
-        private BindingList<CMODEL_GRID_SPLIT> blSplit = null;
+        private BindingList<CMODEL_TABEL_DC_HH_T> bindAvailableSplitHh = null;
+        private BindingList<CMODEL_TABEL_DC_HH_T> bindSelectedSplitHhPick = null;
+        private BindingList<CMODEL_GRID_SPLIT> bindSplit = null;
 
         /* Edit Split */
 
@@ -83,9 +83,9 @@ namespace DCTRNNPBBL.Panels {
             listSelectedSplitHhPick = new List<CMODEL_TABEL_DC_HH_T>();
             listSplit = new List<CMODEL_GRID_SPLIT>(); ;
 
-            blAvailableSplitHh = new BindingList<CMODEL_TABEL_DC_HH_T>(listAvailableSplitHh);
-            blSelectedSplitHhPick = new BindingList<CMODEL_TABEL_DC_HH_T>(listSelectedSplitHhPick);
-            blSplit = new BindingList<CMODEL_GRID_SPLIT>(listSplit);
+            bindAvailableSplitHh = new BindingList<CMODEL_TABEL_DC_HH_T>(listAvailableSplitHh);
+            bindSelectedSplitHhPick = new BindingList<CMODEL_TABEL_DC_HH_T>(listSelectedSplitHhPick);
+            bindSplit = new BindingList<CMODEL_GRID_SPLIT>(listSplit);
 
             /* Edit Split */
 
@@ -161,11 +161,11 @@ namespace DCTRNNPBBL.Panels {
             }
             cmbBxSplitHhPicking.DisplayMember = "HH";
             cmbBxSplitHhPicking.ValueMember = "HH";
-            cmbBxSplitHhPicking.DataSource = blAvailableSplitHh;
+            cmbBxSplitHhPicking.DataSource = bindAvailableSplitHh;
             cmbBxSplitHhScanning.DisplayMember = "HH";
             cmbBxSplitHhScanning.ValueMember = "HH";
-            cmbBxSplitHhScanning.DataSource = blAvailableSplitHh;
-            dtGrdSplitHhPicking.DataSource = blSelectedSplitHhPick;
+            cmbBxSplitHhScanning.DataSource = bindAvailableSplitHh;
+            dtGrdSplitHhPicking.DataSource = bindSelectedSplitHhPick;
             dtGrdSplitHhPicking.Columns["NO_HH"].Visible = false;
             dtGrdSplitHhPicking.Columns["DC_ID"].Visible = false;
             dtGrdSplitHhPicking.Columns["BAGIAN"].Visible = false;
@@ -186,8 +186,8 @@ namespace DCTRNNPBBL.Panels {
             if (selectedSplitHhScan != null) {
                 listAvailableSplitHh.Remove(listAvailableSplitHh.SingleOrDefault(l => l.HH == selectedSplitHhScan.HH));
             }
-            blAvailableSplitHh.ResetBindings();
-            blSelectedSplitHhPick.ResetBindings();
+            bindAvailableSplitHh.ResetBindings();
+            bindSelectedSplitHhPick.ResetBindings();
         }
 
         private void AddSplitHhPick() {
@@ -199,8 +199,8 @@ namespace DCTRNNPBBL.Panels {
                     listSelectedSplitHhPick.Add(d);
                 });
                 listSelectedSplitHhPick.Sort((x, y) => x.HH.CompareTo(y.HH));
-                blAvailableSplitHh.ResetBindings();
-                blSelectedSplitHhPick.ResetBindings();
+                bindAvailableSplitHh.ResetBindings();
+                bindSelectedSplitHhPick.ResetBindings();
                 SetIdleBusyStatus(true);
             }
         }
@@ -214,8 +214,8 @@ namespace DCTRNNPBBL.Panels {
                     listAvailableSplitHh.Add(d);
                 });
                 listAvailableSplitHh.Sort((x, y) => x.HH.CompareTo(y.HH));
-                blAvailableSplitHh.ResetBindings();
-                blSelectedSplitHhPick.ResetBindings();
+                bindAvailableSplitHh.ResetBindings();
+                bindSelectedSplitHhPick.ResetBindings();
                 SetIdleBusyStatus(true);
             }
         }
@@ -224,7 +224,7 @@ namespace DCTRNNPBBL.Panels {
             if (programIdle) {
                 SetIdleBusyStatus(false);
                 CMODEL_TABEL_DC_HH_T z = listAvailableSplitHh.Where(d => d.HH == cmbBxSplitHhPicking.SelectedValue.ToString()).ToList().First();
-                listAvailableSplitHh.Remove(blAvailableSplitHh.SingleOrDefault(l => l.HH == z.HH));
+                listAvailableSplitHh.Remove(bindAvailableSplitHh.SingleOrDefault(l => l.HH == z.HH));
                 if (selectedSplitHhScan != null) {
                     listAvailableSplitHh.Add(selectedSplitHhScan);
                     listAvailableSplitHh.Sort((x, y) => x.HH.CompareTo(y.HH));
@@ -233,7 +233,7 @@ namespace DCTRNNPBBL.Panels {
                 foreach (CMODEL_GRID_SPLIT s in listSplit) {
                     s.HH_SCAN = z.HH;
                 }
-                blAvailableSplitHh.ResetBindings();
+                bindAvailableSplitHh.ResetBindings();
                 SetIdleBusyStatus(true);
             }
         }
@@ -294,7 +294,7 @@ namespace DCTRNNPBBL.Panels {
                     foreach (CMODEL_GRID_SPLIT split in lsSplit) {
                         listSplit.Add(split);
                     }
-                    dtGrdSplit.DataSource = blSplit;
+                    dtGrdSplit.DataSource = bindSplit;
                     dtGrdSplit.Columns["SEQ_NO"].Visible = false;
                     dtGrdSplit.Columns["DOC_DATE"].Visible = false;
                     dtGrdSplit.Columns["HH_PICK"].Visible = false;
@@ -311,7 +311,7 @@ namespace DCTRNNPBBL.Panels {
                             DataPropertyName = "HH_PICK",
                             DisplayMember = "HH",
                             ValueMember = "HH",
-                            DataSource = blSelectedSplitHhPick
+                            DataSource = bindSelectedSplitHhPick
                         });
                     }
                 }
@@ -319,8 +319,8 @@ namespace DCTRNNPBBL.Panels {
             else {
                 MessageBox.Show("Harap Isi DOC_NO Rpb", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            blSelectedSplitHhPick.ResetBindings();
-            blSplit.ResetBindings();
+            bindSelectedSplitHhPick.ResetBindings();
+            bindSplit.ResetBindings();
             SetIdleBusyStatus(true);
         }
 
@@ -344,7 +344,7 @@ namespace DCTRNNPBBL.Panels {
             try {
                 string ctx = "Delete HH Picking ...";
                 if (e.ColumnIndex == dtGrdSplitHhPicking.Columns["X"].Index) {
-                    if (blSelectedSplitHhPick.Count > 1) {
+                    if (bindSelectedSplitHhPick.Count > 1) {
                         bool safeForDelete = true;
                         string HH_PICK = dtGrdSplitHhPicking.Rows[e.RowIndex].Cells[dtGrdSplitHhPicking.Columns["HH"].Index].Value.ToString();
                         foreach (CMODEL_GRID_SPLIT data in listSplit) {
@@ -372,7 +372,7 @@ namespace DCTRNNPBBL.Panels {
 
         private void btnSplitHhPicking_Click(object sender, EventArgs e) {
             string ctx = "Atur HH Split ...";
-            if (blSelectedSplitHhPick.Count <= 0) {
+            if (bindSelectedSplitHhPick.Count <= 0) {
                 MessageBox.Show("Harap Input HH Picking", ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else {
@@ -380,7 +380,7 @@ namespace DCTRNNPBBL.Panels {
                     listSplit[i].HH_PICK = listSelectedSplitHhPick[i % listSelectedSplitHhPick.Count].HH;
                 }
             }
-            blSplit.ResetBindings();
+            bindSplit.ResetBindings();
         }
 
         private async void btnSplitProses_Click(object sender, EventArgs e) {
