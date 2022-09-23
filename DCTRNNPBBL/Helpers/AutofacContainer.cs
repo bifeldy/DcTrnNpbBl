@@ -59,6 +59,7 @@ namespace DCTRNNPBBL.Helpers {
             builder.RegisterType<CApp>().As<IApp>().SingleInstance();
             builder.RegisterType<CLogger>().As<ILogger>().SingleInstance();
             builder.RegisterType<CConverter>().As<IConverter>().SingleInstance();
+            builder.RegisterType<CApi>().As<IApi>().SingleInstance();
 
             /* Database Repossitories */
             builder.RegisterType<COracle>().As<IOracle>().SingleInstance();

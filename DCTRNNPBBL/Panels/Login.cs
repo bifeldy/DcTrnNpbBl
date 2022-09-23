@@ -74,9 +74,6 @@ namespace DCTRNNPBBL.Panels {
 
         private void ShowMainAppPanel() {
 
-            // Set Statusbar Information
-            _globals.Main.Text = $"{_app.AppName} - {_oracle.LoggedInUsername}";
-
             // Change Window Size & Position To Middle Screen
             _globals.Main.Width = 800;
             _globals.Main.Height = 600;

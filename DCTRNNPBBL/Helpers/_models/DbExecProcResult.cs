@@ -6,25 +6,19 @@
  * Department   :: IT SD 03
  * Mail         :: bias@indomaret.co.id
  * 
- * Catatan      :: Untuk Balikan Data Hasil Query Bebas / Asal
+ * Catatan      :: Query Binding Dengan Parameter Turunan `DbParameter`
  *              :: Tidak Untuk Didaftarkan Ke DI Container
  * 
  */
 
+using System.Data.Common;
+
 namespace DCTRNNPBBL.Helpers._models {
 
-    public enum EReturnDataType {
-        FLOAT,
-        DOUBLE,
-        DECIMAL,
-        INT,
-        INT32,
-        INTEGER,
-        INT64,
-        LONG,
-        BYTE,
-        STR,
-        STRING,
+    public class CDbExecProcResult {
+        public bool STATUS { get; set; }
+        public string QUERY { get; set; }
+        public DbParameterCollection PARAMETERS { get; set; }
     }
 
 }

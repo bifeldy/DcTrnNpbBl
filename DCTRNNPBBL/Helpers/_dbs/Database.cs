@@ -24,6 +24,7 @@ using DCTRNNPBBL.Helpers._utils;
 namespace DCTRNNPBBL.Helpers._db {
 
     public interface IDatabase {
+        string DbName { get; set; }
         Task MarkBeforeExecQueryCommitAndRollback();
         void MarkSuccessExecQueryAndCommit();
         void MarkFailExecQueryAndRollback();
@@ -113,13 +114,25 @@ namespace DCTRNNPBBL.Helpers._db {
                     object _obj = await databaseCommand.ExecuteScalarAsync();
                     switch (returnType) {
                         case EReturnDataType.FLOAT:
+                            result = (_obj == null) ? 0 : float.Parse(_obj.ToString());
+                            break;
                         case EReturnDataType.DOUBLE:
-                            result = (_obj == null) ? 0 : Convert.ToDouble(_obj.ToString());
+                            result = (_obj == null) ? 0 : double.Parse(_obj.ToString());
+                            break;
+                        case EReturnDataType.DECIMAL:
+                            result = (_obj == null) ? 0 : decimal.Parse(_obj.ToString());
                             break;
                         case EReturnDataType.INT:
                         case EReturnDataType.INT32:
                         case EReturnDataType.INTEGER:
-                            result = (_obj == null) ? 0 : Convert.ToInt32(_obj.ToString());
+                            result = (_obj == null) ? 0 : int.Parse(_obj.ToString());
+                            break;
+                        case EReturnDataType.INT64:
+                        case EReturnDataType.LONG:
+                            result = (_obj == null) ? 0 : long.Parse(_obj.ToString());
+                            break;
+                        case EReturnDataType.BYTE:
+                            result = (_obj == null) ? 0 : byte.Parse(_obj.ToString());
                             break;
                         case EReturnDataType.STR:
                         case EReturnDataType.STRING:
@@ -174,16 +187,20 @@ namespace DCTRNNPBBL.Helpers._db {
             return result;
         }
 
-        protected virtual async Task<bool> ExecProcedureAsync(DbCommand databaseCommand, bool autoCloseConnection = true) {
-            bool result = false;
+        protected virtual async Task<CDbExecProcResult> ExecProcedureAsync(DbCommand databaseCommand, bool autoCloseConnection = true) {
+            CDbExecProcResult result = new CDbExecProcResult {
+                STATUS = false,
+                QUERY = databaseCommand.CommandText,
+                PARAMETERS = databaseCommand.Parameters
+            };
             try {
                 if (DatabaseConnection.State == ConnectionState.Open) {
                     throw new Exception("Database Connection Already In Use!");
                 }
                 else {
                     await DatabaseConnection.OpenAsync();
-                    // databaseCommand.CommandType = CommandType.StoredProcedure;
-                    result = await databaseCommand.ExecuteNonQueryAsync() == -1;
+                    result.STATUS = await databaseCommand.ExecuteNonQueryAsync() == -1;
+                    result.PARAMETERS = databaseCommand.Parameters;
                 }
             }
             catch (Exception ex) {

@@ -65,7 +65,7 @@ namespace DCTRNNPBBL.Panels {
             // Check Version
             string responseCekProgram = null;
             await Task.Run(async () => {
-                _globals.Main.StatusStripContainer.Items["statusStripKodeDc"].Text = $"{await _oracle.GetKodeDc()} - {await _oracle.GetNamaDc()}";
+                _globals.Main.StatusStripContainer.Items["statusStripKodeDc"].Text = _oracle.DbName;
                 responseCekProgram = await _oracle.CekVersi();
             });
 

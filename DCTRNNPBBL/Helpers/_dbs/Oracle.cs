@@ -29,7 +29,7 @@ namespace DCTRNNPBBL.Helpers._db {
         Task<DataTable> GetDataTableAsync(string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = true);
         Task<dynamic> ExecScalarAsync(EReturnDataType returnType, string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = true);
         Task<bool> ExecQueryAsync(string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = true);
-        Task<bool> ExecProcedureAsync(string procedureName, List<CDbQueryParamBind> bindParam = null, bool closeConnection = true);
+        Task<CDbExecProcResult> ExecProcedureAsync(string procedureName, List<CDbQueryParamBind> bindParam = null, bool closeConnection = true);
         Task<int> UpdateTable(DataSet dataSet, string dataSetTableName, string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = true);
         Task<DbDataReader> ExecReaderAsync(string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = false);
         Task<string> RetrieveBlob(string stringPathDownload, string stringFileName, string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = false);
@@ -44,8 +44,8 @@ namespace DCTRNNPBBL.Helpers._db {
 
         private readonly IApp _app;
 
-        private DbCommand DatabaseCommand { get; set; }
-        private DbDataAdapter DatabaseAdapter { get; set; }
+        private OracleCommand DatabaseCommand { get; set; }
+        private OracleDataAdapter DatabaseAdapter { get; set; }
 
         private string DcCode;
         private string DcName;
@@ -71,7 +71,7 @@ namespace DCTRNNPBBL.Helpers._db {
             DbConnectionString = $"Data Source={DbTnsOdp};User ID={DbUsername};Password={DbPassword};";
             DatabaseConnection = new OracleConnection(DbConnectionString);
             DatabaseCommand = new OracleCommand("", (OracleConnection) DatabaseConnection);
-            DatabaseAdapter = new OracleDataAdapter((OracleCommand) DatabaseCommand);
+            DatabaseAdapter = new OracleDataAdapter(DatabaseCommand);
         }
 
         private void BindQueryParameter(List<CDbQueryParamBind> parameters) {
@@ -97,36 +97,35 @@ namespace DCTRNNPBBL.Helpers._db {
 
         public async Task<DataTable> GetDataTableAsync(string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = true) {
             DatabaseCommand.CommandText = queryString;
+            DatabaseCommand.CommandType = CommandType.Text;
             BindQueryParameter(bindParam);
             return await base.GetDataTableAsync(DatabaseAdapter, closeConnection);
         }
 
         public async Task<dynamic> ExecScalarAsync(EReturnDataType returnType, string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = true) {
             DatabaseCommand.CommandText = queryString;
+            DatabaseCommand.CommandType = CommandType.Text;
             BindQueryParameter(bindParam);
             return await base.ExecScalarAsync(DatabaseCommand, returnType, closeConnection);
         }
 
         public async Task<bool> ExecQueryAsync(string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = true) {
             DatabaseCommand.CommandText = queryString;
+            DatabaseCommand.CommandType = CommandType.Text;
             BindQueryParameter(bindParam);
             return await base.ExecQueryAsync(DatabaseCommand, closeConnection);
         }
 
-        public async Task<bool> ExecProcedureAsync(string procedureName, List<CDbQueryParamBind> bindParam = null, bool closeConnection = true) {
-            string sqlTextQueryParameters = "(";
-            for (int i = 0; i < bindParam.Count; i++) {
-                sqlTextQueryParameters += $"'{bindParam[i].VALUE}'";
-                if (i + 1 < bindParam.Count) sqlTextQueryParameters += ",";
-            }
-            sqlTextQueryParameters += ")";
-            DatabaseCommand.CommandText = $"CALL {procedureName} {sqlTextQueryParameters}";
+        public async Task<CDbExecProcResult> ExecProcedureAsync(string procedureName, List<CDbQueryParamBind> bindParam = null, bool closeConnection = true) {
+            DatabaseCommand.CommandText = procedureName;
+            DatabaseCommand.CommandType = CommandType.StoredProcedure;
             BindQueryParameter(bindParam);
             return await base.ExecProcedureAsync(DatabaseCommand, closeConnection);
         }
 
         public async Task<int> UpdateTable(DataSet dataSet, string dataSetTableName, string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = true) {
             DatabaseCommand.CommandText = queryString;
+            DatabaseCommand.CommandType = CommandType.Text;
             BindQueryParameter(bindParam);
             return await base.UpdateTable(DatabaseAdapter, dataSet, dataSetTableName, closeConnection);
         }
@@ -134,6 +133,7 @@ namespace DCTRNNPBBL.Helpers._db {
         /// <summary> Jangan Lupa Di Close !!</summary>
         public async Task<DbDataReader> ExecReaderAsync(string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = false) {
             DatabaseCommand.CommandText = queryString;
+            DatabaseCommand.CommandType = CommandType.Text;
             BindQueryParameter(bindParam);
             return await base.ExecReaderAsync(DatabaseCommand, closeConnection);
         }
@@ -141,6 +141,7 @@ namespace DCTRNNPBBL.Helpers._db {
         /// <summary> Jangan Lupa Di Close !!</summary>
         public async Task<string> RetrieveBlob(string stringPathDownload, string stringFileName, string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = false) {
             DatabaseCommand.CommandText = queryString;
+            DatabaseCommand.CommandType = CommandType.Text;
             BindQueryParameter(bindParam);
             return await base.RetrieveBlob(DatabaseCommand, stringPathDownload, stringFileName, closeConnection);
         }

@@ -40,9 +40,9 @@ namespace DCTRNNPBBL.Panels {
             this.tabHome = new System.Windows.Forms.TabPage();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.tabSplit = new System.Windows.Forms.TabPage();
-            this.txtSplitNoSeq = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
+            this.txtSplitDcKode = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.lblSplitRecHh = new System.Windows.Forms.Label();
             this.btnSplitSetHhScanning = new System.Windows.Forms.Button();
             this.cmbBxSplitHhScanning = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -61,6 +61,8 @@ namespace DCTRNNPBBL.Panels {
             this.label3 = new System.Windows.Forms.Label();
             this.dtGrdSplit = new System.Windows.Forms.DataGridView();
             this.tabEditSplit = new System.Windows.Forms.TabPage();
+            this.txtEditSplitDcKode = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.txtEditSplitNoSeq = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
@@ -73,6 +75,16 @@ namespace DCTRNNPBBL.Panels {
             this.txtEditSplitNoRpb = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.tabTransferNpb = new System.Windows.Forms.TabPage();
+            this.txtTransferNpbDcKode = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.txtTransferNpbNoSeq = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.btnTransferNpbLoad = new System.Windows.Forms.Button();
+            this.dtPckrTransferNpbTglRpb = new System.Windows.Forms.DateTimePicker();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtTransferNpbNoRpb = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.btnTransferProsesNpb = new System.Windows.Forms.Button();
             this.dtGrdTransferNpb = new System.Windows.Forms.DataGridView();
             this.tabResendNpb = new System.Windows.Forms.TabPage();
@@ -82,6 +94,10 @@ namespace DCTRNNPBBL.Panels {
             this.button1 = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.userInfo = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.chkSemuaKolom = new System.Windows.Forms.CheckBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.txtSplitNoSeq = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdSplitHhPicking)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDomar)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -160,7 +176,7 @@ namespace DCTRNNPBBL.Panels {
             // prgrssBrStatus
             // 
             this.prgrssBrStatus.ForeColor = System.Drawing.Color.GreenYellow;
-            this.prgrssBrStatus.Location = new System.Drawing.Point(563, 53);
+            this.prgrssBrStatus.Location = new System.Drawing.Point(563, 46);
             this.prgrssBrStatus.MarqueeAnimationSpeed = 25;
             this.prgrssBrStatus.Name = "prgrssBrStatus";
             this.prgrssBrStatus.Size = new System.Drawing.Size(139, 10);
@@ -172,7 +188,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             this.lblStatus.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
-            this.lblStatus.Location = new System.Drawing.Point(560, 31);
+            this.lblStatus.Location = new System.Drawing.Point(560, 24);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(142, 23);
             this.lblStatus.TabIndex = 19;
@@ -216,9 +232,11 @@ namespace DCTRNNPBBL.Panels {
             // 
             // tabSplit
             // 
+            this.tabSplit.Controls.Add(this.txtSplitDcKode);
+            this.tabSplit.Controls.Add(this.label19);
             this.tabSplit.Controls.Add(this.txtSplitNoSeq);
             this.tabSplit.Controls.Add(this.label11);
-            this.tabSplit.Controls.Add(this.label10);
+            this.tabSplit.Controls.Add(this.lblSplitRecHh);
             this.tabSplit.Controls.Add(this.btnSplitSetHhScanning);
             this.tabSplit.Controls.Add(this.cmbBxSplitHhScanning);
             this.tabSplit.Controls.Add(this.label6);
@@ -249,36 +267,36 @@ namespace DCTRNNPBBL.Panels {
             this.tabSplit.Text = "SPLIT";
             this.tabSplit.UseVisualStyleBackColor = true;
             // 
-            // txtSplitNoSeq
+            // txtSplitDcKode
             // 
-            this.txtSplitNoSeq.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txtSplitNoSeq.Enabled = false;
-            this.txtSplitNoSeq.Location = new System.Drawing.Point(502, 342);
-            this.txtSplitNoSeq.Name = "txtSplitNoSeq";
-            this.txtSplitNoSeq.Size = new System.Drawing.Size(90, 25);
-            this.txtSplitNoSeq.TabIndex = 31;
+            this.txtSplitDcKode.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.txtSplitDcKode.Enabled = false;
+            this.txtSplitDcKode.Location = new System.Drawing.Point(276, 17);
+            this.txtSplitDcKode.Name = "txtSplitDcKode";
+            this.txtSplitDcKode.Size = new System.Drawing.Size(90, 25);
+            this.txtSplitDcKode.TabIndex = 43;
             // 
-            // label11
+            // label19
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(431, 344);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(66, 19);
-            this.label11.TabIndex = 30;
-            this.label11.Text = "No. SEQ :";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(235, 19);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(35, 19);
+            this.label19.TabIndex = 42;
+            this.label19.Text = "DC :";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label10
+            // lblSplitRecHh
             // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
-            this.label10.Location = new System.Drawing.Point(178, 77);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(118, 13);
-            this.label10.TabIndex = 29;
-            this.label10.Text = "* Rekomendasi : 0 HH";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblSplitRecHh.AutoSize = true;
+            this.lblSplitRecHh.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSplitRecHh.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
+            this.lblSplitRecHh.Location = new System.Drawing.Point(178, 77);
+            this.lblSplitRecHh.Name = "lblSplitRecHh";
+            this.lblSplitRecHh.Size = new System.Drawing.Size(118, 13);
+            this.lblSplitRecHh.TabIndex = 29;
+            this.lblSplitRecHh.Text = "* Rekomendasi : 0 HH";
+            this.lblSplitRecHh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // btnSplitSetHhScanning
             // 
@@ -418,7 +436,7 @@ namespace DCTRNNPBBL.Panels {
             this.btnSplitLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSplitLoad.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnSplitLoad.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSplitLoad.Location = new System.Drawing.Point(650, 16);
+            this.btnSplitLoad.Location = new System.Drawing.Point(650, 17);
             this.btnSplitLoad.Name = "btnSplitLoad";
             this.btnSplitLoad.Size = new System.Drawing.Size(75, 25);
             this.btnSplitLoad.TabIndex = 17;
@@ -429,15 +447,16 @@ namespace DCTRNNPBBL.Panels {
             // dtPckrSplitTglRpb
             // 
             this.dtPckrSplitTglRpb.Enabled = false;
-            this.dtPckrSplitTglRpb.Location = new System.Drawing.Point(357, 17);
+            this.dtPckrSplitTglRpb.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtPckrSplitTglRpb.Location = new System.Drawing.Point(482, 17);
             this.dtPckrSplitTglRpb.Name = "dtPckrSplitTglRpb";
-            this.dtPckrSplitTglRpb.Size = new System.Drawing.Size(235, 25);
+            this.dtPckrSplitTglRpb.Size = new System.Drawing.Size(110, 25);
             this.dtPckrSplitTglRpb.TabIndex = 16;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(287, 19);
+            this.label4.Location = new System.Drawing.Point(412, 19);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(64, 19);
             this.label4.TabIndex = 15;
@@ -449,7 +468,7 @@ namespace DCTRNNPBBL.Panels {
             this.txtSplitNoRpb.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtSplitNoRpb.Location = new System.Drawing.Point(87, 17);
             this.txtSplitNoRpb.Name = "txtSplitNoRpb";
-            this.txtSplitNoRpb.Size = new System.Drawing.Size(146, 25);
+            this.txtSplitNoRpb.Size = new System.Drawing.Size(90, 25);
             this.txtSplitNoRpb.TabIndex = 12;
             // 
             // label3
@@ -474,11 +493,13 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdSplit.Location = new System.Drawing.Point(313, 74);
             this.dtGrdSplit.Name = "dtGrdSplit";
             this.dtGrdSplit.RowHeadersVisible = false;
-            this.dtGrdSplit.Size = new System.Drawing.Size(412, 255);
+            this.dtGrdSplit.Size = new System.Drawing.Size(412, 254);
             this.dtGrdSplit.TabIndex = 10;
             // 
             // tabEditSplit
             // 
+            this.tabEditSplit.Controls.Add(this.txtEditSplitDcKode);
+            this.tabEditSplit.Controls.Add(this.label18);
             this.tabEditSplit.Controls.Add(this.label14);
             this.tabEditSplit.Controls.Add(this.txtEditSplitNoSeq);
             this.tabEditSplit.Controls.Add(this.label13);
@@ -498,6 +519,25 @@ namespace DCTRNNPBBL.Panels {
             this.tabEditSplit.TabIndex = 1;
             this.tabEditSplit.Text = "EDIT SPLIT";
             this.tabEditSplit.UseVisualStyleBackColor = true;
+            // 
+            // txtEditSplitDcKode
+            // 
+            this.txtEditSplitDcKode.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.txtEditSplitDcKode.Enabled = false;
+            this.txtEditSplitDcKode.Location = new System.Drawing.Point(276, 17);
+            this.txtEditSplitDcKode.Name = "txtEditSplitDcKode";
+            this.txtEditSplitDcKode.Size = new System.Drawing.Size(90, 25);
+            this.txtEditSplitDcKode.TabIndex = 43;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(235, 19);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(35, 19);
+            this.label18.TabIndex = 42;
+            this.label18.Text = "DC :";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label14
             // 
@@ -577,7 +617,7 @@ namespace DCTRNNPBBL.Panels {
             this.btnEditSplitLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnEditSplitLoad.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnEditSplitLoad.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnEditSplitLoad.Location = new System.Drawing.Point(650, 16);
+            this.btnEditSplitLoad.Location = new System.Drawing.Point(650, 17);
             this.btnEditSplitLoad.Name = "btnEditSplitLoad";
             this.btnEditSplitLoad.Size = new System.Drawing.Size(75, 25);
             this.btnEditSplitLoad.TabIndex = 24;
@@ -588,15 +628,16 @@ namespace DCTRNNPBBL.Panels {
             // dtPckrEditSplitTglRpb
             // 
             this.dtPckrEditSplitTglRpb.Enabled = false;
-            this.dtPckrEditSplitTglRpb.Location = new System.Drawing.Point(357, 17);
+            this.dtPckrEditSplitTglRpb.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtPckrEditSplitTglRpb.Location = new System.Drawing.Point(482, 17);
             this.dtPckrEditSplitTglRpb.Name = "dtPckrEditSplitTglRpb";
-            this.dtPckrEditSplitTglRpb.Size = new System.Drawing.Size(235, 25);
+            this.dtPckrEditSplitTglRpb.Size = new System.Drawing.Size(110, 25);
             this.dtPckrEditSplitTglRpb.TabIndex = 23;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(287, 19);
+            this.label8.Location = new System.Drawing.Point(412, 19);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(64, 19);
             this.label8.TabIndex = 22;
@@ -608,7 +649,7 @@ namespace DCTRNNPBBL.Panels {
             this.txtEditSplitNoRpb.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtEditSplitNoRpb.Location = new System.Drawing.Point(87, 17);
             this.txtEditSplitNoRpb.Name = "txtEditSplitNoRpb";
-            this.txtEditSplitNoRpb.Size = new System.Drawing.Size(146, 25);
+            this.txtEditSplitNoRpb.Size = new System.Drawing.Size(90, 25);
             this.txtEditSplitNoRpb.TabIndex = 20;
             // 
             // label9
@@ -623,6 +664,17 @@ namespace DCTRNNPBBL.Panels {
             // 
             // tabTransferNpb
             // 
+            this.tabTransferNpb.Controls.Add(this.label20);
+            this.tabTransferNpb.Controls.Add(this.txtTransferNpbDcKode);
+            this.tabTransferNpb.Controls.Add(this.label17);
+            this.tabTransferNpb.Controls.Add(this.txtTransferNpbNoSeq);
+            this.tabTransferNpb.Controls.Add(this.label16);
+            this.tabTransferNpb.Controls.Add(this.panel6);
+            this.tabTransferNpb.Controls.Add(this.btnTransferNpbLoad);
+            this.tabTransferNpb.Controls.Add(this.dtPckrTransferNpbTglRpb);
+            this.tabTransferNpb.Controls.Add(this.label10);
+            this.tabTransferNpb.Controls.Add(this.txtTransferNpbNoRpb);
+            this.tabTransferNpb.Controls.Add(this.label15);
             this.tabTransferNpb.Controls.Add(this.btnTransferProsesNpb);
             this.tabTransferNpb.Controls.Add(this.dtGrdTransferNpb);
             this.tabTransferNpb.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -633,6 +685,105 @@ namespace DCTRNNPBBL.Panels {
             this.tabTransferNpb.TabIndex = 2;
             this.tabTransferNpb.Text = "TRANSFER NPB";
             this.tabTransferNpb.UseVisualStyleBackColor = true;
+            // 
+            // txtTransferNpbDcKode
+            // 
+            this.txtTransferNpbDcKode.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.txtTransferNpbDcKode.Enabled = false;
+            this.txtTransferNpbDcKode.Location = new System.Drawing.Point(276, 17);
+            this.txtTransferNpbDcKode.Name = "txtTransferNpbDcKode";
+            this.txtTransferNpbDcKode.Size = new System.Drawing.Size(90, 25);
+            this.txtTransferNpbDcKode.TabIndex = 41;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(235, 19);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(35, 19);
+            this.label17.TabIndex = 40;
+            this.label17.Text = "DC :";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtTransferNpbNoSeq
+            // 
+            this.txtTransferNpbNoSeq.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.txtTransferNpbNoSeq.Enabled = false;
+            this.txtTransferNpbNoSeq.Location = new System.Drawing.Point(502, 342);
+            this.txtTransferNpbNoSeq.Name = "txtTransferNpbNoSeq";
+            this.txtTransferNpbNoSeq.Size = new System.Drawing.Size(90, 25);
+            this.txtTransferNpbNoSeq.TabIndex = 37;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(431, 344);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(66, 19);
+            this.label16.TabIndex = 36;
+            this.label16.Text = "No. SEQ :";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // panel6
+            // 
+            this.panel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(180)))), ((int)(((byte)(0)))));
+            this.panel6.Location = new System.Drawing.Point(0, 58);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(740, 1);
+            this.panel6.TabIndex = 35;
+            // 
+            // btnTransferNpbLoad
+            // 
+            this.btnTransferNpbLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTransferNpbLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnTransferNpbLoad.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.btnTransferNpbLoad.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnTransferNpbLoad.Location = new System.Drawing.Point(650, 17);
+            this.btnTransferNpbLoad.Name = "btnTransferNpbLoad";
+            this.btnTransferNpbLoad.Size = new System.Drawing.Size(75, 25);
+            this.btnTransferNpbLoad.TabIndex = 34;
+            this.btnTransferNpbLoad.Text = "Load";
+            this.btnTransferNpbLoad.UseVisualStyleBackColor = true;
+            this.btnTransferNpbLoad.Click += new System.EventHandler(this.btnTransferNpbLoad_Click);
+            // 
+            // dtPckrTransferNpbTglRpb
+            // 
+            this.dtPckrTransferNpbTglRpb.Enabled = false;
+            this.dtPckrTransferNpbTglRpb.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtPckrTransferNpbTglRpb.Location = new System.Drawing.Point(482, 17);
+            this.dtPckrTransferNpbTglRpb.Name = "dtPckrTransferNpbTglRpb";
+            this.dtPckrTransferNpbTglRpb.Size = new System.Drawing.Size(110, 25);
+            this.dtPckrTransferNpbTglRpb.TabIndex = 33;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(412, 19);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(64, 19);
+            this.label10.TabIndex = 32;
+            this.label10.Text = "Tgl. RPB :";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtTransferNpbNoRpb
+            // 
+            this.txtTransferNpbNoRpb.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.txtTransferNpbNoRpb.Location = new System.Drawing.Point(87, 17);
+            this.txtTransferNpbNoRpb.Name = "txtTransferNpbNoRpb";
+            this.txtTransferNpbNoRpb.Size = new System.Drawing.Size(90, 25);
+            this.txtTransferNpbNoRpb.TabIndex = 31;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(16, 19);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(65, 19);
+            this.label15.TabIndex = 30;
+            this.label15.Text = "No. RPB :";
+            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // btnTransferProsesNpb
             // 
@@ -648,6 +799,7 @@ namespace DCTRNNPBBL.Panels {
             this.btnTransferProsesNpb.TabIndex = 29;
             this.btnTransferProsesNpb.Text = "Proses NPB";
             this.btnTransferProsesNpb.UseVisualStyleBackColor = true;
+            this.btnTransferProsesNpb.Click += new System.EventHandler(this.btnTransferProsesNpb_Click);
             // 
             // dtGrdTransferNpb
             // 
@@ -658,11 +810,11 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdTransferNpb.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dtGrdTransferNpb.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dtGrdTransferNpb.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtGrdTransferNpb.Location = new System.Drawing.Point(14, 18);
+            this.dtGrdTransferNpb.Location = new System.Drawing.Point(14, 74);
             this.dtGrdTransferNpb.Name = "dtGrdTransferNpb";
             this.dtGrdTransferNpb.ReadOnly = true;
             this.dtGrdTransferNpb.RowHeadersVisible = false;
-            this.dtGrdTransferNpb.Size = new System.Drawing.Size(711, 308);
+            this.dtGrdTransferNpb.Size = new System.Drawing.Size(711, 254);
             this.dtGrdTransferNpb.TabIndex = 28;
             // 
             // tabResendNpb
@@ -722,7 +874,7 @@ namespace DCTRNNPBBL.Panels {
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button1.Location = new System.Drawing.Point(650, 16);
+            this.button1.Location = new System.Drawing.Point(650, 17);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 25);
             this.button1.TabIndex = 31;
@@ -751,11 +903,53 @@ namespace DCTRNNPBBL.Panels {
             this.userInfo.Text = ".: KodeDc - NamaDc :: UserName :.";
             this.userInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
+            this.label20.Location = new System.Drawing.Point(17, 348);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(217, 13);
+            this.label20.TabIndex = 42;
+            this.label20.Text = "* Belum selesai pick / scan (warna merah)";
+            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // chkSemuaKolom
+            // 
+            this.chkSemuaKolom.AutoSize = true;
+            this.chkSemuaKolom.Location = new System.Drawing.Point(564, 60);
+            this.chkSemuaKolom.Name = "chkSemuaKolom";
+            this.chkSemuaKolom.Size = new System.Drawing.Size(143, 17);
+            this.chkSemuaKolom.TabIndex = 24;
+            this.chkSemuaKolom.Text = "Tampilkan Semua Kolom";
+            this.chkSemuaKolom.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(431, 344);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(66, 19);
+            this.label11.TabIndex = 30;
+            this.label11.Text = "No. SEQ :";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtSplitNoSeq
+            // 
+            this.txtSplitNoSeq.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.txtSplitNoSeq.Enabled = false;
+            this.txtSplitNoSeq.Location = new System.Drawing.Point(502, 342);
+            this.txtSplitNoSeq.Name = "txtSplitNoSeq";
+            this.txtSplitNoSeq.Size = new System.Drawing.Size(90, 25);
+            this.txtSplitNoSeq.TabIndex = 31;
+            // 
             // MainApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
+            this.Controls.Add(this.chkSemuaKolom);
             this.Controls.Add(this.userInfo);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.imgDomar);
@@ -777,6 +971,7 @@ namespace DCTRNNPBBL.Panels {
             this.tabEditSplit.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdEditSplit)).EndInit();
             this.tabTransferNpb.ResumeLayout(false);
+            this.tabTransferNpb.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdTransferNpb)).EndInit();
             this.tabResendNpb.ResumeLayout(false);
             this.tabResendNpb.PerformLayout();
@@ -823,7 +1018,7 @@ namespace DCTRNNPBBL.Panels {
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txtEditSplitNoRpb;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label lblSplitRecHh;
         private System.Windows.Forms.TabPage tabHome;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button btnEditSplitUpdate;
@@ -835,10 +1030,26 @@ namespace DCTRNNPBBL.Panels {
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox txtSplitNoSeq;
-        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox txtEditSplitNoSeq;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox txtTransferNpbNoSeq;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Button btnTransferNpbLoad;
+        private System.Windows.Forms.DateTimePicker dtPckrTransferNpbTglRpb;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox txtTransferNpbNoRpb;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox txtTransferNpbDcKode;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox txtEditSplitDcKode;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox txtSplitDcKode;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.CheckBox chkSemuaKolom;
+        private System.Windows.Forms.TextBox txtSplitNoSeq;
+        private System.Windows.Forms.Label label11;
     }
 }

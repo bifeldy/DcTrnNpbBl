@@ -129,8 +129,10 @@
     <Compile Include="Helpers\_dbs\MsSQL.cs" />
     <Compile Include="Helpers\_dbs\Oracle.cs" />
     <Compile Include="Helpers\_dbs\Postgres.cs" />
+    <Compile Include="Helpers\_models\DbExecProcResult.cs" />
     <Compile Include="Helpers\_models\DbQueryParamBind.cs" />
     <Compile Include="Helpers\_models\ReturnDataType.cs" />
+    <Compile Include="Helpers\_utils\Api.cs" />
     <Compile Include="Helpers\_utils\App.cs" />
     <Compile Include="Helpers\_utils\BindingListInvoked.cs" />
     <Compile Include="Helpers\_utils\Converter.cs" />
@@ -138,9 +140,11 @@
     <Compile Include="Models\GRID_EDIT_SPLIT.cs" />
     <Compile Include="Models\GRID_SPLIT.cs" />
     <Compile Include="Models\GRID_TRANSFER_NPB.cs" />
+    <Compile Include="Models\JSON.cs" />
     <Compile Include="Models\TABEL_DC_HH_T.cs" />
     <Compile Include="Models\TABEL_DC_PICKBL_DTL_T.cs" />
     <Compile Include="Models\TABEL_DC_PICKBL_HDR_T.cs" />
+    <Compile Include="Models\TABEL_LOG_API_DC.cs" />
     <Compile Include="Panels\CekProgram.cs">
       <SubType>UserControl</SubType>
     </Compile>
