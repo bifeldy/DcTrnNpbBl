@@ -1,17 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/**
+ * 
+ * Author       :: Basilius Bias Astho Christyono
+ * Phone        :: (+62) 889 236 6466
+ * 
+ * Department   :: IT SD 03
+ * Mail         :: bias@indomaret.co.id
+ * 
+ * Catatan      :: Window Utama
+ *              :: Harap Didaftarkan Ke DI Container
+ * 
+ */
+
+using System;
 using System.Windows.Forms;
 
 using Autofac;
 
 using DCTRNNPBBL.Helpers;
-using DCTRNNPBBL.Helpers._db;
 using DCTRNNPBBL.Helpers._utils;
 using DCTRNNPBBL.Panels;
 
@@ -72,6 +77,13 @@ namespace DCTRNNPBBL.Forms {
             imgLogo.Visible = false;
         }
 
+        private void CMain_FormClosed(object sender, FormClosedEventArgs e) {
+            string title = "Good Bye~ (｡>﹏<｡)";
+            string msg = "Author :: B. Bias A. Ch." + Environment.NewLine;
+            msg += "Contact :: bias@indomaret.co.id" + Environment.NewLine;
+            msg += "© 2022 :: IT SD 03";
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 
 }

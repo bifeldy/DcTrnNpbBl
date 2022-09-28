@@ -67,18 +67,18 @@ namespace DCTRNNPBBL.Panels {
         /* Transfer NPB */
 
         private List<CMODEL_TABEL_DC_PICKBL_HDR_T> listTransferNpbAllNo = null;
-        private List<CMODEL_GRID_TRANSFER_NPB> listTransferNpb = null;
+        private List<CMODEL_GRID_TRANSFER_RESEND_NPB> listTransferNpb = null;
 
         private BindingList<CMODEL_TABEL_DC_PICKBL_HDR_T> bindTransferNpbAllNo = null;
-        private BindingList<CMODEL_GRID_TRANSFER_NPB> bindTransferNpb = null;
+        private BindingList<CMODEL_GRID_TRANSFER_RESEND_NPB> bindTransferNpb = null;
 
         /* Resend NPB */
 
         private List<CMODEL_TABEL_DC_PICKBL_HDR_T> listResendNpbAllNo = null;
-        private List<CMODEL_GRID_RESEND_NPB> listResendNpb = null;
+        private List<CMODEL_GRID_TRANSFER_RESEND_NPB> listResendNpb = null;
 
         private BindingList<CMODEL_TABEL_DC_PICKBL_HDR_T> bindResendNpbAllNo = null;
-        private BindingList<CMODEL_GRID_RESEND_NPB> bindResendNpb = null;
+        private BindingList<CMODEL_GRID_TRANSFER_RESEND_NPB> bindResendNpb = null;
 
         /* ** */
 
@@ -134,18 +134,18 @@ namespace DCTRNNPBBL.Panels {
             /* Transfer NPB */
 
             listTransferNpbAllNo = new List<CMODEL_TABEL_DC_PICKBL_HDR_T>();
-            listTransferNpb = new List<CMODEL_GRID_TRANSFER_NPB>();
+            listTransferNpb = new List<CMODEL_GRID_TRANSFER_RESEND_NPB>();
 
             bindTransferNpbAllNo = new BindingList<CMODEL_TABEL_DC_PICKBL_HDR_T>(listTransferNpbAllNo);
-            bindTransferNpb = new BindingList<CMODEL_GRID_TRANSFER_NPB>(listTransferNpb);
+            bindTransferNpb = new BindingList<CMODEL_GRID_TRANSFER_RESEND_NPB>(listTransferNpb);
 
             /* Resend NPB */
 
             listResendNpbAllNo = new List<CMODEL_TABEL_DC_PICKBL_HDR_T>();
-            listResendNpb = new List<CMODEL_GRID_RESEND_NPB>();
+            listResendNpb = new List<CMODEL_GRID_TRANSFER_RESEND_NPB>();
 
             bindResendNpbAllNo = new BindingList<CMODEL_TABEL_DC_PICKBL_HDR_T>(listResendNpbAllNo);
-            bindResendNpb = new BindingList<CMODEL_GRID_RESEND_NPB>(listResendNpb);
+            bindResendNpb = new BindingList<CMODEL_GRID_TRANSFER_RESEND_NPB>(listResendNpb);
 
             /* ** */
 
@@ -154,6 +154,9 @@ namespace DCTRNNPBBL.Panels {
 
         public void SetEnableDisable(bool isEnabled) {
             chkSemuaKolom.Enabled = isEnabled;
+            foreach (TabPage tabPage in tabContent.TabPages) {
+                tabPage.Enabled = isEnabled;
+            }
 
             /* Split */
 
@@ -182,6 +185,13 @@ namespace DCTRNNPBBL.Panels {
             btnTransferProsesNpb.Enabled = isEnabled;
             dtGrdTransferNpb.Enabled = isEnabled;
 
+            /* Resend NPB */
+
+            cmbBxResendNpbAllNo.Enabled = isEnabled;
+            btnResendNpbLoad.Enabled = isEnabled;
+            btnResendNpbKirim.Enabled = isEnabled;
+            dtGrdResendNpb.Enabled = isEnabled;
+
             /* ** */
         }
 
@@ -200,12 +210,20 @@ namespace DCTRNNPBBL.Panels {
         /* Split */
 
         private async void tabSplit_Enter(object sender, EventArgs e) {
-            SetIdleBusyStatus(false);
-            listSplitAllNo.Clear();
-            DataTable dtAllRpb = new DataTable();
-            await Task.Run(async () => {
-                dtAllRpb = await _oracle.GetDataTableAsync(
-                    $@"
+            if (programIdle) {
+                SetIdleBusyStatus(false);
+                listSplit.Clear();
+                bindSplit.ResetBindings();
+                listAvailableSplitHh.Clear();
+                bindAvailableSplitHh.ResetBindings();
+                listSelectedSplitHhPick.Clear();
+                bindSelectedSplitHhPick.ResetBindings();
+                selectedSplitHhScan = null;
+                listSplitAllNo.Clear();
+                DataTable dtAllRpb = new DataTable();
+                await Task.Run(async () => {
+                    dtAllRpb = await _oracle.GetDataTableAsync(
+                        $@"
                         SELECT
                             DOC_NO
                         FROM
@@ -213,18 +231,19 @@ namespace DCTRNNPBBL.Panels {
                         WHERE
                             (TGL_SPLIT IS NULL OR TGL_SPLIT = '')
                     "
-                );
-            });
-            List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = _converter.ConvertDataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllRpb);
-            lsDtAllRpb.Sort((x, y) => x.DOC_NO.CompareTo(y.DOC_NO));
-            foreach (CMODEL_TABEL_DC_PICKBL_HDR_T rpb in lsDtAllRpb) {
-                listSplitAllNo.Add(rpb);
+                    );
+                });
+                List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = _converter.ConvertDataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllRpb);
+                lsDtAllRpb.Sort((x, y) => x.DOC_NO.CompareTo(y.DOC_NO));
+                foreach (CMODEL_TABEL_DC_PICKBL_HDR_T rpb in lsDtAllRpb) {
+                    listSplitAllNo.Add(rpb);
+                }
+                cmbBxSplitAllNo.DataSource = bindSplitAllNo;
+                cmbBxSplitAllNo.DisplayMember = "DOC_NO";
+                cmbBxSplitAllNo.ValueMember = "DOC_NO";
+                bindSplitAllNo.ResetBindings();
+                SetIdleBusyStatus(true);
             }
-            cmbBxSplitAllNo.DataSource = bindSplitAllNo;
-            cmbBxSplitAllNo.DisplayMember = "DOC_NO";
-            cmbBxSplitAllNo.ValueMember = "DOC_NO";
-            bindSplitAllNo.ResetBindings();
-            SetIdleBusyStatus(true);
         }
 
         private async Task LoadHandHeld() {
@@ -287,7 +306,7 @@ namespace DCTRNNPBBL.Panels {
         private void AddSplitHhPick() {
             if (programIdle) {
                 SetIdleBusyStatus(false);
-                List<CMODEL_TABEL_DC_HH_T> selected = listAvailableSplitHh.Where(d => d.HH == cmbBxSplitHhPicking.SelectedValue.ToString()).ToList();
+                List<CMODEL_TABEL_DC_HH_T> selected = listAvailableSplitHh.Where(d => d.HH == cmbBxSplitHhPicking.Text).ToList();
                 selected.ForEach(d => {
                     listAvailableSplitHh.Remove(d);
                     listSelectedSplitHhPick.Add(d);
@@ -317,7 +336,7 @@ namespace DCTRNNPBBL.Panels {
         private void AddSplitHhScan() {
             if (programIdle) {
                 SetIdleBusyStatus(false);
-                CMODEL_TABEL_DC_HH_T z = listAvailableSplitHh.Where(d => d.HH == cmbBxSplitHhPicking.SelectedValue.ToString()).ToList().FirstOrDefault();
+                CMODEL_TABEL_DC_HH_T z = listAvailableSplitHh.Where(d => d.HH == cmbBxSplitHhPicking.Text).ToList().FirstOrDefault();
                 listAvailableSplitHh.Remove(listAvailableSplitHh.SingleOrDefault(l => l.HH == z.HH));
                 if (selectedSplitHhScan != null) {
                     listAvailableSplitHh.Add(selectedSplitHhScan);
@@ -332,14 +351,14 @@ namespace DCTRNNPBBL.Panels {
             }
         }
 
-        private async void LoadSplit(bool showEmptyMessageDialog = true) {
+        private async void btnSplitLoad_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             string ctx = "Pencarian Split RPB ...";
             await LoadHandHeld();
             selectedSplitHhScan = null;
             listSelectedSplitHhPick.Clear();
             listSplit.Clear();
-            string selectedNoRpb = cmbBxSplitAllNo.SelectedValue.ToString();
+            string selectedNoRpb = cmbBxSplitAllNo.Text;
             if (!string.IsNullOrEmpty(selectedNoRpb)) {
                 DataTable dtSplit = new DataTable();
                 await Task.Run(async () => {
@@ -375,9 +394,7 @@ namespace DCTRNNPBBL.Panels {
                 });
                 if (dtSplit.Rows.Count <= 0) {
                     lblSplitRecHh.Text = "* Rekomendasi : 0 HH";
-                    if (showEmptyMessageDialog) {
-                        MessageBox.Show("Tidak Ada Data Split", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
-                    }
+                    MessageBox.Show("Tidak Ada Data Split", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
                 else {
                     List<CMODEL_GRID_SPLIT> lsSplit = _converter.ConvertDataTableToList<CMODEL_GRID_SPLIT>(dtSplit);
@@ -394,11 +411,11 @@ namespace DCTRNNPBBL.Panels {
                     lblSplitRecHh.Text = $"* Rekomendasi : {totalLineNumber} HH";
                     dtPckrSplitTglRpb.Value = lsSplit.FirstOrDefault().DOC_DATE;
                     SetSplitHandHeld();
-                    foreach (CMODEL_GRID_SPLIT split in lsSplit) {
-                        listSplit.Add(split);
+                    foreach (CMODEL_GRID_SPLIT data in lsSplit) {
+                        listSplit.Add(data);
                     }
                     dtGrdSplit.DataSource = bindSplit;
-                    List<string> visibleColumn = new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY_RPB", "HH_SCAN", "IP_HH_SCAN" };
+                    List<string> visibleColumn = new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY_RPB", "HH_SCAN", "IP_HH_PICK" };
                     foreach (DataGridViewColumn dtGrdCol in dtGrdSplit.Columns) {
                         if (!visibleColumn.Contains(dtGrdCol.Name)) {
                             dtGrdCol.Visible = chkSemuaKolom.Checked;
@@ -423,10 +440,6 @@ namespace DCTRNNPBBL.Panels {
             bindSelectedSplitHhPick.ResetBindings();
             bindSplit.ResetBindings();
             SetIdleBusyStatus(true);
-        }
-
-        private void btnSplitLoad_Click(object sender, EventArgs e) {
-            LoadSplit();
         }
 
         private void btnSplitAddHhPicking_Click(object sender, EventArgs e) {
@@ -539,7 +552,6 @@ namespace DCTRNNPBBL.Panels {
                     }
                     _oracle.MarkSuccessExecQueryAndCommit();
                     MessageBox.Show("Selesai Proses", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadSplit(false);
                 }
                 catch (Exception ex) {
                     _oracle.MarkFailExecQueryAndRollback();
@@ -555,12 +567,19 @@ namespace DCTRNNPBBL.Panels {
         /* Edit Split */
 
         private async void tabEditSplit_Enter(object sender, EventArgs e) {
-            SetIdleBusyStatus(false);
-            listEditSplitAllNo.Clear();
-            DataTable dtAllRpb = new DataTable();
-            await Task.Run(async () => {
-                dtAllRpb = await _oracle.GetDataTableAsync(
-                    $@"
+            if (programIdle) {
+                SetIdleBusyStatus(false);
+                listEditSplit.Clear();
+                bindEditSplit.ResetBindings();
+                listAvailableEditSplitHhPick.Clear();
+                bindAvailableEditSplitHhPick.ResetBindings();
+                listAvailableEditSplitHhScan.Clear();
+                bindAvailableEditSplitHhScan.ResetBindings();
+                listEditSplitAllNo.Clear();
+                DataTable dtAllRpb = new DataTable();
+                await Task.Run(async () => {
+                    dtAllRpb = await _oracle.GetDataTableAsync(
+                        $@"
                         SELECT
                             DOC_NO
                         FROM
@@ -568,28 +587,29 @@ namespace DCTRNNPBBL.Panels {
                         WHERE
                             (TGL_SPLIT IS NOT NULL OR TGL_SPLIT <> '')
                     "
-                );
-            });
-            List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = _converter.ConvertDataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllRpb);
-            lsDtAllRpb.Sort((x, y) => x.DOC_NO.CompareTo(y.DOC_NO));
-            foreach (CMODEL_TABEL_DC_PICKBL_HDR_T rpb in lsDtAllRpb) {
-                listEditSplitAllNo.Add(rpb);
+                    );
+                });
+                List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = _converter.ConvertDataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllRpb);
+                lsDtAllRpb.Sort((x, y) => x.DOC_NO.CompareTo(y.DOC_NO));
+                foreach (CMODEL_TABEL_DC_PICKBL_HDR_T rpb in lsDtAllRpb) {
+                    listEditSplitAllNo.Add(rpb);
+                }
+                cmbBxEditSplitAllNo.DataSource = bindEditSplitAllNo;
+                cmbBxEditSplitAllNo.DisplayMember = "DOC_NO";
+                cmbBxEditSplitAllNo.ValueMember = "DOC_NO";
+                bindEditSplitAllNo.ResetBindings();
+                SetIdleBusyStatus(true);
             }
-            cmbBxEditSplitAllNo.DataSource = bindEditSplitAllNo;
-            cmbBxEditSplitAllNo.DisplayMember = "DOC_NO";
-            cmbBxEditSplitAllNo.ValueMember = "DOC_NO";
-            bindEditSplitAllNo.ResetBindings();
-            SetIdleBusyStatus(true);
         }
 
-        private async void LoadEditSplit(bool showEmptyMessageDialog = true) {
+        private async void btnEditSplitLoad_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             string ctx = "Pencarian Edit Split RPB ...";
             await LoadHandHeld();
             listAvailableEditSplitHhPick.Clear();
             listAvailableEditSplitHhScan.Clear();
             listEditSplit.Clear();
-            string selectedNoRpb = cmbBxEditSplitAllNo.SelectedValue.ToString();
+            string selectedNoRpb = cmbBxEditSplitAllNo.Text;
             if (!string.IsNullOrEmpty(selectedNoRpb)) {
                 DataTable dtEditSplit = new DataTable();
                 await Task.Run(async () => {
@@ -627,9 +647,7 @@ namespace DCTRNNPBBL.Panels {
                     );
                 });
                 if (dtEditSplit.Rows.Count <= 0) {
-                    if (showEmptyMessageDialog) {
-                        MessageBox.Show("Tidak Ada Data Edit Split", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
-                    }
+                    MessageBox.Show("Tidak Ada Data Edit Split", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
                 else {
                     List<CMODEL_GRID_EDIT_SPLIT> lsEditSplit = _converter.ConvertDataTableToList<CMODEL_GRID_EDIT_SPLIT>(dtEditSplit);
@@ -641,8 +659,8 @@ namespace DCTRNNPBBL.Panels {
                         listAvailableEditSplitHhScan.Add(hh);
                     }
                     dtPckrEditSplitTglRpb.Value = lsEditSplit.FirstOrDefault().DOC_DATE;
-                    foreach (CMODEL_GRID_EDIT_SPLIT split in lsEditSplit) {
-                        listEditSplit.Add(split);
+                    foreach (CMODEL_GRID_EDIT_SPLIT data in lsEditSplit) {
+                        listEditSplit.Add(data);
                     }
                     dtGrdEditSplit.DataSource = bindEditSplit;
                     List<string> visibleColumn = new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY_RPB", "TIME_PICKING", "IP_HH_PICK", "TIME_SCANNING", "IP_HH_SCAN" };
@@ -701,10 +719,6 @@ namespace DCTRNNPBBL.Panels {
             SetIdleBusyStatus(true);
         }
 
-        private void btnEditSplitLoad_Click(object sender, EventArgs e) {
-            LoadEditSplit();
-        }
-
         private async void btnEditSplitUpdate_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             string ctx = "Update Edit Split ...";
@@ -760,7 +774,6 @@ namespace DCTRNNPBBL.Panels {
                     }
                     _oracle.MarkSuccessExecQueryAndCommit();
                     MessageBox.Show("Selesai Update", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadEditSplit(false);
                 }
                 catch (Exception ex) {
                     _oracle.MarkFailExecQueryAndRollback();
@@ -776,12 +789,15 @@ namespace DCTRNNPBBL.Panels {
         /* Transfer NPB */
 
         private async void tabTransferNpb_Enter(object sender, EventArgs e) {
-            SetIdleBusyStatus(false);
-            listTransferNpbAllNo.Clear();
-            DataTable dtAllRpb = new DataTable();
-            await Task.Run(async () => {
-                dtAllRpb = await _oracle.GetDataTableAsync(
-                    $@"
+            if (programIdle) {
+                SetIdleBusyStatus(false);
+                listTransferNpb.Clear();
+                bindTransferNpb.ResetBindings();
+                listTransferNpbAllNo.Clear();
+                DataTable dtAllRpb = new DataTable();
+                await Task.Run(async () => {
+                    dtAllRpb = await _oracle.GetDataTableAsync(
+                        $@"
                         SELECT
                             DOC_NO
                         FROM
@@ -790,26 +806,26 @@ namespace DCTRNNPBBL.Panels {
                             (TGL_SPLIT IS NOT NULL OR TGL_SPLIT <> '') AND
                             (NPBDC_DATE IS NULL OR NPBDC_DATE = '')
                     "
-                );
-            });
-            List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = _converter.ConvertDataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllRpb);
-            lsDtAllRpb.Sort((x, y) => x.DOC_NO.CompareTo(y.DOC_NO));
-            foreach (CMODEL_TABEL_DC_PICKBL_HDR_T rpb in lsDtAllRpb) {
-                listTransferNpbAllNo.Add(rpb);
+                    );
+                });
+                List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = _converter.ConvertDataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllRpb);
+                lsDtAllRpb.Sort((x, y) => x.DOC_NO.CompareTo(y.DOC_NO));
+                foreach (CMODEL_TABEL_DC_PICKBL_HDR_T rpb in lsDtAllRpb) {
+                    listTransferNpbAllNo.Add(rpb);
+                }
+                cmbBxTransferNpbAllNo.DataSource = bindTransferNpbAllNo;
+                cmbBxTransferNpbAllNo.DisplayMember = "DOC_NO";
+                cmbBxTransferNpbAllNo.ValueMember = "DOC_NO";
+                bindTransferNpbAllNo.ResetBindings();
+                SetIdleBusyStatus(true);
             }
-            cmbBxTransferNpbAllNo.DataSource = bindTransferNpbAllNo;
-            cmbBxTransferNpbAllNo.DisplayMember = "DOC_NO";
-            cmbBxTransferNpbAllNo.ValueMember = "DOC_NO";
-            bindTransferNpbAllNo.ResetBindings();
-            SetIdleBusyStatus(true);
         }
 
-        private async void LoadTransferNpb(bool showEmptyMessageDialog = true) {
+        private async void btnTransferNpbLoad_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             string ctx = "Pencarian Transfer NPB ...";
-            await LoadHandHeld();
             listTransferNpb.Clear();
-            string selectedNoRpb = cmbBxTransferNpbAllNo.SelectedValue.ToString();
+            string selectedNoRpb = cmbBxTransferNpbAllNo.Text;
             if (!string.IsNullOrEmpty(selectedNoRpb)) {
                 DataTable dtTransferNpb = new DataTable();
                 await Task.Run(async () => {
@@ -868,18 +884,16 @@ namespace DCTRNNPBBL.Panels {
                     );
                 });
                 if (dtTransferNpb.Rows.Count <= 0) {
-                    if (showEmptyMessageDialog) {
-                        MessageBox.Show("Tidak Ada Data Transfer NPB", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
-                    }
+                    MessageBox.Show("Tidak Ada Data Transfer NPB", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
                 else {
-                    List<CMODEL_GRID_TRANSFER_NPB> lsTransferNpb = _converter.ConvertDataTableToList<CMODEL_GRID_TRANSFER_NPB>(dtTransferNpb);
+                    List<CMODEL_GRID_TRANSFER_RESEND_NPB> lsTransferNpb = _converter.ConvertDataTableToList<CMODEL_GRID_TRANSFER_RESEND_NPB>(dtTransferNpb);
                     lsTransferNpb.Sort((x, y) => x.PLU_ID.CompareTo(y.PLU_ID));
                     lsTransferNpb.Sort((x, y) => x.SCAN.CompareTo(y.SCAN));
                     lsTransferNpb.Sort((x, y) => x.PICK.CompareTo(y.PICK));
                     dtPckrTransferNpbTglRpb.Value = lsTransferNpb.FirstOrDefault().DOC_DATE;
-                    foreach (CMODEL_GRID_TRANSFER_NPB split in lsTransferNpb) {
-                        listTransferNpb.Add(split);
+                    foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in lsTransferNpb) {
+                        listTransferNpb.Add(data);
                     }
                     dtGrdTransferNpb.DataSource = bindTransferNpb;
                     List<string> visibleColumn = new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY", "PICK", "SCAN", "PRICE", "GROSS", "PPN" };
@@ -914,15 +928,11 @@ namespace DCTRNNPBBL.Panels {
             SetIdleBusyStatus(true);
         }
 
-        private void btnTransferNpbLoad_Click(object sender, EventArgs e) {
-            LoadTransferNpb();
-        }
-
         private async void btnTransferProsesNpb_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             string ctx = "Proses Transfer NPB ...";
             bool safeForNpb = false;
-            foreach (CMODEL_GRID_TRANSFER_NPB data in listTransferNpb) {
+            foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in listTransferNpb) {
                 if (data.PICK > 0 && data.SCAN > 0) {
                     safeForNpb = true;
                 }
@@ -968,9 +978,21 @@ namespace DCTRNNPBBL.Panels {
                     }
                     MessageBox.Show(resProc, runProc.QUERY, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     if (runProc.STATUS) {
-                        // await PostApiBlTag((dynamic) listTransferNpb);
+                        decimal npb = 0;
+                        await Task.Run(async () => {
+                            npb = await _oracle.ExecScalarAsync(
+                                EReturnDataType.DECIMAL,
+                                "SELECT NPBDC_NO FROM DC_PICKBL_HDR_T WHERE SEQ_NO = :seq_no AND DOC_NO = :doc_no",
+                                new List<CDbQueryParamBind> {
+                                new CDbQueryParamBind { NAME = "seq_no", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
+                                new CDbQueryParamBind { NAME = "doc_no", VALUE = listTransferNpb.FirstOrDefault().DOC_NO }
+                                }
+                            );
+                        });
+                        string msg = "No. NPB :: " + npb + Environment.NewLine;
+                        msg += "Silahkan Kirim NPB Menggunakan Menu 'ReSend NPB'";
+                        MessageBox.Show(msg, "NPB Berhasil Dibuat Tapi Belum Terkirim", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    LoadTransferNpb(false);
                 }
                 else {
                     MessageBox.Show("Gagal Mendapatkan DCID", ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -985,103 +1007,212 @@ namespace DCTRNNPBBL.Panels {
         /* Re-Send NPB */
 
         private async void tabResendNpb_Enter(object sender, EventArgs e) {
-            SetIdleBusyStatus(false);
-            listResendNpbAllNo.Clear();
-            DataTable dtAllNpb = new DataTable();
-            await Task.Run(async () => {
-                dtAllNpb = await _oracle.GetDataTableAsync(
-                    $@"
+            if (programIdle) {
+                SetIdleBusyStatus(false);
+                listResendNpb.Clear();
+                bindResendNpb.ResetBindings();
+                listResendNpbAllNo.Clear();
+                DataTable dtAllNpb = new DataTable();
+                await Task.Run(async () => {
+                    dtAllNpb = await _oracle.GetDataTableAsync(
+                        $@"
                         SELECT NPBDC_NO FROM DC_PICKBL_HDR_T
-                        WHERE 
+                        WHERE
                             (TGL_SPLIT IS NOT NULL OR TGL_SPLIT <> '') AND
-                            (NPBDC_NO IS NOT NULL OR NPBDC_NO <> '')
+                            (NPBDC_DATE IS NOT NULL OR NPBDC_DATE <> '')
                     "
-                );
-            });
-            List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllNpb = _converter.ConvertDataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllNpb);
-            foreach (CMODEL_TABEL_DC_PICKBL_HDR_T npb in lsDtAllNpb) {
-                listResendNpbAllNo.Add(npb);
+                    );
+                });
+                List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllNpb = _converter.ConvertDataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllNpb);
+                foreach (CMODEL_TABEL_DC_PICKBL_HDR_T npb in lsDtAllNpb) {
+                    listResendNpbAllNo.Add(npb);
+                }
+                cmbBxResendNpbAllNo.DataSource = bindResendNpbAllNo;
+                cmbBxResendNpbAllNo.DisplayMember = "NPBDC_NO";
+                cmbBxResendNpbAllNo.ValueMember = "NPBDC_NO";
+                bindResendNpbAllNo.ResetBindings();
+                SetIdleBusyStatus(true);
             }
-            cmbBxResendNpbAllNo.DataSource = bindResendNpbAllNo;
-            cmbBxResendNpbAllNo.DisplayMember = "NPBDC_NO";
-            cmbBxResendNpbAllNo.ValueMember = "NPBDC_NO";
-            bindResendNpbAllNo.ResetBindings();
+        }
+
+        private async void btnResendNpbLoad_Click(object sender, EventArgs e) {
+            SetIdleBusyStatus(false);
+            string ctx = "Pencarian Resend NPB ...";
+            listResendNpb.Clear();
+            string selectedNoNpb = cmbBxResendNpbAllNo.Text;
+            if (!string.IsNullOrEmpty(selectedNoNpb)) {
+                DataTable dtResendNpb = new DataTable();
+                await Task.Run(async () => {
+                    dtResendNpb = await _oracle.GetDataTableAsync(
+                        $@"
+                            SELECT
+                                a.DOC_NO,
+                                a.DC_KODE,
+                                a.SEQ_NO,
+                                a.DOC_DATE,
+                                b.PLU_ID,
+                                c.MBR_SINGKATAN AS SINGKATAN,
+                                (PLA_LINE || '.' || PLA_RAK || '.' || PLA_SHELF || '.' || PLA_CELL) AS LOKASI,
+                                b.QTY_RPB AS QTY,
+                                b.QTY_PICKING AS PICK,
+                                b.QTY_SCANNING AS SCAN,
+                                NVL (c.mbr_acost, NVL(c.mbr_lcost, 0)) AS PRICE,
+                                b.QTY_RPB *
+                                    NVL (c.mbr_acost, NVL(c.mbr_lcost, 0))
+                                        AS GROSS,
+                                CASE
+                                    WHEN
+                                        a.WHK_NPWP <> e.TBL_NPWP_DC AND
+                                        c.MBR_BKP = 'Y'
+                                    THEN
+                                        (GETPPNNEW(b.PLU_ID)/100) *
+                                            (b.QTY_RPB * NVL (c.mbr_acost, NVL(c.mbr_lcost, 0)))
+                                    ELSE
+                                        0
+                                END AS PPN,
+                                b.SJ_QTY,
+                                b.HPP,
+                                b.TGLEXP,
+                                a.NPBDC_NO,
+                                a.NPBDC_DATE,
+                                a.WHK_KODE,
+                                e.TBL_NPWP_DC
+                            FROM
+                                DC_PICKBL_HDR_T a,
+                                DC_PICKBL_DTL_T b,
+                                DC_BARANG_DC_V c,
+                                DC_PLANOGRAM_T d,
+                                DC_TABEL_DC_T e
+                            WHERE
+                                a.NPBDC_NO = :npbdc_no AND
+                                a.SEQ_NO = b.SEQ_FK_NO AND
+                                b.PLU_ID = c.MBR_FK_PLUID AND
+                                b.PLU_ID = d.PLA_FK_PLUID AND
+                                d.PLA_DISPLAY = 'Y' AND
+                                (a.TGL_SPLIT IS NOT NULL OR a.TGL_SPLIT <> '') AND
+                                (a.NPBDC_DATE IS NOT NULL OR a.NPBDC_DATE <> '')
+                        ",
+                        new List<CDbQueryParamBind> {
+                            new CDbQueryParamBind { NAME = "npbdc_no", VALUE = selectedNoNpb }
+                        }
+                    );
+                });
+                if (dtResendNpb.Rows.Count <= 0) {
+                    MessageBox.Show("Tidak Ada Data Resend NPB", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
+                }
+                else {
+                    List<CMODEL_GRID_TRANSFER_RESEND_NPB> lsResendNpb = _converter.ConvertDataTableToList<CMODEL_GRID_TRANSFER_RESEND_NPB>(dtResendNpb);
+                    lsResendNpb.Sort((x, y) => x.PLU_ID.CompareTo(y.PLU_ID));
+                    lsResendNpb.Sort((x, y) => x.SCAN.CompareTo(y.SCAN));
+                    lsResendNpb.Sort((x, y) => x.PICK.CompareTo(y.PICK));
+                    dtPckrResendNpbTglRpb.Value = lsResendNpb.FirstOrDefault().DOC_DATE;
+                    foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in lsResendNpb) {
+                        listResendNpb.Add(data);
+                    }
+                    dtGrdResendNpb.DataSource = bindResendNpb;
+                    List<string> visibleColumn = new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY", "PICK", "SCAN", "PRICE", "GROSS", "PPN" };
+                    foreach (DataGridViewColumn dtGrdCol in dtGrdResendNpb.Columns) {
+                        if (!visibleColumn.Contains(dtGrdCol.Name)) {
+                            dtGrdCol.Visible = chkSemuaKolom.Checked;
+                            dtGrdCol.ReadOnly = true;
+                        }
+                    }
+                    dtGrdResendNpb.Columns["PRICE"].DefaultCellStyle.Format = "c2";
+                    dtGrdResendNpb.Columns["PRICE"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
+                    dtGrdResendNpb.Columns["GROSS"].DefaultCellStyle.Format = "c2";
+                    dtGrdResendNpb.Columns["GROSS"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
+                    dtGrdResendNpb.Columns["PPN"].DefaultCellStyle.Format = "c2";
+                    dtGrdResendNpb.Columns["PPN"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
+                }
+            }
+            else {
+                MessageBox.Show("Harap Isi DOC_NO Rpb", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            bindResendNpb.ResetBindings();
             SetIdleBusyStatus(true);
         }
 
-        private void btnResendNpbLoad_Click(object sender, EventArgs e) {
-            //
-        }
-
-        private void btnResendNpbKirim_Click(object sender, EventArgs e) {
-            //
-        }
-
-        /* ** */
-
-        private async Task PostApiBlTag(List<dynamic> listGrid) {
+        private async void btnResendNpbKirim_Click(object sender, EventArgs e) {
+            SetIdleBusyStatus(false);
             string ctx = "Proses Transfer NPB ...";
-            string apiOwner = "SHANTI";
-            string apiTarget = txtNpbApiTarget.Text;
-            await Task.Run(async () => {
-                List<CMODEL_JSON_KIRIM_NPB_BL_DETAIL> blDetail = new List<CMODEL_JSON_KIRIM_NPB_BL_DETAIL>();
-                foreach (dynamic data in listGrid) {
-                    CMODEL_JSON_KIRIM_NPB_BL_DETAIL detail = new CMODEL_JSON_KIRIM_NPB_BL_DETAIL {
-                        plu_id = data.PLU_ID,
-                        sj_qty = data.SJ_QTY,
-                        hpp = data.HPP,
-                        price = data.PRICE,
-                        gross = data.GROSS,
-                        ppn_rate = data.PPN,
-                        tglexp = data.TGLEXP
-                    };
-                    blDetail.Add(detail);
-                }
-                CMODEL_JSON_KIRIM_NPB_BL bl = new CMODEL_JSON_KIRIM_NPB_BL {
-                    dc_kode = listGrid.FirstOrDefault().DC_KODE,
-                    doc_date = listGrid.FirstOrDefault().DOC_DATE,
-                    dc_npwp = listGrid.FirstOrDefault().TBL_NPWP_DC,
-                    doc_no = listGrid.FirstOrDefault().DOC_NO,
-                    npbdc_no = listGrid.FirstOrDefault().NPBDC_NO,
-                    npbdc_date = listGrid.FirstOrDefault().NPBDC_DATE,
-                    whk_kode = listGrid.FirstOrDefault().WHK_KODE,
-                    detail = blDetail
-                };
-                try {
-                    var resApi = await _api.PostData(apiTarget, bl);
-                    string apiStatusText = $"{resApi.StatusCode} - {ctx}";
-                    if (resApi.StatusCode >= System.Net.HttpStatusCode.OK && resApi.StatusCode < System.Net.HttpStatusCode.MultipleChoices) {
-                        MessageBox.Show("Berhasil Mengirim Data", apiStatusText, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else {
-                        MessageBox.Show("Gagal Mengirim Data", apiStatusText, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    await _oracle.MarkBeforeExecQueryCommitAndRollback();
-                    bool hasilInsert = await _oracle.ExecQueryAsync($@"
+            string apiOwner = txtNpbApiTargetOwner.Text;
+            string apiTarget = txtNpbApiTargetUrl.Text;
+            if (string.IsNullOrEmpty(apiOwner) || string.IsNullOrEmpty(apiTarget)) {
+                MessageBox.Show("API Tujuan Tidak Lengkap", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } else {
+                if (listResendNpb.Count > 0) {
+                    await Task.Run(async () => {
+                        List<CMODEL_JSON_KIRIM_NPB_BL_DETAIL> blDetail = new List<CMODEL_JSON_KIRIM_NPB_BL_DETAIL>();
+                        foreach (dynamic data in listResendNpb) {
+                            CMODEL_JSON_KIRIM_NPB_BL_DETAIL detail = new CMODEL_JSON_KIRIM_NPB_BL_DETAIL {
+                                plu_id = data.PLU_ID,
+                                sj_qty = data.SJ_QTY,
+                                hpp = data.HPP,
+                                price = data.PRICE,
+                                gross = data.GROSS,
+                                ppn_rate = data.PPN,
+                                tglexp = data.TGLEXP
+                            };
+                            blDetail.Add(detail);
+                        }
+                        CMODEL_JSON_KIRIM_NPB_BL bl = new CMODEL_JSON_KIRIM_NPB_BL {
+                            dc_kode = listResendNpb.FirstOrDefault().DC_KODE,
+                            doc_date = listResendNpb.FirstOrDefault().DOC_DATE,
+                            dc_npwp = listResendNpb.FirstOrDefault().TBL_NPWP_DC,
+                            doc_no = listResendNpb.FirstOrDefault().DOC_NO,
+                            npbdc_no = listResendNpb.FirstOrDefault().NPBDC_NO,
+                            npbdc_date = listResendNpb.FirstOrDefault().NPBDC_DATE,
+                            whk_kode = listResendNpb.FirstOrDefault().WHK_KODE,
+                            detail = blDetail
+                        };
+                        try {
+                            string[] urlPaths = apiTarget.Split('/');
+                            string jsonBody = _api.ObjectToJson(bl);
+                            var resApi = await _api.PostData(apiTarget, jsonBody);
+                            string apiStatusText = $"{(int)resApi.StatusCode} {resApi.StatusCode} - {ctx}";
+                            string apiResponse = await resApi.Content.ReadAsStringAsync();
+                            MessageBoxIcon msgBxIco;
+                            if (resApi.StatusCode >= System.Net.HttpStatusCode.OK && resApi.StatusCode < System.Net.HttpStatusCode.MultipleChoices) {
+                                msgBxIco = MessageBoxIcon.Information;
+                            }
+                            else {
+                                msgBxIco = MessageBoxIcon.Error;
+                            }
+                            MessageBox.Show(apiResponse, apiStatusText, MessageBoxButtons.OK, msgBxIco);
+                            await _oracle.MarkBeforeExecQueryCommitAndRollback();
+                            bool hasilInsert = await _oracle.ExecQueryAsync($@"
                         INSERT INTO LOG_API_DC (KODEDC, PEMILIKAPI, NAMAMETHOD, DATAKIRIM, DATABALIK, TANGGAL, STATUS)
                         VALUES (:kode_dc, :pemilik_api, :nama_method, :data_kirim, :data_balik, :tanggal, :status)
                     ", new List<CDbQueryParamBind> {
                         new CDbQueryParamBind { NAME = "kode_dc", VALUE = bl.dc_kode },
                         new CDbQueryParamBind { NAME = "pemilik_api", VALUE = apiOwner },
-                        new CDbQueryParamBind { NAME = "nama_method", VALUE = apiTarget },
-                        new CDbQueryParamBind { NAME = "data_kirim", VALUE = bl.ToString() },
-                        new CDbQueryParamBind { NAME = "data_balik", VALUE = await resApi.Content.ReadAsStringAsync() },
+                        new CDbQueryParamBind { NAME = "nama_method", VALUE = urlPaths[urlPaths.Length-1] },
+                        new CDbQueryParamBind { NAME = "data_kirim", VALUE = jsonBody },
+                        new CDbQueryParamBind { NAME = "data_balik", VALUE = apiResponse },
                         new CDbQueryParamBind { NAME = "tanggal", VALUE = DateTime.Now },
-                        new CDbQueryParamBind { NAME = "status", VALUE = resApi.StatusCode }
+                        new CDbQueryParamBind { NAME = "status", VALUE = $"{(int) resApi.StatusCode} {resApi.StatusCode}" }
                     }, false);
-                    if (hasilInsert) {
-                        _oracle.MarkSuccessExecQueryAndCommit();
-                    }
-                    else {
-                        throw new Exception("Gagal Insert Ke LOG_API_DC");
-                    }
+                            if (hasilInsert) {
+                                _oracle.MarkSuccessExecQueryAndCommit();
+                            }
+                            else {
+                                throw new Exception("Gagal Insert Ke LOG_API_DC");
+                            }
+                        }
+                        catch (Exception ex) {
+                            _oracle.MarkFailExecQueryAndRollback();
+                            MessageBox.Show(ex.Message, ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    });
                 }
-                catch (Exception ex) {
-                    _oracle.MarkFailExecQueryAndRollback();
-                    MessageBox.Show(ex.Message, ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else {
+                    MessageBox.Show("Tidak Ada Data Yang Di Kirim", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-            });
+            }
+            SetIdleBusyStatus(true);
         }
+
+        /* ** */
 
     }
 

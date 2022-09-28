@@ -12,7 +12,10 @@
  */
 
 using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace DCTRNNPBBL.Helpers._utils {
@@ -37,21 +40,23 @@ namespace DCTRNNPBBL.Helpers._utils {
         private readonly SD3Fungsi.Cls_ProgramMonitor ClsProgramMonitor;
 
         private readonly string AppLocation;
-        private readonly string AppName;
         private readonly string AppVersion;
         private readonly string IpAddress;
 
+        private readonly string AppName;
         private readonly int ScreenWidth = 0;
         private readonly int ScreenHeight = 0;
+        private readonly DateTime AppBuild;
 
         public CApp() {
             _SettingLib = new SettingLib.Class1();
             _SettingLibRest = new SettingLibRest.Class1();
             ClsProgramMonitor = new SD3Fungsi.Cls_ProgramMonitor();
             AppLocation = AppDomain.CurrentDomain.BaseDirectory;
-            AppName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".EXE";
-            AppVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            AppVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             IpAddress = SD3Fungsi.IpKomp.GetIPAddress().Split(',').First();
+            //
+            AppName = Assembly.GetExecutingAssembly().GetName().Name + ".EXE";
             ScreenWidth = Screen.PrimaryScreen.WorkingArea.Width;
             ScreenHeight = Screen.PrimaryScreen.WorkingArea.Height;
         }
@@ -76,8 +81,6 @@ namespace DCTRNNPBBL.Helpers._utils {
             #endif
         }
 
-        string IApp.AppName => AppName;
-
         string IApp.AppLocation => AppLocation;
 
         string IApp.AppVersion => AppVersion;
@@ -85,6 +88,8 @@ namespace DCTRNNPBBL.Helpers._utils {
         string IApp.IpAddress => IpAddress;
 
         /* Aplikasi EXE */
+
+        string IApp.AppName => AppName;
 
         public void Exit() => Application.Exit();
 

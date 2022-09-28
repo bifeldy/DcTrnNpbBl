@@ -15,7 +15,7 @@ using System;
 
 namespace DCTRNNPBBL.Models {
 
-    class CMODEL_GRID_TRANSFER_NPB {
+    class CMODEL_GRID_TRANSFER_RESEND_NPB {
         public string DC_KODE { set; get; }
         public decimal SEQ_NO { set; get; }
         public string DOC_NO { set; get; }

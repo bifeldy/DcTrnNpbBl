@@ -104,6 +104,7 @@ namespace DCTRNNPBBL.Forms {
             this.Name = "CMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Main Window";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CMain_FormClosed);
             this.Load += new System.EventHandler(this.CMain_Load);
             this.statusStripContainer.ResumeLayout(false);
             this.statusStripContainer.PerformLayout();

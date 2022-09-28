@@ -75,6 +75,7 @@ namespace DCTRNNPBBL.Helpers._db {
         }
 
         private void BindQueryParameter(List<CDbQueryParamBind> parameters) {
+            DatabaseCommand.BindByName = true;
             DatabaseCommand.Parameters.Clear();
             if (parameters != null) {
                 for (int i = 0; i < parameters.Count; i++) {
