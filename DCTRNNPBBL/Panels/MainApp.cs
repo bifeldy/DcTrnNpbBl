@@ -105,7 +105,7 @@ namespace DCTRNNPBBL.Panels {
             tabSplit.Enter += new EventHandler(tabSplit_Enter);
             tabEditSplit.Enter += new EventHandler(tabEditSplit_Enter);
             tabProsesNpb.Enter += new EventHandler(tabProsesNpb_Enter);
-            tabResendNpb.Enter += new EventHandler(tabResendNpb_Enter);
+            tabReSendNpb.Enter += new EventHandler(tabReSendNpb_Enter);
             tabLogs.Enter += new EventHandler(tabLogs_Enter);
 
             lsAllHh = new List<CMODEL_TABEL_DC_HH_T>();
@@ -190,11 +190,11 @@ namespace DCTRNNPBBL.Panels {
 
             /* Resend NPB */
 
-            cmbBxResendNpbAllNo.Enabled = isEnabled;
-            btnResendNpbLoad.Enabled = isEnabled;
-            btnResendNpbKirim.Enabled = isEnabled;
-            dtGrdResendNpb.Enabled = isEnabled;
-            cmbBxNpbApiTargetDcKode.Enabled = isEnabled;
+            cmbBxReSendNpbAllNo.Enabled = isEnabled;
+            btnReSendNpbLoad.Enabled = isEnabled;
+            btnReSendNpbKirim.Enabled = isEnabled;
+            dtGrdReSendNpb.Enabled = isEnabled;
+            cmbBxReSendNpbApiTargetDcKode.Enabled = isEnabled;
 
             /* ** */
         }
@@ -1000,7 +1000,7 @@ namespace DCTRNNPBBL.Panels {
 
         /* Re-Send NPB */
 
-        private async void tabResendNpb_Enter(object sender, EventArgs e) {
+        private async void tabReSendNpb_Enter(object sender, EventArgs e) {
             if (programIdle) {
                 SetIdleBusyStatus(false);
                 listResendNpb.Clear();
@@ -1021,19 +1021,19 @@ namespace DCTRNNPBBL.Panels {
                 foreach (CMODEL_TABEL_DC_PICKBL_HDR_T npb in lsDtAllNpb) {
                     listResendNpbAllNo.Add(npb);
                 }
-                cmbBxResendNpbAllNo.DataSource = bindResendNpbAllNo;
-                cmbBxResendNpbAllNo.DisplayMember = "NPBDC_NO";
-                cmbBxResendNpbAllNo.ValueMember = "NPBDC_NO";
+                cmbBxReSendNpbAllNo.DataSource = bindResendNpbAllNo;
+                cmbBxReSendNpbAllNo.DisplayMember = "NPBDC_NO";
+                cmbBxReSendNpbAllNo.ValueMember = "NPBDC_NO";
                 bindResendNpbAllNo.ResetBindings();
                 SetIdleBusyStatus(true);
             }
         }
 
-        private async void btnResendNpbLoad_Click(object sender, EventArgs e) {
+        private async void btnReSendNpbLoad_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             string ctx = "Pencarian Resend NPB ...";
             listResendNpb.Clear();
-            string selectedNoNpb = cmbBxResendNpbAllNo.Text;
+            string selectedNoNpb = cmbBxReSendNpbAllNo.Text;
             if (!string.IsNullOrEmpty(selectedNoNpb)) {
                 DataTable dtResendNpb = new DataTable();
                 await Task.Run(async () => {
@@ -1099,18 +1099,18 @@ namespace DCTRNNPBBL.Panels {
                     lsResendNpb.Sort((x, y) => x.PLU_ID.CompareTo(y.PLU_ID));
                     lsResendNpb.Sort((x, y) => x.SCAN.CompareTo(y.SCAN));
                     lsResendNpb.Sort((x, y) => x.PICK.CompareTo(y.PICK));
-                    dtPckrResendNpbTglRpb.Value = lsResendNpb.FirstOrDefault().DOC_DATE;
+                    dtPckrReSendNpbTglRpb.Value = lsResendNpb.FirstOrDefault().DOC_DATE;
                     foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in lsResendNpb) {
                         listResendNpb.Add(data);
                     }
-                    dtGrdResendNpb.DataSource = bindResendNpb;
-                    EnableCustomColumnOnly(dtGrdResendNpb, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY", "PICK", "SCAN", "PRICE", "GROSS", "PPN" });
-                    dtGrdResendNpb.Columns["PRICE"].DefaultCellStyle.Format = "c2";
-                    dtGrdResendNpb.Columns["PRICE"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
-                    dtGrdResendNpb.Columns["GROSS"].DefaultCellStyle.Format = "c2";
-                    dtGrdResendNpb.Columns["GROSS"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
-                    dtGrdResendNpb.Columns["PPN"].DefaultCellStyle.Format = "c2";
-                    dtGrdResendNpb.Columns["PPN"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
+                    dtGrdReSendNpb.DataSource = bindResendNpb;
+                    EnableCustomColumnOnly(dtGrdReSendNpb, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY", "PICK", "SCAN", "PRICE", "GROSS", "PPN" });
+                    dtGrdReSendNpb.Columns["PRICE"].DefaultCellStyle.Format = "c2";
+                    dtGrdReSendNpb.Columns["PRICE"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
+                    dtGrdReSendNpb.Columns["GROSS"].DefaultCellStyle.Format = "c2";
+                    dtGrdReSendNpb.Columns["GROSS"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
+                    dtGrdReSendNpb.Columns["PPN"].DefaultCellStyle.Format = "c2";
+                    dtGrdReSendNpb.Columns["PPN"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
                 }
             }
             else {
@@ -1120,11 +1120,11 @@ namespace DCTRNNPBBL.Panels {
             SetIdleBusyStatus(true);
         }
 
-        private async void btnGetApi_Click(object sender, EventArgs e) {
+        private async void btnReSendGetApi_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             string apiDcho = _app.GetConfig("api_dcho");
             string apiTargetUrl = _app.GetConfig("api_dev");
-            string apiTargetKodeDc = cmbBxNpbApiTargetDcKode.Text.ToUpper();
+            string apiTargetKodeDc = cmbBxReSendNpbApiTargetDcKode.Text.ToUpper();
             if (!string.IsNullOrEmpty(apiTargetKodeDc) && apiTargetKodeDc != "G000" && !apiTargetKodeDc.Contains("DEV")) {
                 await Task.Run(async () => {
                     string jsonBody = _api.ObjectToJson(new CMODEL_JSON_KIRIM_DCHO {
@@ -1138,16 +1138,16 @@ namespace DCTRNNPBBL.Panels {
                     apiTargetUrl = resApiObj.Url;
                 });
             }
-            txtNpbApiTargetUrl.Text = apiTargetUrl;
+            txtReSendNpbApiTargetUrl.Text = apiTargetUrl;
             SetIdleBusyStatus(true);
         }
 
-        private async void btnResendNpbKirim_Click(object sender, EventArgs e) {
+        private async void btnReSendNpbKirim_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             string ctx = "Proses Transfer NPB ...";
             string apiOwner = "TAG_BL-SHANTI";
-            string apiDcKode = cmbBxNpbApiTargetDcKode.Text.ToUpper();
-            string apiTarget = txtNpbApiTargetUrl.Text;
+            string apiDcKode = cmbBxReSendNpbApiTargetDcKode.Text.ToUpper();
+            string apiTarget = txtReSendNpbApiTargetUrl.Text;
             if (string.IsNullOrEmpty(apiDcKode) || string.IsNullOrEmpty(apiTarget)) {
                 MessageBox.Show("API Tujuan Tidak Lengkap", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
             } else {
