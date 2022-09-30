@@ -401,7 +401,7 @@ namespace DCTRNNPBBL.Panels {
             this.btnSplitProses.Name = "btnSplitProses";
             this.btnSplitProses.Size = new System.Drawing.Size(100, 25);
             this.btnSplitProses.TabIndex = 19;
-            this.btnSplitProses.Text = "Proses";
+            this.btnSplitProses.Text = "Proses Split";
             this.btnSplitProses.UseVisualStyleBackColor = true;
             this.btnSplitProses.Click += new System.EventHandler(this.btnSplitProses_Click);
             // 
@@ -524,7 +524,7 @@ namespace DCTRNNPBBL.Panels {
             this.btnEditSplitUpdate.Name = "btnEditSplitUpdate";
             this.btnEditSplitUpdate.Size = new System.Drawing.Size(100, 25);
             this.btnEditSplitUpdate.TabIndex = 27;
-            this.btnEditSplitUpdate.Text = "Update";
+            this.btnEditSplitUpdate.Text = "Update Split";
             this.btnEditSplitUpdate.UseVisualStyleBackColor = true;
             this.btnEditSplitUpdate.Click += new System.EventHandler(this.btnEditSplitUpdate_Click);
             // 
