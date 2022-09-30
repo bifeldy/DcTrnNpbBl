@@ -68,16 +68,16 @@ namespace DCTRNNPBBL.Panels {
             this.dtPckrEditSplitTglRpb = new System.Windows.Forms.DateTimePicker();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.tabTransferNpb = new System.Windows.Forms.TabPage();
-            this.cmbBxTransferNpbAllNo = new System.Windows.Forms.ComboBox();
+            this.tabProsesNpb = new System.Windows.Forms.TabPage();
+            this.cmbBxProsesNpbAllNo = new System.Windows.Forms.ComboBox();
             this.label20 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
-            this.btnTransferNpbLoad = new System.Windows.Forms.Button();
-            this.dtPckrTransferNpbTglRpb = new System.Windows.Forms.DateTimePicker();
+            this.btnProsesNpbLoad = new System.Windows.Forms.Button();
+            this.dtPckrProsesNpbTglRpb = new System.Windows.Forms.DateTimePicker();
             this.label10 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.btnTransferProsesNpb = new System.Windows.Forms.Button();
-            this.dtGrdTransferNpb = new System.Windows.Forms.DataGridView();
+            this.btnProsesNpbBuat = new System.Windows.Forms.Button();
+            this.dtGrdProsesNpb = new System.Windows.Forms.DataGridView();
             this.tabResendNpb = new System.Windows.Forms.TabPage();
             this.btnGetApi = new System.Windows.Forms.Button();
             this.cmbBxNpbApiTargetDcKode = new System.Windows.Forms.ComboBox();
@@ -104,8 +104,8 @@ namespace DCTRNNPBBL.Panels {
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdSplit)).BeginInit();
             this.tabEditSplit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdEditSplit)).BeginInit();
-            this.tabTransferNpb.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dtGrdTransferNpb)).BeginInit();
+            this.tabProsesNpb.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtGrdProsesNpb)).BeginInit();
             this.tabResendNpb.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdResendNpb)).BeginInit();
             this.tabLogs.SuspendLayout();
@@ -199,7 +199,7 @@ namespace DCTRNNPBBL.Panels {
             this.tabContent.Controls.Add(this.tabHome);
             this.tabContent.Controls.Add(this.tabSplit);
             this.tabContent.Controls.Add(this.tabEditSplit);
-            this.tabContent.Controls.Add(this.tabTransferNpb);
+            this.tabContent.Controls.Add(this.tabProsesNpb);
             this.tabContent.Controls.Add(this.tabResendNpb);
             this.tabContent.Controls.Add(this.tabLogs);
             this.tabContent.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
@@ -595,33 +595,33 @@ namespace DCTRNNPBBL.Panels {
             this.label9.Text = "No. RPB :";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // tabTransferNpb
+            // tabProsesNpb
             // 
-            this.tabTransferNpb.Controls.Add(this.cmbBxTransferNpbAllNo);
-            this.tabTransferNpb.Controls.Add(this.label20);
-            this.tabTransferNpb.Controls.Add(this.panel6);
-            this.tabTransferNpb.Controls.Add(this.btnTransferNpbLoad);
-            this.tabTransferNpb.Controls.Add(this.dtPckrTransferNpbTglRpb);
-            this.tabTransferNpb.Controls.Add(this.label10);
-            this.tabTransferNpb.Controls.Add(this.label15);
-            this.tabTransferNpb.Controls.Add(this.btnTransferProsesNpb);
-            this.tabTransferNpb.Controls.Add(this.dtGrdTransferNpb);
-            this.tabTransferNpb.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.tabTransferNpb.Location = new System.Drawing.Point(4, 30);
-            this.tabTransferNpb.Name = "tabTransferNpb";
-            this.tabTransferNpb.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTransferNpb.Size = new System.Drawing.Size(740, 384);
-            this.tabTransferNpb.TabIndex = 2;
-            this.tabTransferNpb.Text = "TRANSFER NPB";
-            this.tabTransferNpb.UseVisualStyleBackColor = true;
+            this.tabProsesNpb.Controls.Add(this.cmbBxProsesNpbAllNo);
+            this.tabProsesNpb.Controls.Add(this.label20);
+            this.tabProsesNpb.Controls.Add(this.panel6);
+            this.tabProsesNpb.Controls.Add(this.btnProsesNpbLoad);
+            this.tabProsesNpb.Controls.Add(this.dtPckrProsesNpbTglRpb);
+            this.tabProsesNpb.Controls.Add(this.label10);
+            this.tabProsesNpb.Controls.Add(this.label15);
+            this.tabProsesNpb.Controls.Add(this.btnProsesNpbBuat);
+            this.tabProsesNpb.Controls.Add(this.dtGrdProsesNpb);
+            this.tabProsesNpb.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.tabProsesNpb.Location = new System.Drawing.Point(4, 30);
+            this.tabProsesNpb.Name = "tabProsesNpb";
+            this.tabProsesNpb.Padding = new System.Windows.Forms.Padding(3);
+            this.tabProsesNpb.Size = new System.Drawing.Size(740, 384);
+            this.tabProsesNpb.TabIndex = 2;
+            this.tabProsesNpb.Text = "PROSES NPB";
+            this.tabProsesNpb.UseVisualStyleBackColor = true;
             // 
-            // cmbBxTransferNpbAllNo
+            // cmbBxProsesNpbAllNo
             // 
-            this.cmbBxTransferNpbAllNo.FormattingEnabled = true;
-            this.cmbBxTransferNpbAllNo.Location = new System.Drawing.Point(87, 17);
-            this.cmbBxTransferNpbAllNo.Name = "cmbBxTransferNpbAllNo";
-            this.cmbBxTransferNpbAllNo.Size = new System.Drawing.Size(153, 25);
-            this.cmbBxTransferNpbAllNo.TabIndex = 43;
+            this.cmbBxProsesNpbAllNo.FormattingEnabled = true;
+            this.cmbBxProsesNpbAllNo.Location = new System.Drawing.Point(87, 17);
+            this.cmbBxProsesNpbAllNo.Name = "cmbBxProsesNpbAllNo";
+            this.cmbBxProsesNpbAllNo.Size = new System.Drawing.Size(153, 25);
+            this.cmbBxProsesNpbAllNo.TabIndex = 43;
             // 
             // label20
             // 
@@ -643,29 +643,29 @@ namespace DCTRNNPBBL.Panels {
             this.panel6.Size = new System.Drawing.Size(740, 1);
             this.panel6.TabIndex = 35;
             // 
-            // btnTransferNpbLoad
+            // btnProsesNpbLoad
             // 
-            this.btnTransferNpbLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.btnProsesNpbLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTransferNpbLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnTransferNpbLoad.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnTransferNpbLoad.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnTransferNpbLoad.Location = new System.Drawing.Point(650, 17);
-            this.btnTransferNpbLoad.Name = "btnTransferNpbLoad";
-            this.btnTransferNpbLoad.Size = new System.Drawing.Size(75, 25);
-            this.btnTransferNpbLoad.TabIndex = 34;
-            this.btnTransferNpbLoad.Text = "Load";
-            this.btnTransferNpbLoad.UseVisualStyleBackColor = true;
-            this.btnTransferNpbLoad.Click += new System.EventHandler(this.btnTransferNpbLoad_Click);
+            this.btnProsesNpbLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnProsesNpbLoad.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.btnProsesNpbLoad.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnProsesNpbLoad.Location = new System.Drawing.Point(650, 17);
+            this.btnProsesNpbLoad.Name = "btnProsesNpbLoad";
+            this.btnProsesNpbLoad.Size = new System.Drawing.Size(75, 25);
+            this.btnProsesNpbLoad.TabIndex = 34;
+            this.btnProsesNpbLoad.Text = "Load";
+            this.btnProsesNpbLoad.UseVisualStyleBackColor = true;
+            this.btnProsesNpbLoad.Click += new System.EventHandler(this.btnTransferNpbLoad_Click);
             // 
-            // dtPckrTransferNpbTglRpb
+            // dtPckrProsesNpbTglRpb
             // 
-            this.dtPckrTransferNpbTglRpb.Enabled = false;
-            this.dtPckrTransferNpbTglRpb.Location = new System.Drawing.Point(356, 17);
-            this.dtPckrTransferNpbTglRpb.Name = "dtPckrTransferNpbTglRpb";
-            this.dtPckrTransferNpbTglRpb.Size = new System.Drawing.Size(241, 25);
-            this.dtPckrTransferNpbTglRpb.TabIndex = 33;
+            this.dtPckrProsesNpbTglRpb.Enabled = false;
+            this.dtPckrProsesNpbTglRpb.Location = new System.Drawing.Point(356, 17);
+            this.dtPckrProsesNpbTglRpb.Name = "dtPckrProsesNpbTglRpb";
+            this.dtPckrProsesNpbTglRpb.Size = new System.Drawing.Size(241, 25);
+            this.dtPckrProsesNpbTglRpb.TabIndex = 33;
             // 
             // label10
             // 
@@ -687,37 +687,37 @@ namespace DCTRNNPBBL.Panels {
             this.label15.Text = "No. RPB :";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // btnTransferProsesNpb
+            // btnProsesNpbBuat
             // 
-            this.btnTransferProsesNpb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.btnProsesNpbBuat.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTransferProsesNpb.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnTransferProsesNpb.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnTransferProsesNpb.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnTransferProsesNpb.Location = new System.Drawing.Point(625, 342);
-            this.btnTransferProsesNpb.Name = "btnTransferProsesNpb";
-            this.btnTransferProsesNpb.Size = new System.Drawing.Size(100, 25);
-            this.btnTransferProsesNpb.TabIndex = 29;
-            this.btnTransferProsesNpb.Text = "Proses NPB";
-            this.btnTransferProsesNpb.UseVisualStyleBackColor = true;
-            this.btnTransferProsesNpb.Click += new System.EventHandler(this.btnTransferProsesNpb_Click);
+            this.btnProsesNpbBuat.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnProsesNpbBuat.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.btnProsesNpbBuat.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnProsesNpbBuat.Location = new System.Drawing.Point(625, 342);
+            this.btnProsesNpbBuat.Name = "btnProsesNpbBuat";
+            this.btnProsesNpbBuat.Size = new System.Drawing.Size(100, 25);
+            this.btnProsesNpbBuat.TabIndex = 29;
+            this.btnProsesNpbBuat.Text = "Buat NPB";
+            this.btnProsesNpbBuat.UseVisualStyleBackColor = true;
+            this.btnProsesNpbBuat.Click += new System.EventHandler(this.btnTransferProsesNpb_Click);
             // 
-            // dtGrdTransferNpb
+            // dtGrdProsesNpb
             // 
-            this.dtGrdTransferNpb.AllowUserToAddRows = false;
-            this.dtGrdTransferNpb.AllowUserToDeleteRows = false;
-            this.dtGrdTransferNpb.AllowUserToOrderColumns = true;
-            this.dtGrdTransferNpb.AllowUserToResizeRows = false;
-            this.dtGrdTransferNpb.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            this.dtGrdTransferNpb.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.dtGrdTransferNpb.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtGrdTransferNpb.Location = new System.Drawing.Point(14, 74);
-            this.dtGrdTransferNpb.Name = "dtGrdTransferNpb";
-            this.dtGrdTransferNpb.ReadOnly = true;
-            this.dtGrdTransferNpb.RowHeadersVisible = false;
-            this.dtGrdTransferNpb.Size = new System.Drawing.Size(711, 254);
-            this.dtGrdTransferNpb.TabIndex = 28;
+            this.dtGrdProsesNpb.AllowUserToAddRows = false;
+            this.dtGrdProsesNpb.AllowUserToDeleteRows = false;
+            this.dtGrdProsesNpb.AllowUserToOrderColumns = true;
+            this.dtGrdProsesNpb.AllowUserToResizeRows = false;
+            this.dtGrdProsesNpb.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.dtGrdProsesNpb.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dtGrdProsesNpb.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtGrdProsesNpb.Location = new System.Drawing.Point(14, 74);
+            this.dtGrdProsesNpb.Name = "dtGrdProsesNpb";
+            this.dtGrdProsesNpb.ReadOnly = true;
+            this.dtGrdProsesNpb.RowHeadersVisible = false;
+            this.dtGrdProsesNpb.Size = new System.Drawing.Size(711, 254);
+            this.dtGrdProsesNpb.TabIndex = 28;
             // 
             // tabResendNpb
             // 
@@ -952,9 +952,9 @@ namespace DCTRNNPBBL.Panels {
             this.tabEditSplit.ResumeLayout(false);
             this.tabEditSplit.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdEditSplit)).EndInit();
-            this.tabTransferNpb.ResumeLayout(false);
-            this.tabTransferNpb.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dtGrdTransferNpb)).EndInit();
+            this.tabProsesNpb.ResumeLayout(false);
+            this.tabProsesNpb.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtGrdProsesNpb)).EndInit();
             this.tabResendNpb.ResumeLayout(false);
             this.tabResendNpb.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdResendNpb)).EndInit();
@@ -976,7 +976,7 @@ namespace DCTRNNPBBL.Panels {
         private System.Windows.Forms.TabControl tabContent;
         private System.Windows.Forms.TabPage tabSplit;
         private System.Windows.Forms.TabPage tabEditSplit;
-        private System.Windows.Forms.TabPage tabTransferNpb;
+        private System.Windows.Forms.TabPage tabProsesNpb;
         private System.Windows.Forms.TabPage tabResendNpb;
         private System.Windows.Forms.Label userInfo;
         private System.Windows.Forms.DataGridView dtGrdSplit;
@@ -1005,8 +1005,8 @@ namespace DCTRNNPBBL.Panels {
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button btnEditSplitUpdate;
         private System.Windows.Forms.DataGridView dtGrdEditSplit;
-        private System.Windows.Forms.Button btnTransferProsesNpb;
-        private System.Windows.Forms.DataGridView dtGrdTransferNpb;
+        private System.Windows.Forms.Button btnProsesNpbBuat;
+        private System.Windows.Forms.DataGridView dtGrdProsesNpb;
         private System.Windows.Forms.DataGridView dtGrdResendNpb;
         private System.Windows.Forms.ComboBox cmbBxResendNpbAllNo;
         private System.Windows.Forms.Panel panel5;
@@ -1014,15 +1014,15 @@ namespace DCTRNNPBBL.Panels {
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.Button btnTransferNpbLoad;
-        private System.Windows.Forms.DateTimePicker dtPckrTransferNpbTglRpb;
+        private System.Windows.Forms.Button btnProsesNpbLoad;
+        private System.Windows.Forms.DateTimePicker dtPckrProsesNpbTglRpb;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.CheckBox chkSemuaKolom;
         private System.Windows.Forms.ComboBox cmbBxSplitAllNo;
         private System.Windows.Forms.ComboBox cmbBxEditSplitAllNo;
-        private System.Windows.Forms.ComboBox cmbBxTransferNpbAllNo;
+        private System.Windows.Forms.ComboBox cmbBxProsesNpbAllNo;
         private System.Windows.Forms.Button btnResendNpbLoad;
         private System.Windows.Forms.DateTimePicker dtPckrResendNpbTglRpb;
         private System.Windows.Forms.Label label11;

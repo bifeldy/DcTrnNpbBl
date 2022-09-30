@@ -104,7 +104,7 @@ namespace DCTRNNPBBL.Panels {
         private void MainApp_Load(object sender, EventArgs e) {
             tabSplit.Enter += new EventHandler(tabSplit_Enter);
             tabEditSplit.Enter += new EventHandler(tabEditSplit_Enter);
-            tabTransferNpb.Enter += new EventHandler(tabTransferNpb_Enter);
+            tabProsesNpb.Enter += new EventHandler(tabProsesNpb_Enter);
             tabResendNpb.Enter += new EventHandler(tabResendNpb_Enter);
             tabLogs.Enter += new EventHandler(tabLogs_Enter);
 
@@ -183,10 +183,10 @@ namespace DCTRNNPBBL.Panels {
 
             /* Transfer NPB */
 
-            cmbBxTransferNpbAllNo.Enabled = isEnabled;
-            btnTransferNpbLoad.Enabled = isEnabled;
-            btnTransferProsesNpb.Enabled = isEnabled;
-            dtGrdTransferNpb.Enabled = isEnabled;
+            cmbBxProsesNpbAllNo.Enabled = isEnabled;
+            btnProsesNpbLoad.Enabled = isEnabled;
+            btnProsesNpbBuat.Enabled = isEnabled;
+            dtGrdProsesNpb.Enabled = isEnabled;
 
             /* Resend NPB */
 
@@ -788,7 +788,7 @@ namespace DCTRNNPBBL.Panels {
 
         /* Transfer NPB */
 
-        private async void tabTransferNpb_Enter(object sender, EventArgs e) {
+        private async void tabProsesNpb_Enter(object sender, EventArgs e) {
             if (programIdle) {
                 SetIdleBusyStatus(false);
                 listTransferNpb.Clear();
@@ -813,9 +813,9 @@ namespace DCTRNNPBBL.Panels {
                 foreach (CMODEL_TABEL_DC_PICKBL_HDR_T rpb in lsDtAllRpb) {
                     listTransferNpbAllNo.Add(rpb);
                 }
-                cmbBxTransferNpbAllNo.DataSource = bindTransferNpbAllNo;
-                cmbBxTransferNpbAllNo.DisplayMember = "DOC_NO";
-                cmbBxTransferNpbAllNo.ValueMember = "DOC_NO";
+                cmbBxProsesNpbAllNo.DataSource = bindTransferNpbAllNo;
+                cmbBxProsesNpbAllNo.DisplayMember = "DOC_NO";
+                cmbBxProsesNpbAllNo.ValueMember = "DOC_NO";
                 bindTransferNpbAllNo.ResetBindings();
                 SetIdleBusyStatus(true);
             }
@@ -825,7 +825,7 @@ namespace DCTRNNPBBL.Panels {
             SetIdleBusyStatus(false);
             string ctx = "Pencarian Transfer NPB ...";
             listTransferNpb.Clear();
-            string selectedNoRpb = cmbBxTransferNpbAllNo.Text;
+            string selectedNoRpb = cmbBxProsesNpbAllNo.Text;
             if (!string.IsNullOrEmpty(selectedNoRpb)) {
                 DataTable dtTransferNpb = new DataTable();
                 await Task.Run(async () => {
@@ -891,27 +891,27 @@ namespace DCTRNNPBBL.Panels {
                     lsTransferNpb.Sort((x, y) => x.PLU_ID.CompareTo(y.PLU_ID));
                     lsTransferNpb.Sort((x, y) => x.SCAN.CompareTo(y.SCAN));
                     lsTransferNpb.Sort((x, y) => x.PICK.CompareTo(y.PICK));
-                    dtPckrTransferNpbTglRpb.Value = lsTransferNpb.FirstOrDefault().DOC_DATE;
+                    dtPckrProsesNpbTglRpb.Value = lsTransferNpb.FirstOrDefault().DOC_DATE;
                     foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in lsTransferNpb) {
                         listTransferNpb.Add(data);
                     }
-                    dtGrdTransferNpb.DataSource = bindTransferNpb;
-                    EnableCustomColumnOnly(dtGrdTransferNpb, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY", "PICK", "SCAN", "PRICE", "GROSS", "PPN" });
-                    dtGrdTransferNpb.Columns["PRICE"].DefaultCellStyle.Format = "c2";
-                    dtGrdTransferNpb.Columns["PRICE"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
-                    dtGrdTransferNpb.Columns["GROSS"].DefaultCellStyle.Format = "c2";
-                    dtGrdTransferNpb.Columns["GROSS"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
-                    dtGrdTransferNpb.Columns["PPN"].DefaultCellStyle.Format = "c2";
-                    dtGrdTransferNpb.Columns["PPN"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
+                    dtGrdProsesNpb.DataSource = bindTransferNpb;
+                    EnableCustomColumnOnly(dtGrdProsesNpb, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY", "PICK", "SCAN", "PRICE", "GROSS", "PPN" });
+                    dtGrdProsesNpb.Columns["PRICE"].DefaultCellStyle.Format = "c2";
+                    dtGrdProsesNpb.Columns["PRICE"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
+                    dtGrdProsesNpb.Columns["GROSS"].DefaultCellStyle.Format = "c2";
+                    dtGrdProsesNpb.Columns["GROSS"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
+                    dtGrdProsesNpb.Columns["PPN"].DefaultCellStyle.Format = "c2";
+                    dtGrdProsesNpb.Columns["PPN"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
                 }
             }
             else {
                 MessageBox.Show("Harap Isi DOC_NO Rpb", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             bindTransferNpb.ResetBindings();
-            foreach (DataGridViewRow row in dtGrdTransferNpb.Rows) {
-                decimal pickCount = decimal.Parse(row.Cells[dtGrdTransferNpb.Columns["PICK"].Index].Value.ToString());
-                decimal scanCount = decimal.Parse(row.Cells[dtGrdTransferNpb.Columns["SCAN"].Index].Value.ToString());
+            foreach (DataGridViewRow row in dtGrdProsesNpb.Rows) {
+                decimal pickCount = decimal.Parse(row.Cells[dtGrdProsesNpb.Columns["PICK"].Index].Value.ToString());
+                decimal scanCount = decimal.Parse(row.Cells[dtGrdProsesNpb.Columns["SCAN"].Index].Value.ToString());
                 if (pickCount > 0 && scanCount > 0) {
                     row.DefaultCellStyle.BackColor = Color.FromArgb(105, 240, 175);
                 }
@@ -955,7 +955,7 @@ namespace DCTRNNPBBL.Panels {
                             procName,
                             new List<CDbQueryParamBind> {
                                     new CDbQueryParamBind { NAME = "n_noref", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
-                                    new CDbQueryParamBind { NAME = "d_tgl_ref", VALUE = dtPckrTransferNpbTglRpb.Value },
+                                    new CDbQueryParamBind { NAME = "d_tgl_ref", VALUE = dtPckrProsesNpbTglRpb.Value },
                                     new CDbQueryParamBind { NAME = "n_dcid1", VALUE = dcid },
                                     new CDbQueryParamBind { NAME = "n_hdrid", VALUE = (decimal) 0, DIRECTION = ParameterDirection.Output },
                                     new CDbQueryParamBind { NAME = "p_msg", VALUE = "", DIRECTION = ParameterDirection.Output, SIZE = 2000 }
