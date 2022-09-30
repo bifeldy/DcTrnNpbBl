@@ -821,7 +821,7 @@ namespace DCTRNNPBBL.Panels {
             }
         }
 
-        private async void btnTransferNpbLoad_Click(object sender, EventArgs e) {
+        private async void btnProsesNpbLoad_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             string ctx = "Pencarian Transfer NPB ...";
             listTransferNpb.Clear();
@@ -922,7 +922,7 @@ namespace DCTRNNPBBL.Panels {
             SetIdleBusyStatus(true);
         }
 
-        private async void btnTransferProsesNpb_Click(object sender, EventArgs e) {
+        private async void btnProsesBuatNpb_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             string ctx = "Proses Transfer NPB ...";
             bool safeForNpb = false;

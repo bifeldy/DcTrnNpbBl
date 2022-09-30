@@ -657,7 +657,7 @@ namespace DCTRNNPBBL.Panels {
             this.btnProsesNpbLoad.TabIndex = 34;
             this.btnProsesNpbLoad.Text = "Load";
             this.btnProsesNpbLoad.UseVisualStyleBackColor = true;
-            this.btnProsesNpbLoad.Click += new System.EventHandler(this.btnTransferNpbLoad_Click);
+            this.btnProsesNpbLoad.Click += new System.EventHandler(this.btnProsesNpbLoad_Click);
             // 
             // dtPckrProsesNpbTglRpb
             // 
@@ -701,7 +701,7 @@ namespace DCTRNNPBBL.Panels {
             this.btnProsesNpbBuat.TabIndex = 29;
             this.btnProsesNpbBuat.Text = "Buat NPB";
             this.btnProsesNpbBuat.UseVisualStyleBackColor = true;
-            this.btnProsesNpbBuat.Click += new System.EventHandler(this.btnTransferProsesNpb_Click);
+            this.btnProsesNpbBuat.Click += new System.EventHandler(this.btnProsesBuatNpb_Click);
             // 
             // dtGrdProsesNpb
             // 
