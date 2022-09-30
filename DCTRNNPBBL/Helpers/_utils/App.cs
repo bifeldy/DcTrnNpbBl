@@ -12,15 +12,16 @@
  */
 
 using System;
-using System.IO;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace DCTRNNPBBL.Helpers._utils {
 
     public interface IApp {
+
+        string GetConfig(string key);
         string CekVersiOracle(string connectionString, string kodeDc);
         string GetVariabelOraSql(string key);
         string GetVariabelPg(string key);
@@ -46,7 +47,6 @@ namespace DCTRNNPBBL.Helpers._utils {
         private readonly string AppName;
         private readonly int ScreenWidth = 0;
         private readonly int ScreenHeight = 0;
-        private readonly DateTime AppBuild;
 
         public CApp() {
             _SettingLib = new SettingLib.Class1();
@@ -92,6 +92,10 @@ namespace DCTRNNPBBL.Helpers._utils {
         string IApp.AppName => AppName;
 
         public void Exit() => Application.Exit();
+
+        public string GetConfig(string key) {
+            return ConfigurationManager.AppSettings[key];
+        }
 
         int IApp.ScreenWidth => ScreenWidth;
 

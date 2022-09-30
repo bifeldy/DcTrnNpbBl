@@ -16,6 +16,19 @@ using System.Collections.Generic;
 
 namespace DCTRNNPBBL.Models {
 
+    public class CMODEL_JSON_KIRIM_DCHO {
+        public string TipeData { set; get; }
+        public string JenisIP { set; get; }
+        public string KodeDC { set; get; }
+    }
+
+    public class CMODEL_JSON_TERIMA_DCHO {
+        public bool IsSuccess { set; get; }
+        public string ResultCode { set; get; }
+        public string ResultDetail { set; get; }
+        public string Url { set; get; }
+    }
+
     public class CMODEL_JSON_KIRIM_NPB_BL_DETAIL {
         public decimal plu_id { set; get; }
         public decimal sj_qty { set; get; }
@@ -35,6 +48,11 @@ namespace DCTRNNPBBL.Models {
         public decimal npbdc_no { set; get; }
         public DateTime npbdc_date { set; get; }
         public List<CMODEL_JSON_KIRIM_NPB_BL_DETAIL> detail { set; get; }
+    }
+
+    public class CMODEL_JSON_TERIMA_NPB_BL {
+        public bool IsSuccess { set; get; }
+        public string Info { set; get; }
     }
 
 }

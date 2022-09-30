@@ -6,7 +6,7 @@
  * Department   :: IT SD 03
  * Mail         :: bias@indomaret.co.id
  * 
- * Catatan      :: Ini Gajelas Sih .. Wkwk
+ * Catatan      :: Ini Global Variable Sih .. Wkwk
  *              :: Buat Nge-Hold Semua
  * 
  */

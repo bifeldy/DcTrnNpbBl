@@ -29,6 +29,7 @@ namespace DCTRNNPBBL.Panels {
 
     public partial class MainApp : UserControl {
 
+        private readonly IApp _app;
         private readonly ILogger _logger;
         private readonly IOracle _oracle;
         private readonly IConverter _converter;
@@ -82,7 +83,8 @@ namespace DCTRNNPBBL.Panels {
 
         /* ** */
 
-        public MainApp(ILogger logger, IOracle oracle, IConverter converter, IApi api) {
+        public MainApp(IApp app, ILogger logger, IOracle oracle, IConverter converter, IApi api) {
+            _app = app;
             _logger = logger;
             _oracle = oracle;
             _converter = converter;
@@ -104,6 +106,7 @@ namespace DCTRNNPBBL.Panels {
             tabEditSplit.Enter += new EventHandler(tabEditSplit_Enter);
             tabTransferNpb.Enter += new EventHandler(tabTransferNpb_Enter);
             tabResendNpb.Enter += new EventHandler(tabResendNpb_Enter);
+            tabLogs.Enter += new EventHandler(tabLogs_Enter);
 
             lsAllHh = new List<CMODEL_TABEL_DC_HH_T>();
 
@@ -191,8 +194,23 @@ namespace DCTRNNPBBL.Panels {
             btnResendNpbLoad.Enabled = isEnabled;
             btnResendNpbKirim.Enabled = isEnabled;
             dtGrdResendNpb.Enabled = isEnabled;
+            cmbBxNpbApiTargetDcKode.Enabled = isEnabled;
 
             /* ** */
+        }
+
+        public void EnableCustomColumnOnly(DataGridView dtGrdVw, List<string> visibleColumn) {
+            foreach (DataGridViewColumn dtGrdCol in dtGrdVw.Columns) {
+                if (!visibleColumn.Contains(dtGrdCol.Name)) {
+                    dtGrdCol.Visible = chkSemuaKolom.Checked;
+                }
+                if (dtGrdCol.GetType() != typeof(DataGridViewButtonColumn) && dtGrdCol.GetType() != typeof(DataGridViewComboBoxColumn)) {
+                    dtGrdCol.ReadOnly = true;
+                }
+                else {
+                    dtGrdCol.ReadOnly = false;
+                }
+            }
         }
 
         public void SetIdleBusyStatus(bool isIdle) {
@@ -275,13 +293,7 @@ namespace DCTRNNPBBL.Panels {
             cmbBxSplitHhScanning.ValueMember = "HH";
             cmbBxSplitHhScanning.DataSource = bindAvailableSplitHh;
             dtGrdSplitHhPicking.DataSource = bindSelectedSplitHhPick;
-            List<string> visibleColumn = new List<string> { "HH", "X" };
-            foreach (DataGridViewColumn dtGrdCol in dtGrdSplitHhPicking.Columns) {
-                if (!visibleColumn.Contains(dtGrdCol.Name)) {
-                    dtGrdCol.Visible = chkSemuaKolom.Checked;
-                    dtGrdCol.ReadOnly = true;
-                }
-            }
+            EnableCustomColumnOnly(dtGrdSplitHhPicking, new List<string> { "HH", "X" });
             if (!dtGrdSplitHhPicking.Columns.Contains("X")) {
                 dtGrdSplitHhPicking.Columns.Add(new DataGridViewButtonColumn {
                     Name = "X",
@@ -415,13 +427,7 @@ namespace DCTRNNPBBL.Panels {
                         listSplit.Add(data);
                     }
                     dtGrdSplit.DataSource = bindSplit;
-                    List<string> visibleColumn = new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY_RPB", "HH_SCAN", "IP_HH_PICK" };
-                    foreach (DataGridViewColumn dtGrdCol in dtGrdSplit.Columns) {
-                        if (!visibleColumn.Contains(dtGrdCol.Name)) {
-                            dtGrdCol.Visible = chkSemuaKolom.Checked;
-                            dtGrdCol.ReadOnly = true;
-                        }
-                    }
+                    EnableCustomColumnOnly(dtGrdSplit, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY_RPB", "HH_SCAN", "IP_HH_PICK" });
                     if (!dtGrdSplit.Columns.Contains("IP_HH_PICK")) {
                         dtGrdSplit.Columns.Add(new DataGridViewComboBoxColumn {
                             Name = "IP_HH_PICK",
@@ -663,13 +669,7 @@ namespace DCTRNNPBBL.Panels {
                         listEditSplit.Add(data);
                     }
                     dtGrdEditSplit.DataSource = bindEditSplit;
-                    List<string> visibleColumn = new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY_RPB", "TIME_PICKING", "IP_HH_PICK", "TIME_SCANNING", "IP_HH_SCAN" };
-                    foreach (DataGridViewColumn dtGrdCol in dtGrdEditSplit.Columns) {
-                        if (!visibleColumn.Contains(dtGrdCol.Name)) {
-                            dtGrdCol.Visible = chkSemuaKolom.Checked;
-                            dtGrdCol.ReadOnly = true;
-                        }
-                    }
+                    EnableCustomColumnOnly(dtGrdEditSplit, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY_RPB", "TIME_PICKING", "IP_HH_PICK", "TIME_SCANNING", "IP_HH_SCAN" });
                     if (!dtGrdEditSplit.Columns.Contains("IP_HH_PICK")) {
                         dtGrdEditSplit.Columns.Add(new DataGridViewComboBoxColumn {
                             Name = "IP_HH_PICK",
@@ -896,13 +896,7 @@ namespace DCTRNNPBBL.Panels {
                         listTransferNpb.Add(data);
                     }
                     dtGrdTransferNpb.DataSource = bindTransferNpb;
-                    List<string> visibleColumn = new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY", "PICK", "SCAN", "PRICE", "GROSS", "PPN" };
-                    foreach (DataGridViewColumn dtGrdCol in dtGrdTransferNpb.Columns) {
-                        if (!visibleColumn.Contains(dtGrdCol.Name)) {
-                            dtGrdCol.Visible = chkSemuaKolom.Checked;
-                            dtGrdCol.ReadOnly = true;
-                        }
-                    }
+                    EnableCustomColumnOnly(dtGrdTransferNpb, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY", "PICK", "SCAN", "PRICE", "GROSS", "PPN" });
                     dtGrdTransferNpb.Columns["PRICE"].DefaultCellStyle.Format = "c2";
                     dtGrdTransferNpb.Columns["PRICE"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
                     dtGrdTransferNpb.Columns["GROSS"].DefaultCellStyle.Format = "c2";
@@ -1110,13 +1104,7 @@ namespace DCTRNNPBBL.Panels {
                         listResendNpb.Add(data);
                     }
                     dtGrdResendNpb.DataSource = bindResendNpb;
-                    List<string> visibleColumn = new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY", "PICK", "SCAN", "PRICE", "GROSS", "PPN" };
-                    foreach (DataGridViewColumn dtGrdCol in dtGrdResendNpb.Columns) {
-                        if (!visibleColumn.Contains(dtGrdCol.Name)) {
-                            dtGrdCol.Visible = chkSemuaKolom.Checked;
-                            dtGrdCol.ReadOnly = true;
-                        }
-                    }
+                    EnableCustomColumnOnly(dtGrdResendNpb, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY", "PICK", "SCAN", "PRICE", "GROSS", "PPN" });
                     dtGrdResendNpb.Columns["PRICE"].DefaultCellStyle.Format = "c2";
                     dtGrdResendNpb.Columns["PRICE"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
                     dtGrdResendNpb.Columns["GROSS"].DefaultCellStyle.Format = "c2";
@@ -1132,12 +1120,35 @@ namespace DCTRNNPBBL.Panels {
             SetIdleBusyStatus(true);
         }
 
+        private async void btnGetApi_Click(object sender, EventArgs e) {
+            SetIdleBusyStatus(false);
+            string apiDcho = _app.GetConfig("api_dcho");
+            string apiTargetUrl = _app.GetConfig("api_dev");
+            string apiTargetKodeDc = cmbBxNpbApiTargetDcKode.Text.ToUpper();
+            if (!string.IsNullOrEmpty(apiTargetKodeDc) && apiTargetKodeDc != "G000" && !apiTargetKodeDc.Contains("DEV")) {
+                await Task.Run(async () => {
+                    string jsonBody = _api.ObjectToJson(new CMODEL_JSON_KIRIM_DCHO {
+                        TipeData = "TAG_BL",
+                        JenisIP = "IIS",
+                        KodeDC = apiTargetKodeDc
+                    });
+                    var resApi = await _api.PostData(apiDcho, jsonBody);
+                    string resApiStr = await resApi.Content.ReadAsStringAsync();
+                    CMODEL_JSON_TERIMA_DCHO resApiObj = _api.JsonToObj<CMODEL_JSON_TERIMA_DCHO>(resApiStr);
+                    apiTargetUrl = resApiObj.Url;
+                });
+            }
+            txtNpbApiTargetUrl.Text = apiTargetUrl;
+            SetIdleBusyStatus(true);
+        }
+
         private async void btnResendNpbKirim_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             string ctx = "Proses Transfer NPB ...";
-            string apiOwner = txtNpbApiTargetOwner.Text;
+            string apiOwner = "TAG_BL-SHANTI";
+            string apiDcKode = cmbBxNpbApiTargetDcKode.Text.ToUpper();
             string apiTarget = txtNpbApiTargetUrl.Text;
-            if (string.IsNullOrEmpty(apiOwner) || string.IsNullOrEmpty(apiTarget)) {
+            if (string.IsNullOrEmpty(apiDcKode) || string.IsNullOrEmpty(apiTarget)) {
                 MessageBox.Show("API Tujuan Tidak Lengkap", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
             } else {
                 if (listResendNpb.Count > 0) {
@@ -1170,7 +1181,8 @@ namespace DCTRNNPBBL.Panels {
                             string jsonBody = _api.ObjectToJson(bl);
                             var resApi = await _api.PostData(apiTarget, jsonBody);
                             string apiStatusText = $"{(int)resApi.StatusCode} {resApi.StatusCode} - {ctx}";
-                            string apiResponse = await resApi.Content.ReadAsStringAsync();
+                            string resApiStr = await resApi.Content.ReadAsStringAsync();
+                            CMODEL_JSON_TERIMA_NPB_BL resApiObj = _api.JsonToObj<CMODEL_JSON_TERIMA_NPB_BL>(resApiStr);
                             MessageBoxIcon msgBxIco;
                             if (resApi.StatusCode >= System.Net.HttpStatusCode.OK && resApi.StatusCode < System.Net.HttpStatusCode.MultipleChoices) {
                                 msgBxIco = MessageBoxIcon.Information;
@@ -1178,29 +1190,24 @@ namespace DCTRNNPBBL.Panels {
                             else {
                                 msgBxIco = MessageBoxIcon.Error;
                             }
-                            MessageBox.Show(apiResponse, apiStatusText, MessageBoxButtons.OK, msgBxIco);
-                            await _oracle.MarkBeforeExecQueryCommitAndRollback();
+                            MessageBox.Show(resApiObj.Info, apiStatusText, MessageBoxButtons.OK, msgBxIco);
                             bool hasilInsert = await _oracle.ExecQueryAsync($@"
-                        INSERT INTO LOG_API_DC (KODEDC, PEMILIKAPI, NAMAMETHOD, DATAKIRIM, DATABALIK, TANGGAL, STATUS)
-                        VALUES (:kode_dc, :pemilik_api, :nama_method, :data_kirim, :data_balik, :tanggal, :status)
-                    ", new List<CDbQueryParamBind> {
-                        new CDbQueryParamBind { NAME = "kode_dc", VALUE = bl.dc_kode },
-                        new CDbQueryParamBind { NAME = "pemilik_api", VALUE = apiOwner },
-                        new CDbQueryParamBind { NAME = "nama_method", VALUE = urlPaths[urlPaths.Length-1] },
-                        new CDbQueryParamBind { NAME = "data_kirim", VALUE = jsonBody },
-                        new CDbQueryParamBind { NAME = "data_balik", VALUE = apiResponse },
-                        new CDbQueryParamBind { NAME = "tanggal", VALUE = DateTime.Now },
-                        new CDbQueryParamBind { NAME = "status", VALUE = $"{(int) resApi.StatusCode} {resApi.StatusCode}" }
-                    }, false);
-                            if (hasilInsert) {
-                                _oracle.MarkSuccessExecQueryAndCommit();
-                            }
-                            else {
+                                INSERT INTO LOG_API_DC (KODEDC, PEMILIKAPI, NAMAMETHOD, DATAKIRIM, DATABALIK, TANGGAL, STATUS)
+                                VALUES (:kode_dc, :pemilik_api, :nama_method, :data_kirim, :data_balik, :tanggal, :status)
+                            ", new List<CDbQueryParamBind> {
+                                new CDbQueryParamBind { NAME = "kode_dc", VALUE = apiDcKode },
+                                new CDbQueryParamBind { NAME = "pemilik_api", VALUE = apiOwner },
+                                new CDbQueryParamBind { NAME = "nama_method", VALUE = urlPaths[urlPaths.Length-1] },
+                                new CDbQueryParamBind { NAME = "data_kirim", VALUE = jsonBody },
+                                new CDbQueryParamBind { NAME = "data_balik", VALUE = resApiStr },
+                                new CDbQueryParamBind { NAME = "tanggal", VALUE = DateTime.Now },
+                                new CDbQueryParamBind { NAME = "status", VALUE = $"{(int) resApi.StatusCode} {resApi.StatusCode}" }
+                            });
+                            if (!hasilInsert) {
                                 throw new Exception("Gagal Insert Ke LOG_API_DC");
                             }
                         }
                         catch (Exception ex) {
-                            _oracle.MarkFailExecQueryAndRollback();
                             MessageBox.Show(ex.Message, ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     });
@@ -1213,6 +1220,20 @@ namespace DCTRNNPBBL.Panels {
         }
 
         /* ** */
+
+        private async void tabLogs_Enter(object sender, EventArgs e) {
+            if (programIdle) {
+                SetIdleBusyStatus(false);
+                DataTable dtLogs = new DataTable();
+                await Task.Run(async () => {
+                    dtLogs = await _oracle.GetDataTableAsync($@"SELECT * FROM LOG_API_DC ORDER BY TANGGAL DESC");
+                });
+                dtGrdLogs.DataSource = _converter.ConvertDataTableToList<CMODEL_TABEL_LOG_API_DC>(dtLogs);
+                dtGrdLogs.Columns["TANGGAL"].DisplayIndex = 0;
+                dtGrdLogs.Columns["STATUS"].DisplayIndex = 1;
+                SetIdleBusyStatus(true);
+            }
+        }
 
     }
 
