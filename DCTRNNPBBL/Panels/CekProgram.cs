@@ -51,12 +51,6 @@ namespace DCTRNNPBBL.Panels {
         }
 
         private void CCekProgram_Load(object sender, EventArgs e) {
-
-            // Change Form View
-            _globals.Main.StatusStripContainer.Items["statusStripIpAddress"].Text = _app.IpAddress;
-            _globals.Main.StatusStripContainer.Items["statusStripAppVersion"].Text = $"v{_app.AppVersion}";
-
-            // Check Version Running Async
             CheckVersiProgram();
         }
 
@@ -65,7 +59,12 @@ namespace DCTRNNPBBL.Panels {
             // Check Version
             string responseCekProgram = null;
             await Task.Run(async () => {
+
+                // Change Form View
+                _globals.Main.StatusStripContainer.Items["statusStripIpAddress"].Text = _app.GetIpAddress();
+                _globals.Main.StatusStripContainer.Items["statusStripAppVersion"].Text = $"v{_app.AppVersion}";
                 _globals.Main.StatusStripContainer.Items["statusStripKodeDc"].Text = _oracle.DbName;
+
                 responseCekProgram = await _oracle.CekVersi();
             });
 

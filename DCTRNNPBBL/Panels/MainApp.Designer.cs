@@ -542,6 +542,7 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdEditSplit.RowHeadersVisible = false;
             this.dtGrdEditSplit.Size = new System.Drawing.Size(711, 254);
             this.dtGrdEditSplit.TabIndex = 26;
+            this.dtGrdEditSplit.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dtGrdEditSplit_EditingControlShowing);
             // 
             // panel4
             // 

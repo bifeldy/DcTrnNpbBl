@@ -699,6 +699,12 @@ namespace DCTRNNPBBL.Panels {
             bindAvailableEditSplitHhPick.ResetBindings();
             bindAvailableEditSplitHhScan.ResetBindings();
             bindEditSplit.ResetBindings();
+            CheckEnableDisableIpHhPickScanEditSplit();
+            SetIdleBusyStatus(true);
+        }
+
+        private void CheckEnableDisableIpHhPickScanEditSplit() {
+            bool canChangeIpHhScan = true;
             foreach (DataGridViewRow row in dtGrdEditSplit.Rows) {
                 DateTime pickTime = DateTime.Parse(row.Cells[dtGrdEditSplit.Columns["TIME_PICKING"].Index].Value.ToString());
                 DateTime scanTime = DateTime.Parse(row.Cells[dtGrdEditSplit.Columns["TIME_SCANNING"].Index].Value.ToString());
@@ -709,14 +715,40 @@ namespace DCTRNNPBBL.Panels {
                     }
                     if (scanTime != DateTime.MinValue) {
                         row.Cells[dtGrdEditSplit.Columns["IP_HH_SCAN"].Index].ReadOnly = true;
+                        canChangeIpHhScan = false;
                     }
                 }
                 else {
                     row.Cells[dtGrdEditSplit.Columns["IP_HH_PICK"].Index].ReadOnly = true;
                     row.Cells[dtGrdEditSplit.Columns["IP_HH_SCAN"].Index].ReadOnly = true;
+                    canChangeIpHhScan = false;
                 }
             }
-            SetIdleBusyStatus(true);
+            if (!canChangeIpHhScan) {
+                foreach (DataGridViewRow row in dtGrdEditSplit.Rows) {
+                    row.Cells[dtGrdEditSplit.Columns["IP_HH_SCAN"].Index].ReadOnly = true;
+                }
+            }
+        }
+
+        private void dtGrdEditSplit_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e) {
+            if (e.Control is ComboBox cmbBx) {
+                cmbBx.SelectionChangeCommitted -= cmbBx_SelectionChangeCommitted;
+                cmbBx.SelectionChangeCommitted += cmbBx_SelectionChangeCommitted;
+            }
+        }
+
+        private void cmbBx_SelectionChangeCommitted(object sender, EventArgs e) {
+            Point currentcell = dtGrdEditSplit.CurrentCellAddress;
+            if (currentcell.X == dtGrdEditSplit.Columns["IP_HH_SCAN"].Index) {
+                DataGridViewComboBoxEditingControl cmbBxIpHhScan = sender as DataGridViewComboBoxEditingControl;
+                string selectedNewIpHhScan = cmbBxIpHhScan.Text;
+                foreach (CMODEL_GRID_EDIT_SPLIT data in listEditSplit) {
+                    data.HH_SCAN = selectedNewIpHhScan;
+                }
+                bindEditSplit.ResetBindings();
+                CheckEnableDisableIpHhPickScanEditSplit();
+            }
         }
 
         private async void btnEditSplitUpdate_Click(object sender, EventArgs e) {

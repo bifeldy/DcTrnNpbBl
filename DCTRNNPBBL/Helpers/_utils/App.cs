@@ -15,6 +15,7 @@ using System;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DCTRNNPBBL.Helpers._utils {
@@ -28,7 +29,7 @@ namespace DCTRNNPBBL.Helpers._utils {
         string AppName { get; }
         string AppLocation { get; }
         string AppVersion { get; }
-        string IpAddress { get; }
+        string GetIpAddress();
         void Exit();
         int ScreenWidth { get; }
         int ScreenHeight { get; }
@@ -42,11 +43,12 @@ namespace DCTRNNPBBL.Helpers._utils {
 
         private readonly string AppLocation;
         private readonly string AppVersion;
-        private readonly string IpAddress;
 
         private readonly string AppName;
         private readonly int ScreenWidth = 0;
         private readonly int ScreenHeight = 0;
+
+        private string IpAddress;
 
         public CApp() {
             _SettingLib = new SettingLib.Class1();
@@ -54,7 +56,6 @@ namespace DCTRNNPBBL.Helpers._utils {
             ClsProgramMonitor = new SD3Fungsi.Cls_ProgramMonitor();
             AppLocation = AppDomain.CurrentDomain.BaseDirectory;
             AppVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            IpAddress = SD3Fungsi.IpKomp.GetIPAddress().Split(',').First();
             //
             AppName = Assembly.GetExecutingAssembly().GetName().Name + ".EXE";
             ScreenWidth = Screen.PrimaryScreen.WorkingArea.Width;
@@ -85,8 +86,6 @@ namespace DCTRNNPBBL.Helpers._utils {
 
         string IApp.AppVersion => AppVersion;
 
-        string IApp.IpAddress => IpAddress;
-
         /* Aplikasi EXE */
 
         string IApp.AppName => AppName;
@@ -100,6 +99,13 @@ namespace DCTRNNPBBL.Helpers._utils {
         int IApp.ScreenWidth => ScreenWidth;
 
         int IApp.ScreenHeight => ScreenHeight;
+
+        public string GetIpAddress() {
+            if (string.IsNullOrEmpty(IpAddress)) {
+                IpAddress = SD3Fungsi.IpKomp.GetIPAddress().Split(',').First();
+            }
+            return IpAddress;
+        }
 
     }
 
