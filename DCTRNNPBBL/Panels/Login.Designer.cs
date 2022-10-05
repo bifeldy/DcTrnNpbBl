@@ -63,11 +63,11 @@ namespace DCTRNNPBBL.Panels {
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(96, 36);
+            this.label1.Location = new System.Drawing.Point(136, 36);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(120, 21);
+            this.label1.Size = new System.Drawing.Size(81, 21);
             this.label1.TabIndex = 10;
-            this.label1.Text = "Username / NIK";
+            this.label1.Text = "Username";
             // 
             // txtPassword
             // 
