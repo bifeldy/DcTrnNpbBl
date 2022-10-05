@@ -382,8 +382,12 @@ namespace DCTRNNPBBL.Panels {
                                 a.DOC_DATE,
                                 b.PLU_ID,
                                 c.MBR_SINGKATAN AS SINGKATAN,
-                                (PLA_LINE || '.' || PLA_RAK || '.' || PLA_SHELF || '.' || PLA_CELL) AS LOKASI,
+                                (d.PLA_LINE || '.' || d.PLA_RAK || '.' || d.PLA_SHELF || '.' || d.PLA_CELL) AS LOKASI,
+                                d.PLA_CELLID AS CELLID_PLANO,
+                                d.PLA_QTY_STOK,
                                 b.QTY_RPB,
+                                b.KETER,
+                                d.PLA_DISPLAY,
                                 b.IP_PICKING AS HH_PICK,
                                 b.IP_SCANNING AS HH_SCAN
                             FROM
@@ -396,7 +400,6 @@ namespace DCTRNNPBBL.Panels {
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_PLUID AND
                                 b.PLU_ID = d.PLA_FK_PLUID AND
-                                d.PLA_DISPLAY = 'Y' AND
                                 (a.TGL_SPLIT IS NULL OR a.TGL_SPLIT = '')
                         ",
                         new List<CDbQueryParamBind> {
@@ -427,7 +430,7 @@ namespace DCTRNNPBBL.Panels {
                         listSplit.Add(data);
                     }
                     dtGrdSplit.DataSource = bindSplit;
-                    EnableCustomColumnOnly(dtGrdSplit, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY_RPB", "HH_SCAN", "IP_HH_PICK" });
+                    EnableCustomColumnOnly(dtGrdSplit, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY_RPB", "KETER", "HH_SCAN", "IP_HH_PICK" });
                     if (!dtGrdSplit.Columns.Contains("IP_HH_PICK")) {
                         dtGrdSplit.Columns.Add(new DataGridViewComboBoxColumn {
                             Name = "IP_HH_PICK",
@@ -445,6 +448,13 @@ namespace DCTRNNPBBL.Panels {
             }
             bindSelectedSplitHhPick.ResetBindings();
             bindSplit.ResetBindings();
+            foreach (DataGridViewRow row in dtGrdSplit.Rows) {
+                object keter = row.Cells[dtGrdSplit.Columns["KETER"].Index].Value;
+                object display = row.Cells[dtGrdSplit.Columns["PLA_DISPLAY"].Index].Value;
+                if (!string.IsNullOrEmpty((string) keter) || string.IsNullOrEmpty((string) display)) {
+                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 64, 129);
+                }
+            }
             SetIdleBusyStatus(true);
         }
 
@@ -509,55 +519,102 @@ namespace DCTRNNPBBL.Panels {
             if (safeForUpdate && listSplit.Count > 0) {
                 try {
                     await _oracle.MarkBeforeExecQueryCommitAndRollback();
+                    bool bolehSplit = true;
                     foreach (CMODEL_GRID_SPLIT data in listSplit) {
-                        bool update1 = false;
+                        string stokPlanoRakDisplay = "";
+                        if (data.PLA_DISPLAY != "Y") {
+                            stokPlanoRakDisplay = "Belum Ada Rak Display";
+                        }
+                        if (data.QTY_RPB > data.PLA_QTY_STOK) {
+                            stokPlanoRakDisplay = "Stok Plano Tidak Cukup";
+                        }
+                        if (!string.IsNullOrEmpty(stokPlanoRakDisplay)) {
+                            bolehSplit = false;
+                            await Task.Run(async () => {
+                                await _oracle.ExecQueryAsync(
+                                    $@"
+                                        UPDATE
+                                            DC_PICKBL_DTL_T
+                                        SET
+                                            KETER = :keter
+                                        WHERE
+                                            SEQ_FK_NO = :seq_fk_no AND
+                                            PLU_ID = :plu_id
+                                    ",
+                                    new List<CDbQueryParamBind> {
+                                        new CDbQueryParamBind { NAME = "keter", VALUE = stokPlanoRakDisplay },
+                                        new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = data.SEQ_NO },
+                                        new CDbQueryParamBind { NAME = "plu_id", VALUE = data.PLU_ID }
+                                    },
+                                    false
+                                );
+                            });
+                        }
+                    }
+                    if (!bolehSplit) {
+                        _oracle.MarkSuccessExecQueryAndCommit();
+                        MessageBox.Show("Silahkan Cek Kolom Keterangan", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        btnSplitLoad_Click(null, EventArgs.Empty);
+                    }
+                    else {
+                        foreach (CMODEL_GRID_SPLIT data in listSplit) {
+                            bool update1 = false;
+                            await Task.Run(async () => {
+                                update1 = await _oracle.ExecQueryAsync(
+                                    $@"
+                                        UPDATE
+                                            DC_PICKBL_DTL_T
+                                        SET
+                                            QTY_PICK = :qty_rpb,
+                                            RAK_PLANO = :rak_plano,
+                                            CELLID_PLANO = :cellid_plano,
+                                            IP_PICKING = :ip_picking,
+                                            IP_SCANNING = :ip_scanning,
+                                            KETER = :keter
+                                        WHERE
+                                            SEQ_FK_NO = :seq_fk_no AND
+                                            PLU_ID = :plu_id
+                                    ",
+                                    new List<CDbQueryParamBind> {
+                                        new CDbQueryParamBind { NAME = "qty_rpb", VALUE = data.QTY_RPB },
+                                        new CDbQueryParamBind { NAME = "rak_plano", VALUE = data.LOKASI },
+                                        new CDbQueryParamBind { NAME = "cellid_plano", VALUE = data.CELLID_PLANO },
+                                        new CDbQueryParamBind { NAME = "ip_picking", VALUE = data.HH_PICK },
+                                        new CDbQueryParamBind { NAME = "ip_scanning", VALUE = data.HH_SCAN },
+                                        new CDbQueryParamBind { NAME = "keter", VALUE = "" },
+                                        new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = data.SEQ_NO },
+                                        new CDbQueryParamBind { NAME = "plu_id", VALUE = data.PLU_ID }
+                                    },
+                                    false
+                                );
+                            });
+                            if (!update1) {
+                                throw new Exception($"Gagal Mengatur HH Untuk {data.SINGKATAN}");
+                            }
+                        }
+                        bool update2 = false;
                         await Task.Run(async () => {
-                            update1 = await _oracle.ExecQueryAsync(
+                            update2 = await _oracle.ExecQueryAsync(
                                 $@"
                                     UPDATE
-                                        DC_PICKBL_DTL_T
+                                        DC_PICKBL_HDR_T
                                     SET
-                                        IP_PICKING = :ip_picking,
-                                        IP_SCANNING = :ip_scanning
+                                        TGL_SPLIT = SYSDATE
                                     WHERE
-                                        SEQ_FK_NO = :seq_fk_no AND
-                                        PLU_ID = :plu_id
+                                        SEQ_NO = :seq_no
                                 ",
                                 new List<CDbQueryParamBind> {
-                                    new CDbQueryParamBind { NAME = "ip_picking", VALUE = data.HH_PICK },
-                                    new CDbQueryParamBind { NAME = "ip_scanning", VALUE = data.HH_SCAN },
-                                    new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = data.SEQ_NO },
-                                    new CDbQueryParamBind { NAME = "plu_id", VALUE = data.PLU_ID }
+                                new CDbQueryParamBind { NAME = "seq_no", VALUE = listSplit.FirstOrDefault().SEQ_NO }
                                 },
                                 false
                             );
                         });
-                        if (!update1) {
-                            throw new Exception($"Gagal Mengatur HH Untuk {data.SINGKATAN}");
+                        if (!update2) {
+                            throw new Exception($"Gagal Set Tanggal Split");
                         }
+                        _oracle.MarkSuccessExecQueryAndCommit();
+                        MessageBox.Show("Selesai Proses", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    bool update2 = false;
-                    await Task.Run(async () => {
-                        update2 = await _oracle.ExecQueryAsync(
-                            $@"
-                                UPDATE
-                                    DC_PICKBL_HDR_T
-                                SET
-                                    TGL_SPLIT = SYSDATE
-                                WHERE
-                                    SEQ_NO = :seq_no
-                            ",
-                            new List<CDbQueryParamBind> {
-                                new CDbQueryParamBind { NAME = "seq_no", VALUE = listSplit.FirstOrDefault().SEQ_NO }
-                            },
-                            false
-                        );
-                    });
-                    if (!update2) {
-                        throw new Exception($"Gagal Set Tanggal Split");
-                    }
-                    _oracle.MarkSuccessExecQueryAndCommit();
-                    MessageBox.Show("Selesai Proses", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex) {
                     _oracle.MarkFailExecQueryAndRollback();
@@ -584,16 +641,14 @@ namespace DCTRNNPBBL.Panels {
                 listEditSplitAllNo.Clear();
                 DataTable dtAllRpb = new DataTable();
                 await Task.Run(async () => {
-                    dtAllRpb = await _oracle.GetDataTableAsync(
-                        $@"
+                    dtAllRpb = await _oracle.GetDataTableAsync($@"
                         SELECT
                             DOC_NO
                         FROM
                             DC_PICKBL_HDR_T
                         WHERE
                             (TGL_SPLIT IS NOT NULL OR TGL_SPLIT <> '')
-                    "
-                    );
+                    ");
                 });
                 List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = _converter.ConvertDataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllRpb);
                 lsDtAllRpb.Sort((x, y) => x.DOC_NO.CompareTo(y.DOC_NO));
