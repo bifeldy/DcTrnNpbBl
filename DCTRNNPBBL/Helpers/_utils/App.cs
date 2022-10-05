@@ -14,6 +14,7 @@
 using System;
 using System.Configuration;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -30,6 +31,7 @@ namespace DCTRNNPBBL.Helpers._utils {
         string AppLocation { get; }
         string AppVersion { get; }
         string GetIpAddress();
+        string CekUser(string p_connStr, string p_user, string p_password);
         void Exit();
         int ScreenWidth { get; }
         int ScreenHeight { get; }
@@ -37,6 +39,7 @@ namespace DCTRNNPBBL.Helpers._utils {
 
     public class CApp : IApp {
 
+        private readonly LIBLOGIN.Class1 _LIBLOGIN;
         private readonly SettingLib.Class1 _SettingLib;
         private readonly SettingLibRest.Class1 _SettingLibRest;
         private readonly SD3Fungsi.Cls_ProgramMonitor ClsProgramMonitor;
@@ -49,8 +52,10 @@ namespace DCTRNNPBBL.Helpers._utils {
         private readonly int ScreenHeight = 0;
 
         private string IpAddress;
+        private string MacAddress;
 
         public CApp() {
+            _LIBLOGIN = new LIBLOGIN.Class1();
             _SettingLib = new SettingLib.Class1();
             _SettingLibRest = new SettingLibRest.Class1();
             ClsProgramMonitor = new SD3Fungsi.Cls_ProgramMonitor();
@@ -102,9 +107,13 @@ namespace DCTRNNPBBL.Helpers._utils {
 
         public string GetIpAddress() {
             if (string.IsNullOrEmpty(IpAddress)) {
-                IpAddress = SD3Fungsi.IpKomp.GetIPAddress().Split(',').First();
+                IpAddress = SD3Fungsi.IpKomp.GetIPAddress().Split(',').FirstOrDefault();
             }
             return IpAddress;
+        }
+
+        public string CekUser(string p_connStr, string p_user, string p_password) {
+            return _LIBLOGIN.cekUser(p_connStr, p_user, p_password, AppName, GetIpAddress());
         }
 
     }

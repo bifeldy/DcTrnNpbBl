@@ -13,6 +13,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -22,6 +23,7 @@ using Oracle.ManagedDataAccess.Client;
 
 using DCTRNNPBBL.Helpers._models;
 using DCTRNNPBBL.Helpers._utils;
+using System.Windows.Forms;
 
 namespace DCTRNNPBBL.Helpers._db {
 
@@ -34,6 +36,7 @@ namespace DCTRNNPBBL.Helpers._db {
         Task<DbDataReader> ExecReaderAsync(string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = false);
         Task<string> RetrieveBlob(string stringPathDownload, string stringFileName, string queryString, List<CDbQueryParamBind> bindParam = null, bool closeConnection = false);
         string LoggedInUsername { get; }
+        Task<string> GetJenisDc();
         Task<string> CekVersi();
         Task<string> GetKodeDc();
         Task<string> GetNamaDc();
@@ -49,6 +52,7 @@ namespace DCTRNNPBBL.Helpers._db {
 
         private string DcCode;
         private string DcName;
+        private string DcJenis;
         private string LoggedInUsername;
 
         public COracle(IApp app, ILogger logger) : base(logger) {
@@ -151,6 +155,13 @@ namespace DCTRNNPBBL.Helpers._db {
 
         string IOracle.LoggedInUsername => LoggedInUsername;
 
+        public async Task<string> GetJenisDc() {
+            if (string.IsNullOrEmpty(DcJenis)) {
+                DcJenis = await ExecScalarAsync(EReturnDataType.STRING, "SELECT TBL_JENIS_DC FROM DC_TABEL_DC_T");
+            }
+            return DcJenis;
+        }
+
         public async Task<string> GetKodeDc() {
             if (string.IsNullOrEmpty(DcCode)) {
                 DcCode = await ExecScalarAsync(EReturnDataType.STRING, "SELECT TBL_DC_KODE FROM DC_TABEL_DC_T");
@@ -175,19 +186,29 @@ namespace DCTRNNPBBL.Helpers._db {
 
         public async Task<bool> LoginUser(string userNameNik, string password) {
             if (string.IsNullOrEmpty(LoggedInUsername)) {
-                LoggedInUsername = await ExecScalarAsync(EReturnDataType.STRING, $@"
-                    SELECT
-                        user_name
-                    FROM
-                        dc_user_t
-                    WHERE
-                        (user_name = :user_name OR user_nik = :user_nik)
-                        AND user_password = :password
-                ", new List<CDbQueryParamBind> {
-                    new CDbQueryParamBind { NAME = "user_name", VALUE = userNameNik },
-                    new CDbQueryParamBind { NAME = "user_nik", VALUE = userNameNik },
-                    new CDbQueryParamBind { NAME = "password", VALUE = password }
-                });
+                #if DEBUG
+                    LoggedInUsername = await ExecScalarAsync(EReturnDataType.STRING, $@"
+                        SELECT
+                            user_name
+                        FROM
+                            dc_user_t
+                        WHERE
+                            (user_name = :user_name OR user_nik = :user_nik)
+                            AND user_password = :password
+                    ", new List<CDbQueryParamBind> {
+                        new CDbQueryParamBind { NAME = "user_name", VALUE = userNameNik },
+                        new CDbQueryParamBind { NAME = "user_nik", VALUE = userNameNik },
+                        new CDbQueryParamBind { NAME = "password", VALUE = password }
+                    });
+                #else
+                    string res = _app.CekUser(DbConnectionString, userNameNik, password);
+                    if (res == "Y") {
+                        LoggedInUsername = userNameNik;
+                    }
+                    else {
+                        MessageBox.Show(res, "Cek User", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                #endif
             }
             return !string.IsNullOrEmpty(LoggedInUsername);
         }

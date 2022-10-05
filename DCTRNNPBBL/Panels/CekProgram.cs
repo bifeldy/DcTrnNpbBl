@@ -11,6 +11,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -51,31 +52,43 @@ namespace DCTRNNPBBL.Panels {
         }
 
         private void CCekProgram_Load(object sender, EventArgs e) {
-            CheckVersiProgram();
+            CheckProgram();
         }
 
-        private async void CheckVersiProgram() {
+        private async void CheckProgram() {
+            List<string> dc = new List<string> { "INDUK", "DEPO" };
 
-            // Check Version
-            string responseCekProgram = null;
+            // Check Jenis DC
+            bool allowed = false;
             await Task.Run(async () => {
-
-                // Change Form View
-                _globals.Main.StatusStripContainer.Items["statusStripIpAddress"].Text = _app.GetIpAddress();
-                _globals.Main.StatusStripContainer.Items["statusStripAppVersion"].Text = $"v{_app.AppVersion}";
-                _globals.Main.StatusStripContainer.Items["statusStripKodeDc"].Text = _oracle.DbName;
-
-                responseCekProgram = await _oracle.CekVersi();
+                allowed = dc.Contains(await _oracle.GetJenisDc());
             });
+            if (allowed) {
 
-            // Read Response
-            if (responseCekProgram.Contains("OKE")) {
-                ShowLoginPanel();
-            }
-            else {
+                // Check Version
+                string responseCekProgram = null;
+                await Task.Run(async () => {
+
+                    // Change Form View
+                    _globals.Main.StatusStripContainer.Items["statusStripIpAddress"].Text = _app.GetIpAddress();
+                    _globals.Main.StatusStripContainer.Items["statusStripAppVersion"].Text = $"v{_app.AppVersion}";
+                    _globals.Main.StatusStripContainer.Items["statusStripKodeDc"].Text = _oracle.DbName;
+
+                    responseCekProgram = await _oracle.CekVersi();
+                });
+                if (responseCekProgram.Contains("OKE")) {
+                    ShowLoginPanel();
+                    return;
+                }
                 MessageBox.Show(responseCekProgram, "Program Checker", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                _app.Exit();
             }
+            MessageBox.Show(
+                $"Program Hanya Dapat Di Jalankan Di DC {Environment.NewLine}{string.Join(", ", dc.ToArray())}",
+                "Program Checker",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
+            _app.Exit();
         }
 
         private void ShowLoginPanel() {
