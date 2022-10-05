@@ -194,7 +194,7 @@ namespace DCTRNNPBBL.Panels {
             btnReSendNpbLoad.Enabled = isEnabled;
             btnReSendNpbKirim.Enabled = isEnabled;
             dtGrdReSendNpb.Enabled = isEnabled;
-            cmbBxReSendNpbApiTargetDcKode.Enabled = isEnabled;
+            txtReSendNpbApiTargetDcKode.Enabled = isEnabled;
 
             /* ** */
         }
@@ -530,8 +530,9 @@ namespace DCTRNNPBBL.Panels {
                         }
                         if (!string.IsNullOrEmpty(stokPlanoRakDisplay)) {
                             bolehSplit = false;
+                            bool update = false;
                             await Task.Run(async () => {
-                                await _oracle.ExecQueryAsync(
+                                update = await _oracle.ExecQueryAsync(
                                     $@"
                                         UPDATE
                                             DC_PICKBL_DTL_T
@@ -549,6 +550,9 @@ namespace DCTRNNPBBL.Panels {
                                     false
                                 );
                             });
+                            if (!update) {
+                                throw new Exception($"Gagal Mengubah Keterangan Untuk {data.SINGKATAN}");
+                            }
                         }
                     }
                     if (!bolehSplit) {
@@ -929,6 +933,7 @@ namespace DCTRNNPBBL.Panels {
                                 b.QTY_RPB AS QTY,
                                 b.QTY_PICKING AS PICK,
                                 b.QTY_SCANNING AS SCAN,
+                                b.HPP,
                                 NVL (c.mbr_acost, NVL(c.mbr_lcost, 0)) AS PRICE,
                                 b.QTY_RPB *
                                     NVL (c.mbr_acost, NVL(c.mbr_lcost, 0))
@@ -944,23 +949,25 @@ namespace DCTRNNPBBL.Panels {
                                         0
                                 END AS PPN,
                                 b.SJ_QTY,
-                                b.HPP,
                                 b.TGLEXP,
                                 a.NPBDC_NO,
                                 a.NPBDC_DATE,
                                 a.WHK_KODE,
-                                e.TBL_NPWP_DC
+                                e.TBL_NPWP_DC,
+                                f.MBR_PPN_PERSEN
                             FROM
                                 DC_PICKBL_HDR_T a,
                                 DC_PICKBL_DTL_T b,
                                 DC_BARANG_DC_V c,
                                 DC_PLANOGRAM_T d,
-                                DC_TABEL_DC_T e
+                                DC_TABEL_DC_T e,
+                                DC_BARANG_DC_T f
                             WHERE
                                 a.DOC_NO = :doc_no AND
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_FK_PLUID AND
                                 b.PLU_ID = d.PLA_FK_PLUID AND
+                                b.PLU_ID = f.MBR_FK_PLUID AND
                                 d.PLA_DISPLAY = 'Y' AND
                                 (a.TGL_SPLIT IS NOT NULL OR a.TGL_SPLIT <> '') AND
                                 (a.NPBDC_DATE IS NULL OR a.NPBDC_DATE = '')
@@ -984,6 +991,8 @@ namespace DCTRNNPBBL.Panels {
                     }
                     dtGrdProsesNpb.DataSource = bindTransferNpb;
                     EnableCustomColumnOnly(dtGrdProsesNpb, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY", "PICK", "SCAN", "PRICE", "GROSS", "PPN" });
+                    dtGrdProsesNpb.Columns["HPP"].DefaultCellStyle.Format = "c2";
+                    dtGrdProsesNpb.Columns["HPP"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
                     dtGrdProsesNpb.Columns["PRICE"].DefaultCellStyle.Format = "c2";
                     dtGrdProsesNpb.Columns["PRICE"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
                     dtGrdProsesNpb.Columns["GROSS"].DefaultCellStyle.Format = "c2";
@@ -1024,59 +1033,101 @@ namespace DCTRNNPBBL.Panels {
                 }
             }
             if (safeForNpb) {
-                decimal dcid = 0;
-                await Task.Run(async () => {
-                    dcid = await _oracle.ExecScalarAsync(
-                        EReturnDataType.INT,
-                        "SELECT get_dcid(:dc_kode) FROM DUAL",
-                        new List<CDbQueryParamBind> {
-                                new CDbQueryParamBind { NAME = "dc_kode", VALUE = listTransferNpb.FirstOrDefault().DC_KODE }
+                bool update = false;
+                try {
+                    await _oracle.MarkBeforeExecQueryCommitAndRollback();
+                    foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in listTransferNpb) {
+                        await Task.Run(async () => {
+                            update = await _oracle.ExecQueryAsync(
+                                $@"
+                                    UPDATE
+                                        DC_PICKBL_DTL_T
+                                    SET
+                                        PRICE = :price,
+                                        GROSS = :gross,
+                                        PPN = :ppn,
+                                        PPN_RATE = :ppn_rate
+                                    WHERE
+                                        SEQ_FK_NO = :seq_fk_no AND
+                                        PLU_ID = :plu_id
+                                ",
+                                new List<CDbQueryParamBind> {
+                                        new CDbQueryParamBind { NAME = "price", VALUE = data.PRICE },
+                                        new CDbQueryParamBind { NAME = "gross", VALUE = data.GROSS },
+                                        new CDbQueryParamBind { NAME = "ppn", VALUE = data.PPN },
+                                        new CDbQueryParamBind { NAME = "ppn_rate", VALUE = data.MBR_PPN_PERSEN },
+                                        new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = data.SEQ_NO },
+                                        new CDbQueryParamBind { NAME = "plu_id", VALUE = data.PLU_ID }
+                                },
+                                false
+                            );
+                        });
+                        if (!update) {
+                            throw new Exception($"Gagal Memperbaharui Data {data.SINGKATAN}");
                         }
-                    );
-                });
-                if (dcid > 0) {
-                    string procName = "DC_ANTARGUDANG_WEB.PROSES_NPBDCBL";
-                    CDbExecProcResult runProc = null;
+                    }
+                    _oracle.MarkSuccessExecQueryAndCommit();
+                }
+                catch (Exception ex) {
+                    _oracle.MarkFailExecQueryAndRollback();
+                    MessageBox.Show(ex.Message, ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                if (update) {
+                    decimal dcid = 0;
                     await Task.Run(async () => {
-                        runProc = await _oracle.ExecProcedureAsync(
-                            procName,
+                        dcid = await _oracle.ExecScalarAsync(
+                            EReturnDataType.INT,
+                            "SELECT get_dcid(:dc_kode) FROM DUAL",
                             new List<CDbQueryParamBind> {
+                                new CDbQueryParamBind { NAME = "dc_kode", VALUE = listTransferNpb.FirstOrDefault().DC_KODE }
+                            }
+                        );
+                    });
+                    if (dcid > 0) {
+                        string procName = "DC_ANTARGUDANG_WEB.PROSES_NPBDCBL";
+                        CDbExecProcResult runProc = null;
+                        await Task.Run(async () => {
+                            runProc = await _oracle.ExecProcedureAsync(
+                                procName,
+                                new List<CDbQueryParamBind> {
                                     new CDbQueryParamBind { NAME = "n_noref", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
                                     new CDbQueryParamBind { NAME = "d_tgl_ref", VALUE = dtPckrProsesNpbTglRpb.Value },
                                     new CDbQueryParamBind { NAME = "n_dcid1", VALUE = dcid },
                                     new CDbQueryParamBind { NAME = "n_hdrid", VALUE = (decimal) 0, DIRECTION = ParameterDirection.Output },
                                     new CDbQueryParamBind { NAME = "p_msg", VALUE = "", DIRECTION = ParameterDirection.Output, SIZE = 2000 }
-                            }
-                        );
-                    });
-                    string resProc = $"status = {(runProc.STATUS ? "Berhasil" : "Gagal")}";
-                    if (runProc.PARAMETERS != null) {
-                        resProc += Environment.NewLine + Environment.NewLine;
-                        for (int i = 0; i < runProc.PARAMETERS.Count; i++) {
-                            resProc += $"{runProc.PARAMETERS[i].ParameterName} = {runProc.PARAMETERS[i].Value}";
-                            if (i + 1 < runProc.PARAMETERS.Count) resProc += Environment.NewLine;
-                        }
-                    }
-                    MessageBox.Show(resProc, runProc.QUERY, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    if (runProc.STATUS) {
-                        decimal npb = 0;
-                        await Task.Run(async () => {
-                            npb = await _oracle.ExecScalarAsync(
-                                EReturnDataType.DECIMAL,
-                                "SELECT NPBDC_NO FROM DC_PICKBL_HDR_T WHERE SEQ_NO = :seq_no AND DOC_NO = :doc_no",
-                                new List<CDbQueryParamBind> {
-                                new CDbQueryParamBind { NAME = "seq_no", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
-                                new CDbQueryParamBind { NAME = "doc_no", VALUE = listTransferNpb.FirstOrDefault().DOC_NO }
                                 }
                             );
                         });
-                        string msg = "No. NPB :: " + npb + Environment.NewLine;
-                        msg += "Silahkan Kirim NPB Menggunakan Menu 'ReSend NPB'";
-                        MessageBox.Show(msg, "NPB Berhasil Dibuat Tapi Belum Terkirim", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        string resProc = $"status = {(runProc.STATUS ? "Berhasil" : "Gagal")}";
+                        if (runProc.PARAMETERS != null) {
+                            resProc += Environment.NewLine + Environment.NewLine;
+                            for (int i = 0; i < runProc.PARAMETERS.Count; i++) {
+                                resProc += $"{runProc.PARAMETERS[i].ParameterName} = {runProc.PARAMETERS[i].Value}";
+                                if (i + 1 < runProc.PARAMETERS.Count) resProc += Environment.NewLine;
+                            }
+                        }
+                        MessageBox.Show(resProc, runProc.QUERY, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (runProc.STATUS) {
+                            decimal npb = 0;
+                            await Task.Run(async () => {
+                                npb = await _oracle.ExecScalarAsync(
+                                    EReturnDataType.DECIMAL,
+                                    "SELECT NPBDC_NO FROM DC_PICKBL_HDR_T WHERE SEQ_NO = :seq_no AND DOC_NO = :doc_no",
+                                    new List<CDbQueryParamBind> {
+                                        new CDbQueryParamBind { NAME = "seq_no", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
+                                        new CDbQueryParamBind { NAME = "doc_no", VALUE = listTransferNpb.FirstOrDefault().DOC_NO }
+                                    }
+                                );
+                            });
+                            cmbBxReSendNpbAllNo.Text = npb.ToString();
+                            string msg = "No. NPB :: " + npb + Environment.NewLine;
+                            msg += "Silahkan Kirim NPB Menggunakan Menu 'ReSend NPB'";
+                            MessageBox.Show(msg, "NPB Berhasil Dibuat Tapi Belum Terkirim", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
-                }
-                else {
-                    MessageBox.Show("Gagal Mendapatkan DCID", ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    else {
+                        MessageBox.Show("Gagal Mendapatkan DCID", ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             else {
@@ -1211,8 +1262,8 @@ namespace DCTRNNPBBL.Panels {
             SetIdleBusyStatus(false);
             string apiDcho = _app.GetConfig("api_dcho");
             string apiTargetUrl = _app.GetConfig("api_dev");
-            string apiTargetKodeDc = cmbBxReSendNpbApiTargetDcKode.Text.ToUpper();
-            if (!string.IsNullOrEmpty(apiTargetKodeDc) && apiTargetKodeDc != "G000" && !apiTargetKodeDc.Contains("DEV")) {
+            string apiTargetKodeDc = txtReSendNpbApiTargetDcKode.Text.ToUpper();
+            if (!string.IsNullOrEmpty(apiTargetKodeDc) && apiTargetKodeDc != "G000" && apiTargetKodeDc != "DEV" && apiTargetKodeDc != "SIM") {
                 await Task.Run(async () => {
                     string jsonBody = _api.ObjectToJson(new CMODEL_JSON_KIRIM_DCHO {
                         TipeData = "TAG_BL",
@@ -1233,7 +1284,7 @@ namespace DCTRNNPBBL.Panels {
             SetIdleBusyStatus(false);
             string ctx = "Proses Transfer NPB ...";
             string apiOwner = "TAG_BL-SHANTI";
-            string apiDcKode = cmbBxReSendNpbApiTargetDcKode.Text.ToUpper();
+            string apiDcKode = txtReSendNpbApiTargetDcKode.Text.ToUpper();
             string apiTarget = txtReSendNpbApiTargetUrl.Text;
             if (string.IsNullOrEmpty(apiDcKode) || string.IsNullOrEmpty(apiTarget)) {
                 MessageBox.Show("API Tujuan Tidak Lengkap", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);

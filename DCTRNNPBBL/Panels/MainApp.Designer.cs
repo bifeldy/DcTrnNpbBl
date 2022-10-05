@@ -29,9 +29,9 @@ namespace DCTRNNPBBL.Panels {
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainApp));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -83,7 +83,6 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdProsesNpb = new System.Windows.Forms.DataGridView();
             this.tabReSendNpb = new System.Windows.Forms.TabPage();
             this.btnReSendNpbGetApi = new System.Windows.Forms.Button();
-            this.cmbBxReSendNpbApiTargetDcKode = new System.Windows.Forms.ComboBox();
             this.txtReSendNpbApiTargetUrl = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.btnReSendNpbLoad = new System.Windows.Forms.Button();
@@ -98,6 +97,8 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdLogs = new System.Windows.Forms.DataGridView();
             this.userInfo = new System.Windows.Forms.Label();
             this.chkSemuaKolom = new System.Windows.Forms.CheckBox();
+            this.txtReSendNpbApiTargetDcKode = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdSplitHhPicking)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDomar)).BeginInit();
             this.tabContent.SuspendLayout();
@@ -235,6 +236,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // tabSplit
             // 
+            this.tabSplit.Controls.Add(this.label16);
             this.tabSplit.Controls.Add(this.cmbBxSplitAllNo);
             this.tabSplit.Controls.Add(this.lblSplitRecHh);
             this.tabSplit.Controls.Add(this.btnSplitSetHhScanning);
@@ -725,8 +727,8 @@ namespace DCTRNNPBBL.Panels {
             // 
             // tabReSendNpb
             // 
+            this.tabReSendNpb.Controls.Add(this.txtReSendNpbApiTargetDcKode);
             this.tabReSendNpb.Controls.Add(this.btnReSendNpbGetApi);
-            this.tabReSendNpb.Controls.Add(this.cmbBxReSendNpbApiTargetDcKode);
             this.tabReSendNpb.Controls.Add(this.txtReSendNpbApiTargetUrl);
             this.tabReSendNpb.Controls.Add(this.label13);
             this.tabReSendNpb.Controls.Add(this.btnReSendNpbLoad);
@@ -761,16 +763,6 @@ namespace DCTRNNPBBL.Panels {
             this.btnReSendNpbGetApi.Text = "=>";
             this.btnReSendNpbGetApi.UseVisualStyleBackColor = true;
             this.btnReSendNpbGetApi.Click += new System.EventHandler(this.btnReSendGetApi_Click);
-            // 
-            // cmbBxReSendNpbApiTargetDcKode
-            // 
-            this.cmbBxReSendNpbApiTargetDcKode.FormattingEnabled = true;
-            this.cmbBxReSendNpbApiTargetDcKode.Items.AddRange(new object[] {
-            "G000"});
-            this.cmbBxReSendNpbApiTargetDcKode.Location = new System.Drawing.Point(107, 343);
-            this.cmbBxReSendNpbApiTargetDcKode.Name = "cmbBxReSendNpbApiTargetDcKode";
-            this.cmbBxReSendNpbApiTargetDcKode.Size = new System.Drawing.Size(55, 25);
-            this.cmbBxReSendNpbApiTargetDcKode.TabIndex = 41;
             // 
             // txtReSendNpbApiTargetUrl
             // 
@@ -900,34 +892,34 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdLogs.AllowUserToResizeRows = false;
             this.dtGrdLogs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dtGrdLogs.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 12F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtGrdLogs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 12F);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtGrdLogs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.dtGrdLogs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 12F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dtGrdLogs.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 12F);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtGrdLogs.DefaultCellStyle = dataGridViewCellStyle8;
             this.dtGrdLogs.Location = new System.Drawing.Point(15, 15);
             this.dtGrdLogs.Name = "dtGrdLogs";
             this.dtGrdLogs.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 12F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtGrdLogs.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 12F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtGrdLogs.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dtGrdLogs.RowHeadersVisible = false;
             this.dtGrdLogs.Size = new System.Drawing.Size(711, 352);
             this.dtGrdLogs.TabIndex = 35;
@@ -953,6 +945,27 @@ namespace DCTRNNPBBL.Panels {
             this.chkSemuaKolom.TabIndex = 24;
             this.chkSemuaKolom.Text = "Tampilkan Semua Kolom";
             this.chkSemuaKolom.UseVisualStyleBackColor = true;
+            // 
+            // txtReSendNpbApiTargetDcKode
+            // 
+            this.txtReSendNpbApiTargetDcKode.Location = new System.Drawing.Point(107, 343);
+            this.txtReSendNpbApiTargetDcKode.Name = "txtReSendNpbApiTargetDcKode";
+            this.txtReSendNpbApiTargetDcKode.Size = new System.Drawing.Size(55, 25);
+            this.txtReSendNpbApiTargetDcKode.TabIndex = 43;
+            this.txtReSendNpbApiTargetDcKode.Text = "G000";
+            this.txtReSendNpbApiTargetDcKode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
+            this.label16.Location = new System.Drawing.Point(321, 348);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(265, 13);
+            this.label16.TabIndex = 35;
+            this.label16.Text = "* Tidak dapat split (warna merah, lihat keterangan)";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // MainApp
             // 
@@ -1057,8 +1070,9 @@ namespace DCTRNNPBBL.Panels {
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txtReSendNpbApiTargetUrl;
         private System.Windows.Forms.Button btnReSendNpbGetApi;
-        private System.Windows.Forms.ComboBox cmbBxReSendNpbApiTargetDcKode;
         private System.Windows.Forms.TabPage tabLogs;
         private System.Windows.Forms.DataGridView dtGrdLogs;
+        private System.Windows.Forms.TextBox txtReSendNpbApiTargetDcKode;
+        private System.Windows.Forms.Label label16;
     }
 }

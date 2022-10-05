@@ -26,16 +26,17 @@ namespace DCTRNNPBBL.Models {
         public decimal QTY { set; get; }
         public decimal PICK { set; get; }
         public decimal SCAN { set; get; }
+        public decimal HPP { set; get; }
         public decimal PRICE { set; get; }
         public decimal GROSS { set; get; }
         public decimal PPN { set; get; }
         public decimal SJ_QTY { set; get; }
-        public decimal HPP { set; get; }
         public DateTime TGLEXP { set; get; }
         public decimal NPBDC_NO { set; get; }
         public DateTime NPBDC_DATE { set; get; }
         public string WHK_KODE { set; get; }
         public string TBL_NPWP_DC { set; get; }
+        public decimal MBR_PPN_PERSEN { set; get; }
     }
 
 }
