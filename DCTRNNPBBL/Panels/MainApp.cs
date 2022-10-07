@@ -19,7 +19,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Autofac;
+using DCTRNNPBBL.Forms;
+using DCTRNNPBBL.Helpers;
 using DCTRNNPBBL.Helpers._db;
 using DCTRNNPBBL.Helpers._models;
 using DCTRNNPBBL.Helpers._utils;
@@ -79,7 +81,6 @@ namespace DCTRNNPBBL.Panels {
         private List<CMODEL_GRID_TRANSFER_RESEND_NPB> listResendNpb = null;
 
         private BindingList<CMODEL_TABEL_DC_PICKBL_HDR_T> bindResendNpbAllNo = null;
-        private BindingList<CMODEL_GRID_TRANSFER_RESEND_NPB> bindResendNpb = null;
 
         /* ** */
 
@@ -148,7 +149,6 @@ namespace DCTRNNPBBL.Panels {
             listResendNpb = new List<CMODEL_GRID_TRANSFER_RESEND_NPB>();
 
             bindResendNpbAllNo = new BindingList<CMODEL_TABEL_DC_PICKBL_HDR_T>(listResendNpbAllNo);
-            bindResendNpb = new BindingList<CMODEL_GRID_TRANSFER_RESEND_NPB>(listResendNpb);
 
             /* ** */
 
@@ -191,10 +191,7 @@ namespace DCTRNNPBBL.Panels {
             /* Resend NPB */
 
             cmbBxReSendNpbAllNo.Enabled = isEnabled;
-            btnReSendNpbLoad.Enabled = isEnabled;
-            btnReSendNpbKirim.Enabled = isEnabled;
-            dtGrdReSendNpb.Enabled = isEnabled;
-            txtReSendNpbApiTargetDcKode.Enabled = isEnabled;
+            btnReSendNpbLaporan.Enabled = isEnabled;
 
             /* ** */
         }
@@ -1050,11 +1047,11 @@ namespace DCTRNNPBBL.Panels {
                         runProc = await _oracle.ExecProcedureAsync(
                             procName,
                             new List<CDbQueryParamBind> {
-                                    new CDbQueryParamBind { NAME = "n_noref", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
-                                    new CDbQueryParamBind { NAME = "d_tgl_ref", VALUE = dtPckrProsesNpbTglRpb.Value },
-                                    new CDbQueryParamBind { NAME = "n_dcid1", VALUE = dcid },
-                                    new CDbQueryParamBind { NAME = "n_hdrid", VALUE = (decimal) 0, DIRECTION = ParameterDirection.Output },
-                                    new CDbQueryParamBind { NAME = "p_msg", VALUE = "", DIRECTION = ParameterDirection.Output, SIZE = 2000 }
+                                new CDbQueryParamBind { NAME = "n_noref", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
+                                new CDbQueryParamBind { NAME = "d_tgl_ref", VALUE = dtPckrProsesNpbTglRpb.Value },
+                                new CDbQueryParamBind { NAME = "n_dcid1", VALUE = dcid },
+                                new CDbQueryParamBind { NAME = "n_hdrid", VALUE = (decimal) 0, DIRECTION = ParameterDirection.Output },
+                                new CDbQueryParamBind { NAME = "p_msg", VALUE = "", DIRECTION = ParameterDirection.Output, SIZE = 2000 }
                             }
                         );
                     });
@@ -1080,9 +1077,11 @@ namespace DCTRNNPBBL.Panels {
                             );
                         });
                         cmbBxReSendNpbAllNo.Text = npb.ToString();
-                        string msg = "No. NPB :: " + npb + Environment.NewLine;
-                        msg += "Silahkan Kirim NPB Menggunakan Menu 'ReSend NPB'";
-                        MessageBox.Show(msg, "NPB Berhasil Dibuat Tapi Belum Terkirim", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show($"No. NPB :: {npb}", "NPB Berhasil Dibuat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        tabReSendNpb.Enter -= new EventHandler(tabReSendNpb_Enter);
+                        tabContent.SelectTab(tabReSendNpb);
+                        LoadResendNpb();
+                        tabReSendNpb.Enter += new EventHandler(tabReSendNpb_Enter);
                     }
                 }
                 else {
@@ -1101,7 +1100,6 @@ namespace DCTRNNPBBL.Panels {
             if (programIdle) {
                 SetIdleBusyStatus(false);
                 listResendNpb.Clear();
-                bindResendNpb.ResetBindings();
                 listResendNpbAllNo.Clear();
                 DataTable dtAllNpb = new DataTable();
                 await Task.Run(async () => {
@@ -1126,9 +1124,9 @@ namespace DCTRNNPBBL.Panels {
             }
         }
 
-        private async void btnReSendNpbLoad_Click(object sender, EventArgs e) {
+        private async void LoadResendNpb() {
             SetIdleBusyStatus(false);
-            string ctx = "Pencarian Resend NPB ...";
+            string ctx = "Pencarian Re/Send NPB ...";
             listResendNpb.Clear();
             string selectedNoNpb = cmbBxReSendNpbAllNo.Text;
             if (!string.IsNullOrEmpty(selectedNoNpb)) {
@@ -1151,6 +1149,7 @@ namespace DCTRNNPBBL.Panels {
                                 b.PRICE,
                                 b.GROSS,
                                 b.PPN,
+                                b.PPN_RATE,
                                 b.SJ_QTY,
                                 b.TGLEXP,
                                 a.NPBDC_NO,
@@ -1185,30 +1184,20 @@ namespace DCTRNNPBBL.Panels {
                     lsResendNpb.Sort((x, y) => x.PLU_ID.CompareTo(y.PLU_ID));
                     lsResendNpb.Sort((x, y) => x.SCAN.CompareTo(y.SCAN));
                     lsResendNpb.Sort((x, y) => x.PICK.CompareTo(y.PICK));
-                    dtPckrReSendNpbTglRpb.Value = lsResendNpb.FirstOrDefault().DOC_DATE;
                     txtReSendNpbApiTargetDcKode.Text = lsResendNpb.FirstOrDefault().WHK_KODE;
                     foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in lsResendNpb) {
                         listResendNpb.Add(data);
                     }
-                    dtGrdReSendNpb.DataSource = bindResendNpb;
-                    EnableCustomColumnOnly(dtGrdReSendNpb, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY", "PICK", "SCAN", "PRICE", "GROSS", "PPN" });
-                    dtGrdReSendNpb.Columns["PRICE"].DefaultCellStyle.Format = "c2";
-                    dtGrdReSendNpb.Columns["PRICE"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
-                    dtGrdReSendNpb.Columns["GROSS"].DefaultCellStyle.Format = "c2";
-                    dtGrdReSendNpb.Columns["GROSS"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
-                    dtGrdReSendNpb.Columns["PPN"].DefaultCellStyle.Format = "c2";
-                    dtGrdReSendNpb.Columns["PPN"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
                 }
             }
             else {
                 MessageBox.Show("Harap Isi DOC_NO Rpb", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            bindResendNpb.ResetBindings();
             SetIdleBusyStatus(true);
-            btnReSendGetApi_Click(null, EventArgs.Empty);
+            GetApiNpb();
         }
 
-        private async void btnReSendGetApi_Click(object sender, EventArgs e) {
+        private async void GetApiNpb() {
             SetIdleBusyStatus(false);
             string apiDcho = _app.GetConfig("api_dcho");
             string apiTargetUrl = _app.GetConfig("api_dev");
@@ -1233,9 +1222,10 @@ namespace DCTRNNPBBL.Panels {
             }
             txtReSendNpbApiTargetUrl.Text = apiTargetUrl;
             SetIdleBusyStatus(true);
+            TransferNpb();
         }
 
-        private async void btnReSendNpbKirim_Click(object sender, EventArgs e) {
+        private async void TransferNpb() {
             SetIdleBusyStatus(false);
             string ctx = "Proses Transfer NPB ...";
             string apiOwner = "TAG_BL-SHANTI";
@@ -1243,18 +1233,19 @@ namespace DCTRNNPBBL.Panels {
             string apiTarget = txtReSendNpbApiTargetUrl.Text;
             if (string.IsNullOrEmpty(apiDcKode) || string.IsNullOrEmpty(apiTarget)) {
                 MessageBox.Show("API Tujuan Tidak Lengkap", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } else {
+            }
+            else {
                 if (listResendNpb.Count > 0) {
                     await Task.Run(async () => {
                         List<CMODEL_JSON_KIRIM_NPB_BL_DETAIL> blDetail = new List<CMODEL_JSON_KIRIM_NPB_BL_DETAIL>();
-                        foreach (dynamic data in listResendNpb) {
+                        foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in listResendNpb) {
                             CMODEL_JSON_KIRIM_NPB_BL_DETAIL detail = new CMODEL_JSON_KIRIM_NPB_BL_DETAIL {
                                 plu_id = Convert.ToInt32(data.PLU_ID),
                                 sj_qty = Convert.ToInt32(data.SJ_QTY),
                                 hpp = data.HPP,
                                 price = data.PRICE,
                                 gross = data.GROSS,
-                                ppn_rate = data.PPN,
+                                ppn_rate = data.PPN_RATE,
                                 tglexp = data.TGLEXP
                             };
                             blDetail.Add(detail);
@@ -1273,7 +1264,7 @@ namespace DCTRNNPBBL.Panels {
                             string[] urlPaths = apiTarget.Split('/');
                             string jsonBody = _api.ObjectToJson(bl);
                             var resApi = await _api.PostData(apiTarget, jsonBody);
-                            string apiStatusText = $"{(int) resApi.StatusCode} {resApi.StatusCode} - {ctx}";
+                            string apiStatusText = $"{(int)resApi.StatusCode} {resApi.StatusCode} - {ctx}";
                             string resApiStr = await resApi.Content.ReadAsStringAsync();
                             MessageBoxIcon msgBxIco;
                             if (resApi.StatusCode >= System.Net.HttpStatusCode.OK && resApi.StatusCode < System.Net.HttpStatusCode.MultipleChoices) {
@@ -1313,6 +1304,10 @@ namespace DCTRNNPBBL.Panels {
             SetIdleBusyStatus(true);
         }
 
+        private void btnReSendNpb_Click(object sender, EventArgs e) {
+            LoadResendNpb();
+        }
+
         /* ** */
 
         private async void tabLogs_Enter(object sender, EventArgs e) {
@@ -1329,6 +1324,10 @@ namespace DCTRNNPBBL.Panels {
             }
         }
 
+        private void btnReSendNpbLaporan_Click(object sender, EventArgs e) {
+            Form report = AutofacContainer.Instance.GetContainer().Resolve<CReport>();
+            report.Show();
+        }
     }
 
 }

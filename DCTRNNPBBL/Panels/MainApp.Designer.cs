@@ -29,9 +29,6 @@ namespace DCTRNNPBBL.Panels {
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainApp));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -43,6 +40,7 @@ namespace DCTRNNPBBL.Panels {
             this.tabHome = new System.Windows.Forms.TabPage();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.tabSplit = new System.Windows.Forms.TabPage();
+            this.label16 = new System.Windows.Forms.Label();
             this.cmbBxSplitAllNo = new System.Windows.Forms.ComboBox();
             this.lblSplitRecHh = new System.Windows.Forms.Label();
             this.btnSplitSetHhScanning = new System.Windows.Forms.Button();
@@ -82,23 +80,19 @@ namespace DCTRNNPBBL.Panels {
             this.btnProsesNpbBuat = new System.Windows.Forms.Button();
             this.dtGrdProsesNpb = new System.Windows.Forms.DataGridView();
             this.tabReSendNpb = new System.Windows.Forms.TabPage();
-            this.btnReSendNpbGetApi = new System.Windows.Forms.Button();
+            this.rptViewer = new Microsoft.Reporting.WinForms.ReportViewer();
+            this.btnReSendNpb = new System.Windows.Forms.Button();
+            this.txtReSendNpbApiTargetDcKode = new System.Windows.Forms.TextBox();
             this.txtReSendNpbApiTargetUrl = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.btnReSendNpbLoad = new System.Windows.Forms.Button();
-            this.dtPckrReSendNpbTglRpb = new System.Windows.Forms.DateTimePicker();
-            this.label11 = new System.Windows.Forms.Label();
-            this.dtGrdReSendNpb = new System.Windows.Forms.DataGridView();
+            this.btnReSendNpbLaporan = new System.Windows.Forms.Button();
             this.cmbBxReSendNpbAllNo = new System.Windows.Forms.ComboBox();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.btnReSendNpbKirim = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.tabLogs = new System.Windows.Forms.TabPage();
             this.dtGrdLogs = new System.Windows.Forms.DataGridView();
             this.userInfo = new System.Windows.Forms.Label();
             this.chkSemuaKolom = new System.Windows.Forms.CheckBox();
-            this.txtReSendNpbApiTargetDcKode = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdSplitHhPicking)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDomar)).BeginInit();
             this.tabContent.SuspendLayout();
@@ -111,7 +105,6 @@ namespace DCTRNNPBBL.Panels {
             this.tabProsesNpb.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdProsesNpb)).BeginInit();
             this.tabReSendNpb.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dtGrdReSendNpb)).BeginInit();
             this.tabLogs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdLogs)).BeginInit();
             this.SuspendLayout();
@@ -267,6 +260,18 @@ namespace DCTRNNPBBL.Panels {
             this.tabSplit.TabIndex = 0;
             this.tabSplit.Text = "SPLIT";
             this.tabSplit.UseVisualStyleBackColor = true;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
+            this.label16.Location = new System.Drawing.Point(321, 348);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(265, 13);
+            this.label16.TabIndex = 35;
+            this.label16.Text = "* Tidak dapat split (warna merah, lihat keterangan)";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // cmbBxSplitAllNo
             // 
@@ -727,17 +732,14 @@ namespace DCTRNNPBBL.Panels {
             // 
             // tabReSendNpb
             // 
+            this.tabReSendNpb.Controls.Add(this.rptViewer);
+            this.tabReSendNpb.Controls.Add(this.btnReSendNpb);
             this.tabReSendNpb.Controls.Add(this.txtReSendNpbApiTargetDcKode);
-            this.tabReSendNpb.Controls.Add(this.btnReSendNpbGetApi);
             this.tabReSendNpb.Controls.Add(this.txtReSendNpbApiTargetUrl);
             this.tabReSendNpb.Controls.Add(this.label13);
-            this.tabReSendNpb.Controls.Add(this.btnReSendNpbLoad);
-            this.tabReSendNpb.Controls.Add(this.dtPckrReSendNpbTglRpb);
-            this.tabReSendNpb.Controls.Add(this.label11);
-            this.tabReSendNpb.Controls.Add(this.dtGrdReSendNpb);
+            this.tabReSendNpb.Controls.Add(this.btnReSendNpbLaporan);
             this.tabReSendNpb.Controls.Add(this.cmbBxReSendNpbAllNo);
             this.tabReSendNpb.Controls.Add(this.panel5);
-            this.tabReSendNpb.Controls.Add(this.btnReSendNpbKirim);
             this.tabReSendNpb.Controls.Add(this.label12);
             this.tabReSendNpb.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.tabReSendNpb.Location = new System.Drawing.Point(4, 30);
@@ -748,26 +750,44 @@ namespace DCTRNNPBBL.Panels {
             this.tabReSendNpb.Text = "RE/SEND NPB";
             this.tabReSendNpb.UseVisualStyleBackColor = true;
             // 
-            // btnReSendNpbGetApi
+            // rptViewer
             // 
-            this.btnReSendNpbGetApi.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.rptViewer.Location = new System.Drawing.Point(14, 74);
+            this.rptViewer.Name = "rptViewer";
+            this.rptViewer.ServerReport.BearerToken = null;
+            this.rptViewer.Size = new System.Drawing.Size(711, 254);
+            this.rptViewer.TabIndex = 25;
+            // 
+            // btnReSendNpb
+            // 
+            this.btnReSendNpb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReSendNpbGetApi.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnReSendNpbGetApi.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnReSendNpbGetApi.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnReSendNpbGetApi.Location = new System.Drawing.Point(168, 343);
-            this.btnReSendNpbGetApi.Name = "btnReSendNpbGetApi";
-            this.btnReSendNpbGetApi.Size = new System.Drawing.Size(35, 25);
-            this.btnReSendNpbGetApi.TabIndex = 42;
-            this.btnReSendNpbGetApi.Text = "=>";
-            this.btnReSendNpbGetApi.UseVisualStyleBackColor = true;
-            this.btnReSendNpbGetApi.Click += new System.EventHandler(this.btnReSendGetApi_Click);
+            this.btnReSendNpb.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnReSendNpb.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.btnReSendNpb.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnReSendNpb.Location = new System.Drawing.Point(519, 17);
+            this.btnReSendNpb.Name = "btnReSendNpb";
+            this.btnReSendNpb.Size = new System.Drawing.Size(100, 25);
+            this.btnReSendNpb.TabIndex = 44;
+            this.btnReSendNpb.Text = "Kirim NPB";
+            this.btnReSendNpb.UseVisualStyleBackColor = true;
+            this.btnReSendNpb.Click += new System.EventHandler(this.btnReSendNpb_Click);
+            // 
+            // txtReSendNpbApiTargetDcKode
+            // 
+            this.txtReSendNpbApiTargetDcKode.Enabled = false;
+            this.txtReSendNpbApiTargetDcKode.Location = new System.Drawing.Point(161, 343);
+            this.txtReSendNpbApiTargetDcKode.Name = "txtReSendNpbApiTargetDcKode";
+            this.txtReSendNpbApiTargetDcKode.Size = new System.Drawing.Size(55, 25);
+            this.txtReSendNpbApiTargetDcKode.TabIndex = 43;
+            this.txtReSendNpbApiTargetDcKode.Text = "G000";
+            this.txtReSendNpbApiTargetDcKode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtReSendNpbApiTargetUrl
             // 
             this.txtReSendNpbApiTargetUrl.Enabled = false;
-            this.txtReSendNpbApiTargetUrl.Location = new System.Drawing.Point(209, 343);
+            this.txtReSendNpbApiTargetUrl.Location = new System.Drawing.Point(222, 343);
             this.txtReSendNpbApiTargetUrl.Name = "txtReSendNpbApiTargetUrl";
             this.txtReSendNpbApiTargetUrl.Size = new System.Drawing.Size(300, 25);
             this.txtReSendNpbApiTargetUrl.TabIndex = 39;
@@ -777,60 +797,26 @@ namespace DCTRNNPBBL.Panels {
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(16, 345);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(85, 19);
+            this.label13.Size = new System.Drawing.Size(139, 19);
             this.label13.TabIndex = 38;
-            this.label13.Text = "API TAG BL :";
+            this.label13.Text = "Kirim Ke API TAG BL :";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // btnReSendNpbLoad
+            // btnReSendNpbLaporan
             // 
-            this.btnReSendNpbLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.btnReSendNpbLaporan.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReSendNpbLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnReSendNpbLoad.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnReSendNpbLoad.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnReSendNpbLoad.Location = new System.Drawing.Point(650, 17);
-            this.btnReSendNpbLoad.Name = "btnReSendNpbLoad";
-            this.btnReSendNpbLoad.Size = new System.Drawing.Size(75, 25);
-            this.btnReSendNpbLoad.TabIndex = 37;
-            this.btnReSendNpbLoad.Text = "Load";
-            this.btnReSendNpbLoad.UseVisualStyleBackColor = true;
-            this.btnReSendNpbLoad.Click += new System.EventHandler(this.btnReSendNpbLoad_Click);
-            // 
-            // dtPckrReSendNpbTglRpb
-            // 
-            this.dtPckrReSendNpbTglRpb.Enabled = false;
-            this.dtPckrReSendNpbTglRpb.Location = new System.Drawing.Point(356, 17);
-            this.dtPckrReSendNpbTglRpb.Name = "dtPckrReSendNpbTglRpb";
-            this.dtPckrReSendNpbTglRpb.Size = new System.Drawing.Size(241, 25);
-            this.dtPckrReSendNpbTglRpb.TabIndex = 36;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(284, 19);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(66, 19);
-            this.label11.TabIndex = 35;
-            this.label11.Text = "Tgl. NPB :";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // dtGrdReSendNpb
-            // 
-            this.dtGrdReSendNpb.AllowUserToAddRows = false;
-            this.dtGrdReSendNpb.AllowUserToDeleteRows = false;
-            this.dtGrdReSendNpb.AllowUserToOrderColumns = true;
-            this.dtGrdReSendNpb.AllowUserToResizeRows = false;
-            this.dtGrdReSendNpb.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            this.dtGrdReSendNpb.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.dtGrdReSendNpb.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtGrdReSendNpb.Location = new System.Drawing.Point(14, 74);
-            this.dtGrdReSendNpb.Name = "dtGrdReSendNpb";
-            this.dtGrdReSendNpb.ReadOnly = true;
-            this.dtGrdReSendNpb.RowHeadersVisible = false;
-            this.dtGrdReSendNpb.Size = new System.Drawing.Size(711, 254);
-            this.dtGrdReSendNpb.TabIndex = 34;
+            this.btnReSendNpbLaporan.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnReSendNpbLaporan.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.btnReSendNpbLaporan.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnReSendNpbLaporan.Location = new System.Drawing.Point(625, 17);
+            this.btnReSendNpbLaporan.Name = "btnReSendNpbLaporan";
+            this.btnReSendNpbLaporan.Size = new System.Drawing.Size(100, 25);
+            this.btnReSendNpbLaporan.TabIndex = 37;
+            this.btnReSendNpbLaporan.Text = "Lihat Laporan";
+            this.btnReSendNpbLaporan.UseVisualStyleBackColor = true;
+            this.btnReSendNpbLaporan.Click += new System.EventHandler(this.btnReSendNpbLaporan_Click);
             // 
             // cmbBxReSendNpbAllNo
             // 
@@ -847,22 +833,6 @@ namespace DCTRNNPBBL.Panels {
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(740, 1);
             this.panel5.TabIndex = 32;
-            // 
-            // btnReSendNpbKirim
-            // 
-            this.btnReSendNpbKirim.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReSendNpbKirim.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnReSendNpbKirim.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnReSendNpbKirim.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnReSendNpbKirim.Location = new System.Drawing.Point(625, 342);
-            this.btnReSendNpbKirim.Name = "btnReSendNpbKirim";
-            this.btnReSendNpbKirim.Size = new System.Drawing.Size(100, 25);
-            this.btnReSendNpbKirim.TabIndex = 31;
-            this.btnReSendNpbKirim.Text = "Kirim NPB";
-            this.btnReSendNpbKirim.UseVisualStyleBackColor = true;
-            this.btnReSendNpbKirim.Click += new System.EventHandler(this.btnReSendNpbKirim_Click);
             // 
             // label12
             // 
@@ -892,34 +862,10 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdLogs.AllowUserToResizeRows = false;
             this.dtGrdLogs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dtGrdLogs.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 12F);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtGrdLogs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.dtGrdLogs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 12F);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dtGrdLogs.DefaultCellStyle = dataGridViewCellStyle8;
             this.dtGrdLogs.Location = new System.Drawing.Point(15, 15);
             this.dtGrdLogs.Name = "dtGrdLogs";
             this.dtGrdLogs.ReadOnly = true;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 12F);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtGrdLogs.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dtGrdLogs.RowHeadersVisible = false;
             this.dtGrdLogs.Size = new System.Drawing.Size(711, 352);
             this.dtGrdLogs.TabIndex = 35;
@@ -945,27 +891,6 @@ namespace DCTRNNPBBL.Panels {
             this.chkSemuaKolom.TabIndex = 24;
             this.chkSemuaKolom.Text = "Tampilkan Semua Kolom";
             this.chkSemuaKolom.UseVisualStyleBackColor = true;
-            // 
-            // txtReSendNpbApiTargetDcKode
-            // 
-            this.txtReSendNpbApiTargetDcKode.Location = new System.Drawing.Point(107, 343);
-            this.txtReSendNpbApiTargetDcKode.Name = "txtReSendNpbApiTargetDcKode";
-            this.txtReSendNpbApiTargetDcKode.Size = new System.Drawing.Size(55, 25);
-            this.txtReSendNpbApiTargetDcKode.TabIndex = 43;
-            this.txtReSendNpbApiTargetDcKode.Text = "G000";
-            this.txtReSendNpbApiTargetDcKode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
-            this.label16.Location = new System.Drawing.Point(321, 348);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(265, 13);
-            this.label16.TabIndex = 35;
-            this.label16.Text = "* Tidak dapat split (warna merah, lihat keterangan)";
-            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // MainApp
             // 
@@ -998,7 +923,6 @@ namespace DCTRNNPBBL.Panels {
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdProsesNpb)).EndInit();
             this.tabReSendNpb.ResumeLayout(false);
             this.tabReSendNpb.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dtGrdReSendNpb)).EndInit();
             this.tabLogs.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdLogs)).EndInit();
             this.ResumeLayout(false);
@@ -1048,10 +972,8 @@ namespace DCTRNNPBBL.Panels {
         private System.Windows.Forms.DataGridView dtGrdEditSplit;
         private System.Windows.Forms.Button btnProsesNpbBuat;
         private System.Windows.Forms.DataGridView dtGrdProsesNpb;
-        private System.Windows.Forms.DataGridView dtGrdReSendNpb;
         private System.Windows.Forms.ComboBox cmbBxReSendNpbAllNo;
         private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Button btnReSendNpbKirim;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Panel panel6;
@@ -1064,15 +986,14 @@ namespace DCTRNNPBBL.Panels {
         private System.Windows.Forms.ComboBox cmbBxSplitAllNo;
         private System.Windows.Forms.ComboBox cmbBxEditSplitAllNo;
         private System.Windows.Forms.ComboBox cmbBxProsesNpbAllNo;
-        private System.Windows.Forms.Button btnReSendNpbLoad;
-        private System.Windows.Forms.DateTimePicker dtPckrReSendNpbTglRpb;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button btnReSendNpbLaporan;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txtReSendNpbApiTargetUrl;
-        private System.Windows.Forms.Button btnReSendNpbGetApi;
         private System.Windows.Forms.TabPage tabLogs;
         private System.Windows.Forms.DataGridView dtGrdLogs;
         private System.Windows.Forms.TextBox txtReSendNpbApiTargetDcKode;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Button btnReSendNpb;
+        private Microsoft.Reporting.WinForms.ReportViewer rptViewer;
     }
 }

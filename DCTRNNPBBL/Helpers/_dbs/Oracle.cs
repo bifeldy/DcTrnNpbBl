@@ -82,6 +82,12 @@ namespace DCTRNNPBBL.Helpers._db {
             DatabaseCommand.BindByName = true;
             DatabaseCommand.Parameters.Clear();
             if (parameters != null) {
+                // string sqlTextQueryParameters = "(";
+                // for (int i = 0; i < parameters.Count; i++) {
+                //     sqlTextQueryParameters += $"'{parameters[i].VALUE}'";
+                //     if (i + 1 < parameters.Count) sqlTextQueryParameters += ",";
+                // }
+                // sqlTextQueryParameters += ")";
                 for (int i = 0; i < parameters.Count; i++) {
                     OracleParameter param = new OracleParameter {
                         ParameterName = parameters[i].NAME,

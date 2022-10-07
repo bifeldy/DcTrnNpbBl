@@ -30,6 +30,7 @@ namespace DCTRNNPBBL.Models {
         public decimal PRICE { set; get; }
         public decimal GROSS { set; get; }
         public decimal PPN { set; get; }
+        public decimal PPN_RATE { set; get; }
         public decimal SJ_QTY { set; get; }
         public DateTime TGLEXP { set; get; }
         public decimal NPBDC_NO { set; get; }
