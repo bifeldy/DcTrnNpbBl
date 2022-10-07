@@ -1161,7 +1161,10 @@ namespace DCTRNNPBBL.Panels {
                                 DC_PICKBL_DTL_T b,
                                 DC_BARANG_DC_V c,
                                 DC_PLANOGRAM_T d,
-                                DC_TABEL_DC_T e
+                                DC_TABEL_DC_T e,
+                                DC_HEADER_TRANSAKSI_T f,
+                                DC_HISTORY_TRANSAKSI_T g,
+                                DC_PICKBL_HDR_H h
                             WHERE
                                 a.NPBDC_NO = :npbdc_no AND
                                 a.SEQ_NO = b.SEQ_FK_NO AND
@@ -1169,7 +1172,10 @@ namespace DCTRNNPBBL.Panels {
                                 b.PLU_ID = d.PLA_FK_PLUID AND
                                 d.PLA_DISPLAY = 'Y' AND
                                 (a.TGL_SPLIT IS NOT NULL OR a.TGL_SPLIT <> '') AND
-                                (a.NPBDC_DATE IS NOT NULL OR a.NPBDC_DATE <> '')
+                                (a.NPBDC_DATE IS NOT NULL OR a.NPBDC_DATE <> '') AND
+                                f.HDR_TYPE_TRANS = 'NPB_DC' AND
+                                f.HDR_NO_INV = h.SEQ_NO AND
+                                a.SEQ_NO = h.SEQ_NO
                         ",
                         new List<CDbQueryParamBind> {
                             new CDbQueryParamBind { NAME = "npbdc_no", VALUE = selectedNoNpb }
