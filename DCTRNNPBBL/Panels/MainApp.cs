@@ -19,9 +19,10 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Reporting.WinForms;
+
 using Autofac;
-using DCTRNNPBBL.Forms;
-using DCTRNNPBBL.Helpers;
+
 using DCTRNNPBBL.Helpers._db;
 using DCTRNNPBBL.Helpers._models;
 using DCTRNNPBBL.Helpers._utils;
@@ -376,6 +377,8 @@ namespace DCTRNNPBBL.Panels {
                             SELECT
                                 a.DC_KODE,
                                 a.SEQ_NO,
+                                a.SEQ_DATE,
+                                a.DOC_NO,
                                 a.DOC_DATE,
                                 b.PLU_ID,
                                 c.MBR_SINGKATAN AS SINGKATAN,
@@ -397,7 +400,8 @@ namespace DCTRNNPBBL.Panels {
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_PLUID AND
                                 b.PLU_ID = d.PLA_FK_PLUID AND
-                                (a.TGL_SPLIT IS NULL OR a.TGL_SPLIT = '')
+                                (a.TGL_SPLIT IS NULL OR a.TGL_SPLIT = '') AND
+                                d.pla_display = 'Y'
                         ",
                         new List<CDbQueryParamBind> {
                             new CDbQueryParamBind { NAME = "doc_no", VALUE = selectedNoRpb }
@@ -525,31 +529,31 @@ namespace DCTRNNPBBL.Panels {
                         if (data.QTY_RPB > data.PLA_QTY_STOK) {
                             stokPlanoRakDisplay = "Stok Plano Tidak Cukup";
                         }
-                        if (!string.IsNullOrEmpty(stokPlanoRakDisplay)) {
-                            bolehSplit = false;
-                            bool update = false;
-                            await Task.Run(async () => {
-                                update = await _oracle.ExecQueryAsync(
-                                    $@"
-                                        UPDATE
-                                            DC_PICKBL_DTL_T
-                                        SET
-                                            KETER = :keter
-                                        WHERE
-                                            SEQ_FK_NO = :seq_fk_no AND
-                                            PLU_ID = :plu_id
-                                    ",
-                                    new List<CDbQueryParamBind> {
+                        bool update = false;
+                        await Task.Run(async () => {
+                            update = await _oracle.ExecQueryAsync(
+                                $@"
+                                    UPDATE
+                                        DC_PICKBL_DTL_T
+                                    SET
+                                        KETER = :keter
+                                    WHERE
+                                        SEQ_FK_NO = :seq_fk_no AND
+                                        PLU_ID = :plu_id
+                                ",
+                                new List<CDbQueryParamBind> {
                                         new CDbQueryParamBind { NAME = "keter", VALUE = stokPlanoRakDisplay },
                                         new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = data.SEQ_NO },
                                         new CDbQueryParamBind { NAME = "plu_id", VALUE = data.PLU_ID }
-                                    },
-                                    false
-                                );
-                            });
-                            if (!update) {
-                                throw new Exception($"Gagal Mengubah Keterangan Untuk {data.SINGKATAN}");
-                            }
+                                },
+                                false
+                            );
+                        });
+                        if (!update) {
+                            throw new Exception($"Gagal Mengubah Keterangan Untuk {data.SINGKATAN}");
+                        }
+                        if (!string.IsNullOrEmpty(stokPlanoRakDisplay)) {
+                            bolehSplit = false;
                         }
                     }
                     if (!bolehSplit) {
@@ -680,6 +684,8 @@ namespace DCTRNNPBBL.Panels {
                             SELECT
                                 a.DC_KODE,
                                 a.SEQ_NO,
+                                a.SEQ_DATE,
+                                a.DOC_NO,
                                 a.DOC_DATE,
                                 b.PLU_ID,
                                 c.MBR_SINGKATAN AS SINGKATAN,
@@ -920,9 +926,10 @@ namespace DCTRNNPBBL.Panels {
                     dtTransferNpb = await _oracle.GetDataTableAsync(
                         $@"
                             SELECT
-                                a.DOC_NO,
                                 a.DC_KODE,
                                 a.SEQ_NO,
+                                a.SEQ_DATE,
+                                a.DOC_NO,
                                 a.DOC_DATE,
                                 b.PLU_ID,
                                 c.MBR_SINGKATAN AS SINGKATAN,
@@ -930,41 +937,41 @@ namespace DCTRNNPBBL.Panels {
                                 b.QTY_RPB AS QTY,
                                 b.QTY_PICKING AS PICK,
                                 b.QTY_SCANNING AS SCAN,
-                                b.HPP,
-                                NVL (c.mbr_acost, NVL(c.mbr_lcost, 0)) AS PRICE,
-                                b.QTY_RPB *
+                                CAST(b.HPP as DECIMAL(30,3)) AS HPP,
+                                CAST(NVL(c.mbr_acost, NVL(c.mbr_lcost, 0)) as DECIMAL(30,3)) AS PRICE,
+                                CAST(b.QTY_RPB *
                                     NVL (c.mbr_acost, NVL(c.mbr_lcost, 0))
-                                        AS GROSS,
+                                        as DECIMAL(30,3))
+                                            AS GROSS,
                                 CASE
                                     WHEN
                                         a.WHK_NPWP <> e.TBL_NPWP_DC AND
                                         c.MBR_BKP = 'Y'
                                     THEN
-                                        (GETPPNNEW(b.PLU_ID)/100) *
+                                        CAST((GETPPNNEW(b.PLU_ID)/100) *
                                             (b.QTY_RPB * NVL (c.mbr_acost, NVL(c.mbr_lcost, 0)))
+                                                as DECIMAL(30,3))
                                     ELSE
                                         0
                                 END AS PPN,
+                                b.PPN_RATE,
                                 b.SJ_QTY,
                                 b.TGLEXP,
                                 a.NPBDC_NO,
                                 a.NPBDC_DATE,
                                 a.WHK_KODE,
-                                e.TBL_NPWP_DC,
-                                f.MBR_PPN_PERSEN
+                                e.TBL_NPWP_DC
                             FROM
                                 DC_PICKBL_HDR_T a,
                                 DC_PICKBL_DTL_T b,
                                 DC_BARANG_DC_V c,
                                 DC_PLANOGRAM_T d,
-                                DC_TABEL_DC_T e,
-                                DC_BARANG_DC_T f
+                                DC_TABEL_DC_T e
                             WHERE
                                 a.DOC_NO = :doc_no AND
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_FK_PLUID AND
                                 b.PLU_ID = d.PLA_FK_PLUID AND
-                                b.PLU_ID = f.MBR_FK_PLUID AND
                                 d.PLA_DISPLAY = 'Y' AND
                                 (a.TGL_SPLIT IS NOT NULL OR a.TGL_SPLIT <> '') AND
                                 (a.NPBDC_DATE IS NULL OR a.NPBDC_DATE = '')
@@ -1048,40 +1055,42 @@ namespace DCTRNNPBBL.Panels {
                             procName,
                             new List<CDbQueryParamBind> {
                                 new CDbQueryParamBind { NAME = "n_noref", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
-                                new CDbQueryParamBind { NAME = "d_tgl_ref", VALUE = dtPckrProsesNpbTglRpb.Value },
+                                new CDbQueryParamBind { NAME = "d_tgl_ref", VALUE = listTransferNpb.FirstOrDefault().SEQ_DATE },
                                 new CDbQueryParamBind { NAME = "n_dcid1", VALUE = dcid },
                                 new CDbQueryParamBind { NAME = "n_hdrid", VALUE = (decimal) 0, DIRECTION = ParameterDirection.Output },
                                 new CDbQueryParamBind { NAME = "p_msg", VALUE = "", DIRECTION = ParameterDirection.Output, SIZE = 2000 }
                             }
                         );
                     });
-                    string resProc = $"status = {(runProc.STATUS ? "Berhasil" : "Gagal")}";
+                    string resProc = $"status = {(runProc.STATUS ? "Berhasil" : "Gagal")} Menjalankan Procedure";
+                    bool npbOk = runProc.STATUS;
                     if (runProc.PARAMETERS != null) {
                         resProc += Environment.NewLine + Environment.NewLine;
                         for (int i = 0; i < runProc.PARAMETERS.Count; i++) {
                             resProc += $"{runProc.PARAMETERS[i].ParameterName} = {runProc.PARAMETERS[i].Value}";
                             if (i + 1 < runProc.PARAMETERS.Count) resProc += Environment.NewLine;
+                            if (runProc.PARAMETERS[i].ParameterName == "p_msg") {
+                                npbOk = npbOk && string.IsNullOrEmpty(runProc.PARAMETERS[i].Value.ToString());
+                            }
                         }
                     }
                     MessageBox.Show(resProc, runProc.QUERY, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    if (runProc.STATUS) {
+                    if (npbOk) {
                         decimal npb = 0;
                         await Task.Run(async () => {
                             npb = await _oracle.ExecScalarAsync(
                                 EReturnDataType.DECIMAL,
-                                "SELECT NPBDC_NO FROM DC_PICKBL_HDR_T WHERE SEQ_NO = :seq_no AND DOC_NO = :doc_no",
+                                "SELECT NPBDC_NO FROM DC_PICKBL_HDR_H WHERE SEQ_NO = :seq_no AND DOC_NO = :doc_no",
                                 new List<CDbQueryParamBind> {
-                                        new CDbQueryParamBind { NAME = "seq_no", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
-                                        new CDbQueryParamBind { NAME = "doc_no", VALUE = listTransferNpb.FirstOrDefault().DOC_NO }
+                                    new CDbQueryParamBind { NAME = "seq_no", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
+                                    new CDbQueryParamBind { NAME = "doc_no", VALUE = listTransferNpb.FirstOrDefault().DOC_NO }
                                 }
                             );
                         });
                         cmbBxReSendNpbAllNo.Text = npb.ToString();
                         MessageBox.Show($"No. NPB :: {npb}", "NPB Berhasil Dibuat", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        tabReSendNpb.Enter -= new EventHandler(tabReSendNpb_Enter);
                         tabContent.SelectTab(tabReSendNpb);
-                        LoadResendNpb();
-                        tabReSendNpb.Enter += new EventHandler(tabReSendNpb_Enter);
+                        LoadReSendNpb();
                     }
                 }
                 else {
@@ -1105,12 +1114,11 @@ namespace DCTRNNPBBL.Panels {
                 await Task.Run(async () => {
                     dtAllNpb = await _oracle.GetDataTableAsync(
                         $@"
-                        SELECT NPBDC_NO FROM DC_PICKBL_HDR_T
-                        WHERE
-                            (TGL_SPLIT IS NOT NULL OR TGL_SPLIT <> '') AND
-                            (NPBDC_DATE IS NOT NULL OR NPBDC_DATE <> '')
-                    "
-                    );
+                            SELECT NPBDC_NO FROM DC_PICKBL_HDR_H
+                            WHERE
+                                (NPBDC_DATE IS NOT NULL OR NPBDC_DATE <> '')
+                        "
+                        );
                 });
                 List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllNpb = _converter.ConvertDataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllNpb);
                 foreach (CMODEL_TABEL_DC_PICKBL_HDR_T npb in lsDtAllNpb) {
@@ -1124,7 +1132,7 @@ namespace DCTRNNPBBL.Panels {
             }
         }
 
-        private async void LoadResendNpb() {
+        private async void LoadReSendNpb() {
             SetIdleBusyStatus(false);
             string ctx = "Pencarian Re/Send NPB ...";
             listResendNpb.Clear();
@@ -1135,9 +1143,10 @@ namespace DCTRNNPBBL.Panels {
                     dtResendNpb = await _oracle.GetDataTableAsync(
                         $@"
                             SELECT
-                                a.DOC_NO,
                                 a.DC_KODE,
                                 a.SEQ_NO,
+                                a.SEQ_DATE,
+                                a.DOC_NO,
                                 a.DOC_DATE,
                                 b.PLU_ID,
                                 c.MBR_SINGKATAN AS SINGKATAN,
@@ -1145,10 +1154,10 @@ namespace DCTRNNPBBL.Panels {
                                 b.QTY_RPB AS QTY,
                                 b.QTY_PICKING AS PICK,
                                 b.QTY_SCANNING AS SCAN,
-                                b.HPP,
-                                b.PRICE,
-                                b.GROSS,
-                                b.PPN,
+                                CAST(b.HPP as DECIMAL(30,3)) AS HPP,
+                                CAST(b.PRICE as DECIMAL(30,3)) AS PRICE,
+                                CAST(b.GROSS as DECIMAL(30,3)) AS GROSS,
+                                CAST(b.PPN as DECIMAL(30,3)) AS PPN,
                                 b.PPN_RATE,
                                 b.SJ_QTY,
                                 b.TGLEXP,
@@ -1157,25 +1166,17 @@ namespace DCTRNNPBBL.Panels {
                                 a.WHK_KODE,
                                 e.TBL_NPWP_DC
                             FROM
-                                DC_PICKBL_HDR_T a,
-                                DC_PICKBL_DTL_T b,
+                                DC_PICKBL_HDR_H a,
+                                DC_PICKBL_DTL_H b,
                                 DC_BARANG_DC_V c,
                                 DC_PLANOGRAM_T d,
-                                DC_TABEL_DC_T e,
-                                DC_HEADER_TRANSAKSI_T f,
-                                DC_HISTORY_TRANSAKSI_T g,
-                                DC_PICKBL_HDR_H h
+                                DC_TABEL_DC_T e
                             WHERE
                                 a.NPBDC_NO = :npbdc_no AND
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_FK_PLUID AND
-                                b.PLU_ID = d.PLA_FK_PLUID AND
-                                d.PLA_DISPLAY = 'Y' AND
-                                (a.TGL_SPLIT IS NOT NULL OR a.TGL_SPLIT <> '') AND
-                                (a.NPBDC_DATE IS NOT NULL OR a.NPBDC_DATE <> '') AND
-                                f.HDR_TYPE_TRANS = 'NPB_DC' AND
-                                f.HDR_NO_INV = h.SEQ_NO AND
-                                a.SEQ_NO = h.SEQ_NO
+                                c.MBR_FK_PLUID = d.PLA_FK_PLUID AND
+		                        d.PLA_DC_KODE = a.DC_KODE
                         ",
                         new List<CDbQueryParamBind> {
                             new CDbQueryParamBind { NAME = "npbdc_no", VALUE = selectedNoNpb }
@@ -1183,7 +1184,7 @@ namespace DCTRNNPBBL.Panels {
                     );
                 });
                 if (dtResendNpb.Rows.Count <= 0) {
-                    MessageBox.Show("Tidak Ada Data Resend NPB", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
+                    MessageBox.Show("Tidak Ada Data Re/Send NPB", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
                 else {
                     List<CMODEL_GRID_TRANSFER_RESEND_NPB> lsResendNpb = _converter.ConvertDataTableToList<CMODEL_GRID_TRANSFER_RESEND_NPB>(dtResendNpb);
@@ -1197,7 +1198,7 @@ namespace DCTRNNPBBL.Panels {
                 }
             }
             else {
-                MessageBox.Show("Harap Isi DOC_NO Rpb", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Harap Isi NPBDC_NO Npb", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             SetIdleBusyStatus(true);
             GetApiNpb();
@@ -1207,8 +1208,11 @@ namespace DCTRNNPBBL.Panels {
             SetIdleBusyStatus(false);
             string apiDcho = _app.GetConfig("api_dcho");
             string apiTargetUrl = _app.GetConfig("api_dev");
+            #if DEBUG
+                txtReSendNpbApiTargetDcKode.Text = "G000";
+            #endif
             string apiTargetKodeDc = txtReSendNpbApiTargetDcKode.Text.ToUpper();
-            if (!string.IsNullOrEmpty(apiTargetKodeDc) && apiTargetKodeDc != "G000" && apiTargetKodeDc != "DEV" && apiTargetKodeDc != "SIM") {
+            if (!string.IsNullOrEmpty(apiTargetKodeDc) && apiTargetKodeDc != "G000") {
                 await Task.Run(async () => {
                     List<CMODEL_JSON_KIRIM_DCHO_DC> kode_dc = new List<CMODEL_JSON_KIRIM_DCHO_DC> {
                         new CMODEL_JSON_KIRIM_DCHO_DC {
@@ -1308,10 +1312,116 @@ namespace DCTRNNPBBL.Panels {
                 }
             }
             SetIdleBusyStatus(true);
+            ViewLaporan();
+        }
+
+        private async void ViewLaporan() {
+            SetIdleBusyStatus(false);
+            string ctx = "Cetak Laporan ...";
+            string selectedNoNpb = cmbBxReSendNpbAllNo.Text;
+            if (!string.IsNullOrEmpty(selectedNoNpb)) {
+                DataTable dtReport = new DataTable();
+                await Task.Run(async () => {
+                    dtReport = await _oracle.GetDataTableAsync(
+                        $@"
+                            SELECT
+                                a.hdr_no_doc AS no_npb,
+                                TO_CHAR (a.hdr_tgl_doc, 'dd-mm-yyyy') AS tgl_npb, 
+                                e.dc_kode AS pengirim,
+                                e.whk_kode AS penerima,
+                                TO_CHAR (a.hdr_no_inv) || '/' || e.dc_kode || '/' || TO_CHAR(a.hdr_tgl_inv,'dd-mm-yyyy') AS no_ref,
+                                f.rak_plano AS alamat_planogram,
+                                b.his_fk_pluid AS pluid,
+                                c.mbr_singkatan AS deskripsi,
+                                f.fraction AS fraction, 
+                                TO_NUMBER(NVL(b.f_dummy_1, '0')) AS minta,
+                                b.his_qty AS kirim,
+                                ROUND(b.his_qty * d.mbr_panjang * d.mbr_lebar * d.mbr_tinggi / 1000000, 6) AS volume,
+                                ROUND((b.his_price + b.his_ppn), 5) AS dppppn, 
+                                b.his_ppn AS ppn,
+                                ROUND(((b.his_price + b.his_ppn) * b.his_qty), 5) AS total
+                            FROM
+                                DC_HEADER_TRANSAKSI_T a,
+                                DC_HISTORY_TRANSAKSI_T b,
+                                dc_barang_dc_v c,
+                                (
+                                    SELECT
+                                        *
+                                    FROM
+                                        DC_BRG_DIMENSI_T
+                                    WHERE
+                                        mbr_flag_pcs = 'Y'
+                                ) d,
+                                DC_PICKBL_HDR_H e,
+                                DC_PICKBL_DTL_H f,
+                                (
+                                    SELECT
+                                        z.hdr_hdr_id,
+                                        z.hdr_tbl_lokasiid
+                                    FROM 
+                                        DC_PICKBL_HDR_H y,
+                                        DC_HEADER_TRANSAKSI_T z
+                                    WHERE
+                                        y.NPBDC_NO = :npbdc_no
+                                        AND z.HDR_NO_INV = y.SEQ_NO
+                                        AND z.hdr_type_trans = 'NPB DC'
+                                ) g
+                            WHERE
+                                a.hdr_hdr_id = b.his_hdr_fk_id
+                                AND a.hdr_tbl_lokasiid = b.his_tbl_lokasiid
+                                AND b.his_fk_pluid = c.mbr_fk_pluid
+                                AND a.hdr_fk_dcid = c.mbr_fk_dcid
+                                AND b.his_fk_pluid = d.mbr_fk_pluid(+)
+                                AND a.hdr_no_inv = e.seq_no
+                                AND b.his_fk_pluid = f.plu_id
+                                AND e.seq_no = f.seq_fk_no
+                                AND a.hdr_type_trans = 'NPB DC'
+                                AND b.his_type_trans = 'NPB DC'
+                                /* AND a.hdr_hdr_id = '13315752' --param */
+                                AND a.hdr_hdr_id = g.hdr_hdr_id
+                                /* AND a.hdr_tbl_lokasiid = '124' --param */
+                                AND a.hdr_tbl_lokasiid = g.hdr_tbl_lokasiid
+                            ORDER BY
+                                b.his_fk_plukode ASC
+                        ",
+                        new List<CDbQueryParamBind> {
+                        new CDbQueryParamBind { NAME = "npbdc_no", VALUE = selectedNoNpb }
+                        }
+                    );
+                });
+                rptViewer.Reset();
+                rptViewer.Clear();
+                if (dtReport.Rows.Count <= 0) {
+                    MessageBox.Show("Tidak Ada Data Untuk Laporan", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
+                }
+                else {
+                    List<CMODEL_DS_NPBTAGBL> lsReport = _converter.ConvertDataTableToList<CMODEL_DS_NPBTAGBL>(dtReport);
+                    List<ReportParameter> paramList = new List<ReportParameter> {
+                        new ReportParameter("user", $"{_oracle.LoggedInUsername}"),
+                        new ReportParameter("dc_kode_nama_pengirim", $"{lsReport.FirstOrDefault().PENGIRIM}"),
+                        new ReportParameter("tgl_npb", $"Tanggal NPB : {lsReport.FirstOrDefault().TGL_NPB}"),
+                        new ReportParameter("no_npb", $"No. NPB : {lsReport.FirstOrDefault().NO_NPB}"),
+                        new ReportParameter("dc_kode_nama_penerima", $"{lsReport.FirstOrDefault().PENERIMA}"),
+                        new ReportParameter("rpb_no_tgl", $"{lsReport.FirstOrDefault().NO_REF}")
+                    };
+                    rptViewer.LocalReport.ReportPath = _app.AppLocation + "/Reports/NpbTagBl.rdlc";
+                    rptViewer.LocalReport.DataSources.Add(new ReportDataSource("NpbTagBl", dtReport));
+                    rptViewer.LocalReport.SetParameters(paramList);
+                    rptViewer.RefreshReport();
+                }
+            }
+            else {
+                MessageBox.Show("Harap Isi NPBDC_NO Npb", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            SetIdleBusyStatus(true);
         }
 
         private void btnReSendNpb_Click(object sender, EventArgs e) {
-            LoadResendNpb();
+            LoadReSendNpb();
+        }
+
+        private void btnReSendNpbLaporan_Click(object sender, EventArgs e) {
+            ViewLaporan();
         }
 
         /* ** */
@@ -1330,10 +1440,6 @@ namespace DCTRNNPBBL.Panels {
             }
         }
 
-        private void btnReSendNpbLaporan_Click(object sender, EventArgs e) {
-            Form report = AutofacContainer.Instance.GetContainer().Resolve<CReport>();
-            report.Show();
-        }
     }
 
 }

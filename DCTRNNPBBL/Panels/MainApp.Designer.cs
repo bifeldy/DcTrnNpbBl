@@ -766,9 +766,9 @@ namespace DCTRNNPBBL.Panels {
             this.btnReSendNpb.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnReSendNpb.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnReSendNpb.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnReSendNpb.Location = new System.Drawing.Point(519, 17);
+            this.btnReSendNpb.Location = new System.Drawing.Point(475, 17);
             this.btnReSendNpb.Name = "btnReSendNpb";
-            this.btnReSendNpb.Size = new System.Drawing.Size(100, 25);
+            this.btnReSendNpb.Size = new System.Drawing.Size(122, 25);
             this.btnReSendNpb.TabIndex = 44;
             this.btnReSendNpb.Text = "Kirim NPB";
             this.btnReSendNpb.UseVisualStyleBackColor = true;
@@ -781,7 +781,6 @@ namespace DCTRNNPBBL.Panels {
             this.txtReSendNpbApiTargetDcKode.Name = "txtReSendNpbApiTargetDcKode";
             this.txtReSendNpbApiTargetDcKode.Size = new System.Drawing.Size(55, 25);
             this.txtReSendNpbApiTargetDcKode.TabIndex = 43;
-            this.txtReSendNpbApiTargetDcKode.Text = "G000";
             this.txtReSendNpbApiTargetDcKode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtReSendNpbApiTargetUrl
@@ -810,9 +809,9 @@ namespace DCTRNNPBBL.Panels {
             this.btnReSendNpbLaporan.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnReSendNpbLaporan.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnReSendNpbLaporan.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnReSendNpbLaporan.Location = new System.Drawing.Point(625, 17);
+            this.btnReSendNpbLaporan.Location = new System.Drawing.Point(603, 17);
             this.btnReSendNpbLaporan.Name = "btnReSendNpbLaporan";
-            this.btnReSendNpbLaporan.Size = new System.Drawing.Size(100, 25);
+            this.btnReSendNpbLaporan.Size = new System.Drawing.Size(122, 25);
             this.btnReSendNpbLaporan.TabIndex = 37;
             this.btnReSendNpbLaporan.Text = "Lihat Laporan";
             this.btnReSendNpbLaporan.UseVisualStyleBackColor = true;

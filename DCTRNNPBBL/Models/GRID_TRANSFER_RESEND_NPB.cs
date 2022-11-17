@@ -18,6 +18,7 @@ namespace DCTRNNPBBL.Models {
     class CMODEL_GRID_TRANSFER_RESEND_NPB {
         public string DC_KODE { set; get; }
         public decimal SEQ_NO { set; get; }
+        public DateTime SEQ_DATE { set; get; }
         public string DOC_NO { set; get; }
         public DateTime DOC_DATE { set; get; }
         public decimal PLU_ID { set; get; }
@@ -37,7 +38,6 @@ namespace DCTRNNPBBL.Models {
         public DateTime NPBDC_DATE { set; get; }
         public string WHK_KODE { set; get; }
         public string TBL_NPWP_DC { set; get; }
-        public decimal MBR_PPN_PERSEN { set; get; }
     }
 
 }

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NpgTagBl" targetNamespace="http://tempuri.org/NpgTagBl.xsd" xmlns:mstns="http://tempuri.org/NpgTagBl.xsd" xmlns="http://tempuri.org/NpgTagBl.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="NpgTagBl" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="NpgTagBl" msprop:Generator_UserDSName="NpgTagBl">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="NPBTAGBL" msprop:Generator_TableClassName="NPBTAGBLDataTable" msprop:Generator_TableVarName="tableNPBTAGBL" msprop:Generator_TablePropName="NPBTAGBL" msprop:Generator_RowDeletingName="NPBTAGBLRowDeleting" msprop:Generator_RowChangingName="NPBTAGBLRowChanging" msprop:Generator_RowEvHandlerName="NPBTAGBLRowChangeEventHandler" msprop:Generator_RowDeletedName="NPBTAGBLRowDeleted" msprop:Generator_UserTableName="NPBTAGBL" msprop:Generator_RowChangedName="NPBTAGBLRowChanged" msprop:Generator_RowEvArgName="NPBTAGBLRowChangeEvent" msprop:Generator_RowClassName="NPBTAGBLRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="NO_NPB" msprop:Generator_ColumnVarNameInTable="columnNO_NPB" msprop:Generator_ColumnPropNameInRow="NO_NPB" msprop:Generator_ColumnPropNameInTable="NO_NPBColumn" msprop:Generator_UserColumnName="NO_NPB" type="xs:string" minOccurs="0" />
+              <xs:element name="TGL_NPB" msprop:Generator_ColumnVarNameInTable="columnTGL_NPB" msprop:Generator_ColumnPropNameInRow="TGL_NPB" msprop:Generator_ColumnPropNameInTable="TGL_NPBColumn" msprop:Generator_UserColumnName="TGL_NPB" type="xs:string" minOccurs="0" />
+              <xs:element name="PENGIRIM" msprop:Generator_ColumnVarNameInTable="columnPENGIRIM" msprop:Generator_ColumnPropNameInRow="PENGIRIM" msprop:Generator_ColumnPropNameInTable="PENGIRIMColumn" msprop:Generator_UserColumnName="PENGIRIM" type="xs:string" minOccurs="0" />
+              <xs:element name="NO_REF" msprop:Generator_ColumnVarNameInTable="columnNO_REF" msprop:Generator_ColumnPropNameInRow="NO_REF" msprop:Generator_ColumnPropNameInTable="NO_REFColumn" msprop:Generator_UserColumnName="NO_REF" type="xs:string" minOccurs="0" />
+              <xs:element name="ALAMAT_PLANOGRAM" msprop:Generator_ColumnVarNameInTable="columnALAMAT_PLANOGRAM" msprop:Generator_ColumnPropNameInRow="ALAMAT_PLANOGRAM" msprop:Generator_ColumnPropNameInTable="ALAMAT_PLANOGRAMColumn" msprop:Generator_UserColumnName="ALAMAT_PLANOGRAM" type="xs:string" minOccurs="0" />
+              <xs:element name="PLUID" msprop:Generator_ColumnVarNameInTable="columnPLUID" msprop:Generator_ColumnPropNameInRow="PLUID" msprop:Generator_ColumnPropNameInTable="PLUIDColumn" msprop:Generator_UserColumnName="PLUID" type="xs:string" minOccurs="0" />
+              <xs:element name="DESKRIPSI" msprop:Generator_ColumnVarNameInTable="columnDESKRIPSI" msprop:Generator_ColumnPropNameInRow="DESKRIPSI" msprop:Generator_ColumnPropNameInTable="DESKRIPSIColumn" msprop:Generator_UserColumnName="DESKRIPSI" type="xs:string" minOccurs="0" />
+              <xs:element name="FRACTION" msprop:Generator_ColumnVarNameInTable="columnFRACTION" msprop:Generator_ColumnPropNameInRow="FRACTION" msprop:Generator_ColumnPropNameInTable="FRACTIONColumn" msprop:Generator_UserColumnName="FRACTION" type="xs:string" minOccurs="0" />
+              <xs:element name="MINTA" msprop:Generator_ColumnVarNameInTable="columnMINTA" msprop:Generator_ColumnPropNameInRow="MINTA" msprop:Generator_ColumnPropNameInTable="MINTAColumn" msprop:Generator_UserColumnName="MINTA" type="xs:string" minOccurs="0" />
+              <xs:element name="KIRIM" msprop:Generator_ColumnVarNameInTable="columnKIRIM" msprop:Generator_ColumnPropNameInRow="KIRIM" msprop:Generator_ColumnPropNameInTable="KIRIMColumn" msprop:Generator_UserColumnName="KIRIM" type="xs:string" minOccurs="0" />
+              <xs:element name="VOLUME" msprop:Generator_ColumnVarNameInTable="columnVOLUME" msprop:Generator_ColumnPropNameInRow="VOLUME" msprop:Generator_ColumnPropNameInTable="VOLUMEColumn" msprop:Generator_UserColumnName="VOLUME" type="xs:string" minOccurs="0" />
+              <xs:element name="DPPPPN" msprop:Generator_ColumnVarNameInTable="columnDPPPPN" msprop:Generator_ColumnPropNameInRow="DPPPPN" msprop:Generator_ColumnPropNameInTable="DPPPPNColumn" msprop:Generator_UserColumnName="DPPPPN" type="xs:string" minOccurs="0" />
+              <xs:element name="PPN" msprop:Generator_ColumnVarNameInTable="columnPPN" msprop:Generator_ColumnPropNameInRow="PPN" msprop:Generator_ColumnPropNameInTable="PPNColumn" msprop:Generator_UserColumnName="PPN" type="xs:string" minOccurs="0" />
+              <xs:element name="TOTAL" msprop:Generator_ColumnVarNameInTable="columnTOTAL" msprop:Generator_ColumnPropNameInRow="TOTAL" msprop:Generator_ColumnPropNameInTable="TOTALColumn" msprop:Generator_UserColumnName="TOTAL" type="xs:string" minOccurs="0" />
+              <xs:element name="PENERIMA" msprop:Generator_ColumnVarNameInTable="columnPENERIMA" msprop:Generator_ColumnPropNameInRow="PENERIMA" msprop:Generator_ColumnPropNameInTable="PENERIMAColumn" msprop:Generator_UserColumnName="PENERIMA" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
