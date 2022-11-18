@@ -416,8 +416,7 @@ namespace DCTRNNPBBL.Panels {
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_PLUID AND
                                 b.PLU_ID = d.PLA_FK_PLUID AND
-                                (a.TGL_SPLIT IS NULL OR a.TGL_SPLIT = '') AND
-                                d.pla_display = 'Y'
+                                (a.TGL_SPLIT IS NULL OR a.TGL_SPLIT = '')
                         ",
                         new List<CDbQueryParamBind> {
                             new CDbQueryParamBind { NAME = "doc_no", VALUE = selectedNoRpb }
