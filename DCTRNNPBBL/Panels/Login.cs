@@ -77,6 +77,8 @@ namespace DCTRNNPBBL.Panels {
             // Change Window Size & Position To Middle Screen
             _globals.Main.Width = 1000;
             _globals.Main.Height = 600;
+            _globals.Main.MaximizeBox = true;
+            _globals.Main.FormBorderStyle = FormBorderStyle.Sizable;
             _globals.Main.SetDesktopLocation((_app.ScreenWidth - _globals.Main.Width) / 2, (_app.ScreenHeight - _globals.Main.Height) / 2);
 
             // Change Panel To Fully Windowed Mode And Go To `MainApp`

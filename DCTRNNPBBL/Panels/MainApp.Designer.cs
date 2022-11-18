@@ -29,9 +29,6 @@ namespace DCTRNNPBBL.Panels {
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainApp));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -150,6 +147,8 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdSplitHhPicking.AllowUserToDeleteRows = false;
             this.dtGrdSplitHhPicking.AllowUserToOrderColumns = true;
             this.dtGrdSplitHhPicking.AllowUserToResizeRows = false;
+            this.dtGrdSplitHhPicking.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dtGrdSplitHhPicking.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dtGrdSplitHhPicking.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dtGrdSplitHhPicking.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -272,6 +271,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // label16
             // 
+            this.label16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
@@ -304,7 +304,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // btnSplitSetHhScanning
             // 
-            this.btnSplitSetHhScanning.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btnSplitSetHhScanning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSplitSetHhScanning.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSplitSetHhScanning.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnSplitSetHhScanning.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -318,6 +318,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // cmbBxSplitHhScanning
             // 
+            this.cmbBxSplitHhScanning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cmbBxSplitHhScanning.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbBxSplitHhScanning.FormattingEnabled = true;
             this.cmbBxSplitHhScanning.Location = new System.Drawing.Point(68, 340);
@@ -327,6 +328,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // label6
             // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(26, 342);
             this.label6.Name = "label6";
@@ -337,6 +339,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // label7
             // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(68)))), ((int)(((byte)(55)))));
@@ -349,6 +352,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // panel3
             // 
+            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(180)))), ((int)(((byte)(0)))));
             this.panel3.Location = new System.Drawing.Point(15, 326);
             this.panel3.Name = "panel3";
@@ -357,6 +361,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // btnSplitHhPicking
             // 
+            this.btnSplitHhPicking.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSplitHhPicking.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSplitHhPicking.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnSplitHhPicking.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -402,7 +407,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // btnSplitProses
             // 
-            this.btnSplitProses.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnSplitProses.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSplitProses.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSplitProses.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnSplitProses.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -416,7 +421,8 @@ namespace DCTRNNPBBL.Panels {
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(180)))), ((int)(((byte)(0)))));
             this.panel1.Location = new System.Drawing.Point(0, 58);
             this.panel1.Name = "panel1";
@@ -425,7 +431,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // btnSplitLoad
             // 
-            this.btnSplitLoad.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnSplitLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSplitLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSplitLoad.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnSplitLoad.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -471,7 +477,9 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdSplit.AllowUserToDeleteRows = false;
             this.dtGrdSplit.AllowUserToOrderColumns = true;
             this.dtGrdSplit.AllowUserToResizeRows = false;
-            this.dtGrdSplit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtGrdSplit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dtGrdSplit.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dtGrdSplit.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dtGrdSplit.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -513,6 +521,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // label14
             // 
+            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
@@ -543,7 +552,9 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdEditSplit.AllowUserToDeleteRows = false;
             this.dtGrdEditSplit.AllowUserToOrderColumns = true;
             this.dtGrdEditSplit.AllowUserToResizeRows = false;
-            this.dtGrdEditSplit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtGrdEditSplit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dtGrdEditSplit.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dtGrdEditSplit.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dtGrdEditSplit.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -558,7 +569,8 @@ namespace DCTRNNPBBL.Panels {
             // 
             // panel4
             // 
-            this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(180)))), ((int)(((byte)(0)))));
             this.panel4.Location = new System.Drawing.Point(0, 58);
             this.panel4.Name = "panel4";
@@ -567,7 +579,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // btnEditSplitLoad
             // 
-            this.btnEditSplitLoad.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnEditSplitLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEditSplitLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnEditSplitLoad.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnEditSplitLoad.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -581,7 +593,6 @@ namespace DCTRNNPBBL.Panels {
             // 
             // dtPckrEditSplitTglRpb
             // 
-            this.dtPckrEditSplitTglRpb.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.dtPckrEditSplitTglRpb.Enabled = false;
             this.dtPckrEditSplitTglRpb.Location = new System.Drawing.Point(356, 17);
             this.dtPckrEditSplitTglRpb.Name = "dtPckrEditSplitTglRpb";
@@ -590,7 +601,6 @@ namespace DCTRNNPBBL.Panels {
             // 
             // label8
             // 
-            this.label8.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(286, 19);
             this.label8.Name = "label8";
@@ -639,6 +649,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // label20
             // 
+            this.label20.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label20.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
@@ -651,8 +662,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // panel6
             // 
-            this.panel6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.panel6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(180)))), ((int)(((byte)(0)))));
             this.panel6.Location = new System.Drawing.Point(0, 58);
@@ -758,7 +768,9 @@ namespace DCTRNNPBBL.Panels {
             // 
             // rptViewer
             // 
-            this.rptViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.rptViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rptViewer.Location = new System.Drawing.Point(14, 74);
             this.rptViewer.Name = "rptViewer";
             this.rptViewer.ServerReport.BearerToken = null;
@@ -781,6 +793,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // txtReSendNpbApiTargetDcKode
             // 
+            this.txtReSendNpbApiTargetDcKode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.txtReSendNpbApiTargetDcKode.Enabled = false;
             this.txtReSendNpbApiTargetDcKode.Location = new System.Drawing.Point(161, 343);
             this.txtReSendNpbApiTargetDcKode.Name = "txtReSendNpbApiTargetDcKode";
@@ -790,6 +803,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // txtReSendNpbApiTargetUrl
             // 
+            this.txtReSendNpbApiTargetUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.txtReSendNpbApiTargetUrl.Enabled = false;
             this.txtReSendNpbApiTargetUrl.Location = new System.Drawing.Point(222, 343);
             this.txtReSendNpbApiTargetUrl.Name = "txtReSendNpbApiTargetUrl";
@@ -798,6 +812,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // label13
             // 
+            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(16, 345);
             this.label13.Name = "label13";
@@ -830,7 +845,8 @@ namespace DCTRNNPBBL.Panels {
             // 
             // panel5
             // 
-            this.panel5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(180)))), ((int)(((byte)(0)))));
             this.panel5.Location = new System.Drawing.Point(0, 58);
             this.panel5.Name = "panel5";
@@ -868,34 +884,10 @@ namespace DCTRNNPBBL.Panels {
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dtGrdLogs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dtGrdLogs.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtGrdLogs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dtGrdLogs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dtGrdLogs.DefaultCellStyle = dataGridViewCellStyle2;
             this.dtGrdLogs.Location = new System.Drawing.Point(15, 15);
             this.dtGrdLogs.Name = "dtGrdLogs";
             this.dtGrdLogs.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtGrdLogs.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dtGrdLogs.RowHeadersVisible = false;
             this.dtGrdLogs.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.dtGrdLogs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
