@@ -14,6 +14,7 @@
 namespace DCTRNNPBBL.Models {
 
     public class CMODEL_DS_NPBTAGBL {
+        public string DOC_NO { set; get; }
         public string NO_NPB { set; get; }
         public string TGL_NPB { set; get; }
         public string PENGIRIM { set; get; }

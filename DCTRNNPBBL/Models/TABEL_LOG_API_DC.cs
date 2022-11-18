@@ -23,6 +23,7 @@ namespace DCTRNNPBBL.Models {
         public string DATABALIK { set; get; }
         public DateTime TANGGAL { set; get; }
         public string STATUS { set; get; }
+        public string KETERANGAN { set; get; }
     }
 
 }

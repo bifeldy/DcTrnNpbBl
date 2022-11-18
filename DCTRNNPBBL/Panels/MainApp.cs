@@ -223,6 +223,22 @@ namespace DCTRNNPBBL.Panels {
             userInfo.Text = $".: {await _oracle.GetKodeDc()} - {await _oracle.GetNamaDc()} :: {_oracle.LoggedInUsername} :.";
         }
 
+        public void DtClearSelection() {
+            dtGrdSplit.ClearSelection();
+            dtGrdEditSplit.ClearSelection();
+            dtGrdProsesNpb.ClearSelection();
+            dtGrdLogs.ClearSelection();
+        }
+
+        private void dtGrd_DataError(object sender, DataGridViewDataErrorEventArgs e) {
+            MessageBox.Show(
+                $"Data Tembakan / Editan DB Langsung (?)\r\n1. Pastikan IP HH Terdaftar Di Tabel\r\n2. IP HH Pick Harus Berbeda Dengan IP HH Scan",
+                "Bind UI Tampilan IP HH Bermasalah",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
+        }
+
         /* Split */
 
         private async void tabSplit_Enter(object sender, EventArgs e) {
@@ -409,7 +425,7 @@ namespace DCTRNNPBBL.Panels {
                     );
                 });
                 if (dtSplit.Rows.Count <= 0) {
-                    lblSplitRecHh.Text = "* Rekomendasi : 0 HH";
+                    lblSplitRecHh.Text = "* Saran : 0 HH";
                     MessageBox.Show("Tidak Ada Data Split", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
                 else {
@@ -424,7 +440,7 @@ namespace DCTRNNPBBL.Panels {
                         }
                     }
                     int totalLineNumber = line.Distinct().Count();
-                    lblSplitRecHh.Text = $"* Rekomendasi : {totalLineNumber} HH";
+                    lblSplitRecHh.Text = $"* Saran : {totalLineNumber} HH";
                     dtPckrSplitTglRpb.Value = lsSplit.FirstOrDefault().DOC_DATE;
                     SetSplitHandHeld();
                     foreach (CMODEL_GRID_SPLIT data in lsSplit) {
@@ -456,6 +472,7 @@ namespace DCTRNNPBBL.Panels {
                     row.DefaultCellStyle.BackColor = Color.FromArgb(255, 64, 129);
                 }
             }
+            DtClearSelection();
             SetIdleBusyStatus(true);
         }
 
@@ -507,6 +524,7 @@ namespace DCTRNNPBBL.Panels {
 
         private async void btnSplitProses_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
+            DtClearSelection();
             string ctx = "Proses Split ...";
             bool safeForUpdate = false;
             foreach (CMODEL_GRID_SPLIT data in listSplit) {
@@ -524,7 +542,7 @@ namespace DCTRNNPBBL.Panels {
                     foreach (CMODEL_GRID_SPLIT data in listSplit) {
                         string stokPlanoRakDisplay = "";
                         if (data.PLA_DISPLAY != "Y") {
-                            stokPlanoRakDisplay = "Belum Ada Rak Display";
+                            stokPlanoRakDisplay = "Belum Ada Rak Display / Tablok";
                         }
                         if (data.QTY_RPB > data.PLA_QTY_STOK) {
                             stokPlanoRakDisplay = "Stok Plano Tidak Cukup";
@@ -729,6 +747,14 @@ namespace DCTRNNPBBL.Panels {
                     dtPckrEditSplitTglRpb.Value = lsEditSplit.FirstOrDefault().DOC_DATE;
                     foreach (CMODEL_GRID_EDIT_SPLIT data in lsEditSplit) {
                         listEditSplit.Add(data);
+                        List<CMODEL_TABEL_DC_HH_T> selectedPick = listAvailableEditSplitHhPick.Where(d => d.HH == data.HH_SCAN).ToList();
+                        selectedPick.ForEach(d => {
+                            listAvailableEditSplitHhPick.Remove(d);
+                        });
+                        List<CMODEL_TABEL_DC_HH_T> selectedScan = listAvailableEditSplitHhScan.Where(d => d.HH == data.HH_PICK).ToList();
+                        selectedScan.ForEach(d => {
+                            listAvailableEditSplitHhScan.Remove(d);
+                        });
                     }
                     dtGrdEditSplit.DataSource = bindEditSplit;
                     EnableCustomColumnOnly(dtGrdEditSplit, new List<string> { "PLU_ID", "SINGKATAN", "LOKASI", "QTY_RPB", "TIME_PICKING", "IP_HH_PICK", "TIME_SCANNING", "IP_HH_SCAN" });
@@ -762,6 +788,7 @@ namespace DCTRNNPBBL.Panels {
             bindAvailableEditSplitHhScan.ResetBindings();
             bindEditSplit.ResetBindings();
             CheckEnableDisableIpHhPickScanEditSplit();
+            DtClearSelection();
             SetIdleBusyStatus(true);
         }
 
@@ -806,8 +833,38 @@ namespace DCTRNNPBBL.Panels {
                 DataGridViewComboBoxEditingControl cmbBxIpHhScan = sender as DataGridViewComboBoxEditingControl;
                 string selectedNewIpHhScan = cmbBxIpHhScan.Text;
                 foreach (CMODEL_GRID_EDIT_SPLIT data in listEditSplit) {
+                    List<CMODEL_TABEL_DC_HH_T> oldIpHhScan = lsAllHh.Where(d => d.HH == data.HH_SCAN).ToList();
+                    oldIpHhScan.ForEach(d => {
+                        if (!listAvailableEditSplitHhPick.Contains(d)) {
+                            listAvailableEditSplitHhPick.Add(d);
+                        }
+                    });
+                    listAvailableEditSplitHhPick.Sort((x, y) => x.HH.CompareTo(y.HH));
                     data.HH_SCAN = selectedNewIpHhScan;
+                    List<CMODEL_TABEL_DC_HH_T> newIpHhScan = lsAllHh.Where(d => d.HH == data.HH_SCAN).ToList();
+                    newIpHhScan.ForEach(d => {
+                        listAvailableEditSplitHhPick.Remove(d);
+                    });
                 }
+                bindEditSplit.ResetBindings();
+                CheckEnableDisableIpHhPickScanEditSplit();
+            }
+            else if (currentcell.X == dtGrdEditSplit.Columns["IP_HH_PICK"].Index) {
+                DataGridViewComboBoxEditingControl cmbBxIpHhPick = sender as DataGridViewComboBoxEditingControl;
+                string selectedNewIpHhPick = cmbBxIpHhPick.Text;
+                CMODEL_GRID_EDIT_SPLIT editSplit = listEditSplit[currentcell.Y];
+                List<CMODEL_TABEL_DC_HH_T> oldIpHhPick= lsAllHh.Where(d => d.HH == editSplit.HH_PICK).ToList();
+                oldIpHhPick.ForEach(d => {
+                    if (!listAvailableEditSplitHhScan.Contains(d)) {
+                        listAvailableEditSplitHhScan.Add(d);
+                    }
+                });
+                listAvailableEditSplitHhScan.Sort((x, y) => x.HH.CompareTo(y.HH));
+                editSplit.HH_PICK= selectedNewIpHhPick;
+                List<CMODEL_TABEL_DC_HH_T> newIpHhPick= lsAllHh.Where(d => d.HH == editSplit.HH_PICK).ToList();
+                newIpHhPick.ForEach(d => {
+                    listAvailableEditSplitHhScan.Remove(d);
+                });
                 bindEditSplit.ResetBindings();
                 CheckEnableDisableIpHhPickScanEditSplit();
             }
@@ -815,6 +872,7 @@ namespace DCTRNNPBBL.Panels {
 
         private async void btnEditSplitUpdate_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
+            DtClearSelection();
             string ctx = "Update Edit Split ...";
             bool safeForUpdate = false;
             List<CMODEL_GRID_EDIT_SPLIT> updateAbleSplit = new List<CMODEL_GRID_EDIT_SPLIT>();
@@ -1019,11 +1077,13 @@ namespace DCTRNNPBBL.Panels {
                     row.DefaultCellStyle.BackColor = Color.FromArgb(255, 64, 129);
                 }
             }
+            DtClearSelection();
             SetIdleBusyStatus(true);
         }
 
         private async void btnProsesBuatNpb_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
+            DtClearSelection();
             string ctx = "Proses Transfer NPB ...";
             bool safeForNpb = false;
             foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in listTransferNpb) {
@@ -1325,6 +1385,7 @@ namespace DCTRNNPBBL.Panels {
                     dtReport = await _oracle.GetDataTableAsync(
                         $@"
                             SELECT
+                                e.doc_no as doc_no,
                                 a.hdr_no_doc AS no_npb,
                                 TO_CHAR (a.hdr_tgl_doc, 'dd-mm-yyyy') AS tgl_npb, 
                                 e.dc_kode AS pengirim,
@@ -1402,7 +1463,7 @@ namespace DCTRNNPBBL.Panels {
                         new ReportParameter("tgl_npb", $"Tanggal NPB : {lsReport.FirstOrDefault().TGL_NPB}"),
                         new ReportParameter("no_npb", $"No. NPB : {lsReport.FirstOrDefault().NO_NPB}"),
                         new ReportParameter("dc_kode_nama_penerima", $"{lsReport.FirstOrDefault().PENERIMA}"),
-                        new ReportParameter("rpb_no_tgl", $"{lsReport.FirstOrDefault().NO_REF}")
+                        new ReportParameter("rpb_no_tgl", $"{lsReport.FirstOrDefault().DOC_NO}/{lsReport.FirstOrDefault().NO_REF}")
                     };
                     rptViewer.LocalReport.ReportPath = _app.AppLocation + "/Reports/NpbTagBl.rdlc";
                     rptViewer.LocalReport.DataSources.Add(new ReportDataSource("NpbTagBl", dtReport));
@@ -1433,9 +1494,20 @@ namespace DCTRNNPBBL.Panels {
                 await Task.Run(async () => {
                     dtLogs = await _oracle.GetDataTableAsync($@"SELECT * FROM LOG_API_DC ORDER BY TANGGAL DESC");
                 });
-                dtGrdLogs.DataSource = _converter.ConvertDataTableToList<CMODEL_TABEL_LOG_API_DC>(dtLogs);
+                List<CMODEL_TABEL_LOG_API_DC> logs = _converter.ConvertDataTableToList<CMODEL_TABEL_LOG_API_DC>(dtLogs);
+                foreach (CMODEL_TABEL_LOG_API_DC l in logs) {
+                    try {
+                        CMODEL_JSON_TERIMA_NPB_BL resApiObj = _api.JsonToObj<CMODEL_JSON_TERIMA_NPB_BL>(l.DATABALIK);
+                        l.KETERANGAN = resApiObj.Info;
+                    }
+                    catch (Exception ex) {
+                        _logger.WriteError(ex);
+                    }
+                }
+                dtGrdLogs.DataSource = logs;
+                EnableCustomColumnOnly(dtGrdLogs, new List<string> { "KODEDC", "TANGGAL", "STATUS", "KETERANGAN" });
                 dtGrdLogs.Columns["TANGGAL"].DisplayIndex = 0;
-                dtGrdLogs.Columns["STATUS"].DisplayIndex = 1;
+                DtClearSelection();
                 SetIdleBusyStatus(true);
             }
         }

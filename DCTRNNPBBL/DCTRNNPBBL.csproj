@@ -245,7 +245,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Reports\NpbTagBl.rdlc" />
+    <EmbeddedResource Include="Reports\NpbTagBl.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="Datasets\NpgTagBl.xsc">
       <DependentUpon>NpgTagBl.xsd</DependentUpon>
     </None>

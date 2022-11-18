@@ -75,7 +75,7 @@ namespace DCTRNNPBBL.Panels {
         private void ShowMainAppPanel() {
 
             // Change Window Size & Position To Middle Screen
-            _globals.Main.Width = 800;
+            _globals.Main.Width = 1000;
             _globals.Main.Height = 600;
             _globals.Main.SetDesktopLocation((_app.ScreenWidth - _globals.Main.Width) / 2, (_app.ScreenHeight - _globals.Main.Height) / 2);
 

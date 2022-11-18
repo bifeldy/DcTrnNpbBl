@@ -29,6 +29,9 @@ namespace DCTRNNPBBL.Panels {
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainApp));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -155,14 +158,15 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdSplitHhPicking.Name = "dtGrdSplitHhPicking";
             this.dtGrdSplitHhPicking.ReadOnly = true;
             this.dtGrdSplitHhPicking.RowHeadersVisible = false;
-            this.dtGrdSplitHhPicking.Size = new System.Drawing.Size(281, 115);
+            this.dtGrdSplitHhPicking.Size = new System.Drawing.Size(225, 115);
             this.dtGrdSplitHhPicking.TabIndex = 9;
             this.dtGrdSplitHhPicking.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGrdSplitHhPicking_CellContentClick);
             // 
             // imgDomar
             // 
+            this.imgDomar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.imgDomar.Image = ((System.Drawing.Image)(resources.GetObject("imgDomar.Image")));
-            this.imgDomar.Location = new System.Drawing.Point(712, 21);
+            this.imgDomar.Location = new System.Drawing.Point(912, 21);
             this.imgDomar.Name = "imgDomar";
             this.imgDomar.Size = new System.Drawing.Size(51, 56);
             this.imgDomar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -171,8 +175,9 @@ namespace DCTRNNPBBL.Panels {
             // 
             // prgrssBrStatus
             // 
+            this.prgrssBrStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.prgrssBrStatus.ForeColor = System.Drawing.Color.GreenYellow;
-            this.prgrssBrStatus.Location = new System.Drawing.Point(563, 46);
+            this.prgrssBrStatus.Location = new System.Drawing.Point(763, 46);
             this.prgrssBrStatus.MarqueeAnimationSpeed = 25;
             this.prgrssBrStatus.Name = "prgrssBrStatus";
             this.prgrssBrStatus.Size = new System.Drawing.Size(139, 10);
@@ -182,9 +187,10 @@ namespace DCTRNNPBBL.Panels {
             // 
             // lblStatus
             // 
+            this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblStatus.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
-            this.lblStatus.Location = new System.Drawing.Point(560, 24);
+            this.lblStatus.Location = new System.Drawing.Point(760, 24);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(142, 23);
             this.lblStatus.TabIndex = 19;
@@ -193,6 +199,9 @@ namespace DCTRNNPBBL.Panels {
             // 
             // tabContent
             // 
+            this.tabContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabContent.Controls.Add(this.tabHome);
             this.tabContent.Controls.Add(this.tabSplit);
             this.tabContent.Controls.Add(this.tabEditSplit);
@@ -203,7 +212,7 @@ namespace DCTRNNPBBL.Panels {
             this.tabContent.Location = new System.Drawing.Point(19, 101);
             this.tabContent.Name = "tabContent";
             this.tabContent.SelectedIndex = 0;
-            this.tabContent.Size = new System.Drawing.Size(748, 418);
+            this.tabContent.Size = new System.Drawing.Size(948, 418);
             this.tabContent.TabIndex = 22;
             // 
             // tabHome
@@ -211,7 +220,7 @@ namespace DCTRNNPBBL.Panels {
             this.tabHome.Controls.Add(this.pictureBox2);
             this.tabHome.Location = new System.Drawing.Point(4, 30);
             this.tabHome.Name = "tabHome";
-            this.tabHome.Size = new System.Drawing.Size(740, 384);
+            this.tabHome.Size = new System.Drawing.Size(940, 384);
             this.tabHome.TabIndex = 4;
             this.tabHome.Text = "HOME";
             this.tabHome.UseVisualStyleBackColor = true;
@@ -222,7 +231,7 @@ namespace DCTRNNPBBL.Panels {
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
             this.pictureBox2.Location = new System.Drawing.Point(0, 0);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(740, 384);
+            this.pictureBox2.Size = new System.Drawing.Size(940, 384);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
@@ -256,7 +265,7 @@ namespace DCTRNNPBBL.Panels {
             this.tabSplit.Location = new System.Drawing.Point(4, 30);
             this.tabSplit.Name = "tabSplit";
             this.tabSplit.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSplit.Size = new System.Drawing.Size(740, 384);
+            this.tabSplit.Size = new System.Drawing.Size(940, 384);
             this.tabSplit.TabIndex = 0;
             this.tabSplit.Text = "SPLIT";
             this.tabSplit.UseVisualStyleBackColor = true;
@@ -266,7 +275,7 @@ namespace DCTRNNPBBL.Panels {
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
-            this.label16.Location = new System.Drawing.Point(321, 348);
+            this.label16.Location = new System.Drawing.Point(257, 348);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(265, 13);
             this.label16.TabIndex = 35;
@@ -286,22 +295,20 @@ namespace DCTRNNPBBL.Panels {
             this.lblSplitRecHh.AutoSize = true;
             this.lblSplitRecHh.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSplitRecHh.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
-            this.lblSplitRecHh.Location = new System.Drawing.Point(178, 77);
+            this.lblSplitRecHh.Location = new System.Drawing.Point(161, 77);
             this.lblSplitRecHh.Name = "lblSplitRecHh";
-            this.lblSplitRecHh.Size = new System.Drawing.Size(118, 13);
+            this.lblSplitRecHh.Size = new System.Drawing.Size(77, 13);
             this.lblSplitRecHh.TabIndex = 29;
-            this.lblSplitRecHh.Text = "* Rekomendasi : 0 HH";
+            this.lblSplitRecHh.Text = "* Saran : 0 HH";
             this.lblSplitRecHh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // btnSplitSetHhScanning
             // 
-            this.btnSplitSetHhScanning.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSplitSetHhScanning.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnSplitSetHhScanning.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSplitSetHhScanning.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnSplitSetHhScanning.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSplitSetHhScanning.Location = new System.Drawing.Point(246, 340);
+            this.btnSplitSetHhScanning.Location = new System.Drawing.Point(190, 340);
             this.btnSplitSetHhScanning.Name = "btnSplitSetHhScanning";
             this.btnSplitSetHhScanning.Size = new System.Drawing.Size(50, 25);
             this.btnSplitSetHhScanning.TabIndex = 28;
@@ -313,15 +320,15 @@ namespace DCTRNNPBBL.Panels {
             // 
             this.cmbBxSplitHhScanning.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbBxSplitHhScanning.FormattingEnabled = true;
-            this.cmbBxSplitHhScanning.Location = new System.Drawing.Point(87, 340);
+            this.cmbBxSplitHhScanning.Location = new System.Drawing.Point(68, 340);
             this.cmbBxSplitHhScanning.Name = "cmbBxSplitHhScanning";
-            this.cmbBxSplitHhScanning.Size = new System.Drawing.Size(153, 25);
+            this.cmbBxSplitHhScanning.Size = new System.Drawing.Size(116, 25);
             this.cmbBxSplitHhScanning.TabIndex = 27;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(45, 342);
+            this.label6.Location = new System.Drawing.Point(26, 342);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(36, 19);
             this.label6.TabIndex = 26;
@@ -350,13 +357,10 @@ namespace DCTRNNPBBL.Panels {
             // 
             // btnSplitHhPicking
             // 
-            this.btnSplitHhPicking.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSplitHhPicking.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSplitHhPicking.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnSplitHhPicking.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSplitHhPicking.Location = new System.Drawing.Point(246, 272);
+            this.btnSplitHhPicking.Location = new System.Drawing.Point(190, 268);
             this.btnSplitHhPicking.Name = "btnSplitHhPicking";
             this.btnSplitHhPicking.Size = new System.Drawing.Size(50, 25);
             this.btnSplitHhPicking.TabIndex = 23;
@@ -366,13 +370,10 @@ namespace DCTRNNPBBL.Panels {
             // 
             // btnSplitAddHhPicking
             // 
-            this.btnSplitAddHhPicking.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSplitAddHhPicking.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSplitAddHhPicking.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnSplitAddHhPicking.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSplitAddHhPicking.Location = new System.Drawing.Point(246, 109);
+            this.btnSplitAddHhPicking.Location = new System.Drawing.Point(190, 109);
             this.btnSplitAddHhPicking.Name = "btnSplitAddHhPicking";
             this.btnSplitAddHhPicking.Size = new System.Drawing.Size(50, 25);
             this.btnSplitAddHhPicking.TabIndex = 22;
@@ -384,15 +385,15 @@ namespace DCTRNNPBBL.Panels {
             // 
             this.cmbBxSplitHhPicking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbBxSplitHhPicking.FormattingEnabled = true;
-            this.cmbBxSplitHhPicking.Location = new System.Drawing.Point(87, 109);
+            this.cmbBxSplitHhPicking.Location = new System.Drawing.Point(68, 109);
             this.cmbBxSplitHhPicking.Name = "cmbBxSplitHhPicking";
-            this.cmbBxSplitHhPicking.Size = new System.Drawing.Size(153, 25);
+            this.cmbBxSplitHhPicking.Size = new System.Drawing.Size(116, 25);
             this.cmbBxSplitHhPicking.TabIndex = 21;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(45, 111);
+            this.label5.Location = new System.Drawing.Point(26, 111);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(36, 19);
             this.label5.TabIndex = 20;
@@ -401,13 +402,11 @@ namespace DCTRNNPBBL.Panels {
             // 
             // btnSplitProses
             // 
-            this.btnSplitProses.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSplitProses.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnSplitProses.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSplitProses.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnSplitProses.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSplitProses.Location = new System.Drawing.Point(625, 342);
+            this.btnSplitProses.Location = new System.Drawing.Point(825, 342);
             this.btnSplitProses.Name = "btnSplitProses";
             this.btnSplitProses.Size = new System.Drawing.Size(100, 25);
             this.btnSplitProses.TabIndex = 19;
@@ -417,21 +416,20 @@ namespace DCTRNNPBBL.Panels {
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(180)))), ((int)(((byte)(0)))));
             this.panel1.Location = new System.Drawing.Point(0, 58);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(740, 1);
+            this.panel1.Size = new System.Drawing.Size(940, 1);
             this.panel1.TabIndex = 18;
             // 
             // btnSplitLoad
             // 
-            this.btnSplitLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSplitLoad.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnSplitLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSplitLoad.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnSplitLoad.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSplitLoad.Location = new System.Drawing.Point(650, 17);
+            this.btnSplitLoad.Location = new System.Drawing.Point(850, 17);
             this.btnSplitLoad.Name = "btnSplitLoad";
             this.btnSplitLoad.Size = new System.Drawing.Size(75, 25);
             this.btnSplitLoad.TabIndex = 17;
@@ -473,14 +471,17 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdSplit.AllowUserToDeleteRows = false;
             this.dtGrdSplit.AllowUserToOrderColumns = true;
             this.dtGrdSplit.AllowUserToResizeRows = false;
-            this.dtGrdSplit.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.dtGrdSplit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtGrdSplit.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dtGrdSplit.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dtGrdSplit.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtGrdSplit.Location = new System.Drawing.Point(313, 74);
+            this.dtGrdSplit.Location = new System.Drawing.Point(256, 74);
             this.dtGrdSplit.Name = "dtGrdSplit";
             this.dtGrdSplit.RowHeadersVisible = false;
-            this.dtGrdSplit.Size = new System.Drawing.Size(412, 254);
+            this.dtGrdSplit.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dtGrdSplit.Size = new System.Drawing.Size(669, 254);
             this.dtGrdSplit.TabIndex = 10;
+            this.dtGrdSplit.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dtGrd_DataError);
             // 
             // tabEditSplit
             // 
@@ -497,7 +498,7 @@ namespace DCTRNNPBBL.Panels {
             this.tabEditSplit.Location = new System.Drawing.Point(4, 30);
             this.tabEditSplit.Name = "tabEditSplit";
             this.tabEditSplit.Padding = new System.Windows.Forms.Padding(3);
-            this.tabEditSplit.Size = new System.Drawing.Size(740, 384);
+            this.tabEditSplit.Size = new System.Drawing.Size(940, 384);
             this.tabEditSplit.TabIndex = 1;
             this.tabEditSplit.Text = "EDIT SPLIT";
             this.tabEditSplit.UseVisualStyleBackColor = true;
@@ -524,13 +525,11 @@ namespace DCTRNNPBBL.Panels {
             // 
             // btnEditSplitUpdate
             // 
-            this.btnEditSplitUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEditSplitUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEditSplitUpdate.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnEditSplitUpdate.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnEditSplitUpdate.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnEditSplitUpdate.Location = new System.Drawing.Point(625, 342);
+            this.btnEditSplitUpdate.Location = new System.Drawing.Point(825, 342);
             this.btnEditSplitUpdate.Name = "btnEditSplitUpdate";
             this.btnEditSplitUpdate.Size = new System.Drawing.Size(100, 25);
             this.btnEditSplitUpdate.TabIndex = 27;
@@ -544,33 +543,35 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdEditSplit.AllowUserToDeleteRows = false;
             this.dtGrdEditSplit.AllowUserToOrderColumns = true;
             this.dtGrdEditSplit.AllowUserToResizeRows = false;
-            this.dtGrdEditSplit.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.dtGrdEditSplit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtGrdEditSplit.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dtGrdEditSplit.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dtGrdEditSplit.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtGrdEditSplit.Location = new System.Drawing.Point(14, 74);
             this.dtGrdEditSplit.Name = "dtGrdEditSplit";
             this.dtGrdEditSplit.RowHeadersVisible = false;
-            this.dtGrdEditSplit.Size = new System.Drawing.Size(711, 254);
+            this.dtGrdEditSplit.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dtGrdEditSplit.Size = new System.Drawing.Size(911, 254);
             this.dtGrdEditSplit.TabIndex = 26;
+            this.dtGrdEditSplit.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dtGrd_DataError);
             this.dtGrdEditSplit.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dtGrdEditSplit_EditingControlShowing);
             // 
             // panel4
             // 
+            this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(180)))), ((int)(((byte)(0)))));
             this.panel4.Location = new System.Drawing.Point(0, 58);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(740, 1);
+            this.panel4.Size = new System.Drawing.Size(940, 1);
             this.panel4.TabIndex = 25;
             // 
             // btnEditSplitLoad
             // 
-            this.btnEditSplitLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEditSplitLoad.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnEditSplitLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnEditSplitLoad.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnEditSplitLoad.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnEditSplitLoad.Location = new System.Drawing.Point(650, 17);
+            this.btnEditSplitLoad.Location = new System.Drawing.Point(850, 17);
             this.btnEditSplitLoad.Name = "btnEditSplitLoad";
             this.btnEditSplitLoad.Size = new System.Drawing.Size(75, 25);
             this.btnEditSplitLoad.TabIndex = 24;
@@ -580,6 +581,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // dtPckrEditSplitTglRpb
             // 
+            this.dtPckrEditSplitTglRpb.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.dtPckrEditSplitTglRpb.Enabled = false;
             this.dtPckrEditSplitTglRpb.Location = new System.Drawing.Point(356, 17);
             this.dtPckrEditSplitTglRpb.Name = "dtPckrEditSplitTglRpb";
@@ -588,6 +590,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // label8
             // 
+            this.label8.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(286, 19);
             this.label8.Name = "label8";
@@ -621,7 +624,7 @@ namespace DCTRNNPBBL.Panels {
             this.tabProsesNpb.Location = new System.Drawing.Point(4, 30);
             this.tabProsesNpb.Name = "tabProsesNpb";
             this.tabProsesNpb.Padding = new System.Windows.Forms.Padding(3);
-            this.tabProsesNpb.Size = new System.Drawing.Size(740, 384);
+            this.tabProsesNpb.Size = new System.Drawing.Size(940, 384);
             this.tabProsesNpb.TabIndex = 2;
             this.tabProsesNpb.Text = "PROSES NPB";
             this.tabProsesNpb.UseVisualStyleBackColor = true;
@@ -648,21 +651,22 @@ namespace DCTRNNPBBL.Panels {
             // 
             // panel6
             // 
+            this.panel6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(180)))), ((int)(((byte)(0)))));
             this.panel6.Location = new System.Drawing.Point(0, 58);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(740, 1);
+            this.panel6.Size = new System.Drawing.Size(940, 1);
             this.panel6.TabIndex = 35;
             // 
             // btnProsesNpbLoad
             // 
-            this.btnProsesNpbLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnProsesNpbLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnProsesNpbLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnProsesNpbLoad.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnProsesNpbLoad.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnProsesNpbLoad.Location = new System.Drawing.Point(650, 17);
+            this.btnProsesNpbLoad.Location = new System.Drawing.Point(850, 17);
             this.btnProsesNpbLoad.Name = "btnProsesNpbLoad";
             this.btnProsesNpbLoad.Size = new System.Drawing.Size(75, 25);
             this.btnProsesNpbLoad.TabIndex = 34;
@@ -700,13 +704,11 @@ namespace DCTRNNPBBL.Panels {
             // 
             // btnProsesNpbBuat
             // 
-            this.btnProsesNpbBuat.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnProsesNpbBuat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnProsesNpbBuat.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnProsesNpbBuat.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnProsesNpbBuat.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnProsesNpbBuat.Location = new System.Drawing.Point(625, 342);
+            this.btnProsesNpbBuat.Location = new System.Drawing.Point(825, 342);
             this.btnProsesNpbBuat.Name = "btnProsesNpbBuat";
             this.btnProsesNpbBuat.Size = new System.Drawing.Size(100, 25);
             this.btnProsesNpbBuat.TabIndex = 29;
@@ -720,14 +722,18 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdProsesNpb.AllowUserToDeleteRows = false;
             this.dtGrdProsesNpb.AllowUserToOrderColumns = true;
             this.dtGrdProsesNpb.AllowUserToResizeRows = false;
-            this.dtGrdProsesNpb.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.dtGrdProsesNpb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtGrdProsesNpb.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dtGrdProsesNpb.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dtGrdProsesNpb.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtGrdProsesNpb.Location = new System.Drawing.Point(14, 74);
             this.dtGrdProsesNpb.Name = "dtGrdProsesNpb";
             this.dtGrdProsesNpb.ReadOnly = true;
             this.dtGrdProsesNpb.RowHeadersVisible = false;
-            this.dtGrdProsesNpb.Size = new System.Drawing.Size(711, 254);
+            this.dtGrdProsesNpb.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dtGrdProsesNpb.Size = new System.Drawing.Size(911, 254);
             this.dtGrdProsesNpb.TabIndex = 28;
             // 
             // tabReSendNpb
@@ -745,28 +751,27 @@ namespace DCTRNNPBBL.Panels {
             this.tabReSendNpb.Location = new System.Drawing.Point(4, 30);
             this.tabReSendNpb.Name = "tabReSendNpb";
             this.tabReSendNpb.Padding = new System.Windows.Forms.Padding(3);
-            this.tabReSendNpb.Size = new System.Drawing.Size(740, 384);
+            this.tabReSendNpb.Size = new System.Drawing.Size(940, 384);
             this.tabReSendNpb.TabIndex = 3;
             this.tabReSendNpb.Text = "RE/SEND NPB";
             this.tabReSendNpb.UseVisualStyleBackColor = true;
             // 
             // rptViewer
             // 
+            this.rptViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.rptViewer.Location = new System.Drawing.Point(14, 74);
             this.rptViewer.Name = "rptViewer";
             this.rptViewer.ServerReport.BearerToken = null;
-            this.rptViewer.Size = new System.Drawing.Size(711, 254);
+            this.rptViewer.Size = new System.Drawing.Size(911, 254);
             this.rptViewer.TabIndex = 25;
             // 
             // btnReSendNpb
             // 
-            this.btnReSendNpb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnReSendNpb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnReSendNpb.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnReSendNpb.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnReSendNpb.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnReSendNpb.Location = new System.Drawing.Point(475, 17);
+            this.btnReSendNpb.Location = new System.Drawing.Point(675, 17);
             this.btnReSendNpb.Name = "btnReSendNpb";
             this.btnReSendNpb.Size = new System.Drawing.Size(122, 25);
             this.btnReSendNpb.TabIndex = 44;
@@ -803,13 +808,11 @@ namespace DCTRNNPBBL.Panels {
             // 
             // btnReSendNpbLaporan
             // 
-            this.btnReSendNpbLaporan.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnReSendNpbLaporan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnReSendNpbLaporan.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnReSendNpbLaporan.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnReSendNpbLaporan.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnReSendNpbLaporan.Location = new System.Drawing.Point(603, 17);
+            this.btnReSendNpbLaporan.Location = new System.Drawing.Point(803, 17);
             this.btnReSendNpbLaporan.Name = "btnReSendNpbLaporan";
             this.btnReSendNpbLaporan.Size = new System.Drawing.Size(122, 25);
             this.btnReSendNpbLaporan.TabIndex = 37;
@@ -827,10 +830,11 @@ namespace DCTRNNPBBL.Panels {
             // 
             // panel5
             // 
+            this.panel5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(180)))), ((int)(((byte)(0)))));
             this.panel5.Location = new System.Drawing.Point(0, 58);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(740, 1);
+            this.panel5.Size = new System.Drawing.Size(940, 1);
             this.panel5.TabIndex = 32;
             // 
             // label12
@@ -848,7 +852,7 @@ namespace DCTRNNPBBL.Panels {
             this.tabLogs.Controls.Add(this.dtGrdLogs);
             this.tabLogs.Location = new System.Drawing.Point(4, 30);
             this.tabLogs.Name = "tabLogs";
-            this.tabLogs.Size = new System.Drawing.Size(740, 384);
+            this.tabLogs.Size = new System.Drawing.Size(940, 384);
             this.tabLogs.TabIndex = 5;
             this.tabLogs.Text = "LOGS";
             this.tabLogs.UseVisualStyleBackColor = true;
@@ -859,14 +863,43 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdLogs.AllowUserToDeleteRows = false;
             this.dtGrdLogs.AllowUserToOrderColumns = true;
             this.dtGrdLogs.AllowUserToResizeRows = false;
-            this.dtGrdLogs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.dtGrdLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtGrdLogs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dtGrdLogs.BackgroundColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtGrdLogs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dtGrdLogs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtGrdLogs.DefaultCellStyle = dataGridViewCellStyle2;
             this.dtGrdLogs.Location = new System.Drawing.Point(15, 15);
             this.dtGrdLogs.Name = "dtGrdLogs";
             this.dtGrdLogs.ReadOnly = true;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtGrdLogs.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dtGrdLogs.RowHeadersVisible = false;
-            this.dtGrdLogs.Size = new System.Drawing.Size(711, 352);
+            this.dtGrdLogs.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
+            this.dtGrdLogs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dtGrdLogs.Size = new System.Drawing.Size(911, 352);
             this.dtGrdLogs.TabIndex = 35;
             // 
             // userInfo
@@ -883,8 +916,9 @@ namespace DCTRNNPBBL.Panels {
             // 
             // chkSemuaKolom
             // 
+            this.chkSemuaKolom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkSemuaKolom.AutoSize = true;
-            this.chkSemuaKolom.Location = new System.Drawing.Point(564, 60);
+            this.chkSemuaKolom.Location = new System.Drawing.Point(764, 60);
             this.chkSemuaKolom.Name = "chkSemuaKolom";
             this.chkSemuaKolom.Size = new System.Drawing.Size(143, 17);
             this.chkSemuaKolom.TabIndex = 24;
@@ -904,7 +938,7 @@ namespace DCTRNNPBBL.Panels {
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.label1);
             this.Name = "MainApp";
-            this.Size = new System.Drawing.Size(784, 539);
+            this.Size = new System.Drawing.Size(984, 539);
             this.Load += new System.EventHandler(this.MainApp_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdSplitHhPicking)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDomar)).EndInit();
@@ -989,10 +1023,10 @@ namespace DCTRNNPBBL.Panels {
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txtReSendNpbApiTargetUrl;
         private System.Windows.Forms.TabPage tabLogs;
-        private System.Windows.Forms.DataGridView dtGrdLogs;
         private System.Windows.Forms.TextBox txtReSendNpbApiTargetDcKode;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button btnReSendNpb;
         private Microsoft.Reporting.WinForms.ReportViewer rptViewer;
+        private System.Windows.Forms.DataGridView dtGrdLogs;
     }
 }
