@@ -588,9 +588,9 @@ namespace DCTRNNPBBL.Panels {
                                         PLU_ID = :plu_id
                                 ",
                                 new List<CDbQueryParamBind> {
-                                        new CDbQueryParamBind { NAME = "keter", VALUE = stokPlanoRakDisplay },
-                                        new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = data.SEQ_NO },
-                                        new CDbQueryParamBind { NAME = "plu_id", VALUE = data.PLU_ID }
+                                    new CDbQueryParamBind { NAME = "keter", VALUE = stokPlanoRakDisplay },
+                                    new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = data.SEQ_NO },
+                                    new CDbQueryParamBind { NAME = "plu_id", VALUE = data.PLU_ID }
                                 },
                                 false
                             );
@@ -655,7 +655,7 @@ namespace DCTRNNPBBL.Panels {
                                         SEQ_NO = :seq_no
                                 ",
                                 new List<CDbQueryParamBind> {
-                                new CDbQueryParamBind { NAME = "seq_no", VALUE = listSplit.FirstOrDefault().SEQ_NO }
+                                    new CDbQueryParamBind { NAME = "seq_no", VALUE = listSplit.FirstOrDefault().SEQ_NO }
                                 },
                                 false
                             );
@@ -1402,18 +1402,21 @@ namespace DCTRNNPBBL.Panels {
                                 msgBxIco = MessageBoxIcon.Error;
                             }
                             MessageBox.Show(resApiObj.Info, apiStatusText, MessageBoxButtons.OK, msgBxIco);
-                            bool hasilInsert = await _oracle.ExecQueryAsync($@"
-                                INSERT INTO LOG_API_DC (KODEDC, PEMILIKAPI, NAMAMETHOD, DATAKIRIM, DATABALIK, TANGGAL, STATUS)
-                                VALUES (:kode_dc, :pemilik_api, :nama_method, :data_kirim, :data_balik, :tanggal, :status)
-                            ", new List<CDbQueryParamBind> {
-                                new CDbQueryParamBind { NAME = "kode_dc", VALUE = apiDcKode },
-                                new CDbQueryParamBind { NAME = "pemilik_api", VALUE = apiOwner },
-                                new CDbQueryParamBind { NAME = "nama_method", VALUE = urlPaths[urlPaths.Length-1] },
-                                new CDbQueryParamBind { NAME = "data_kirim", VALUE = jsonBody },
-                                new CDbQueryParamBind { NAME = "data_balik", VALUE = resApiStr },
-                                new CDbQueryParamBind { NAME = "tanggal", VALUE = DateTime.Now },
-                                new CDbQueryParamBind { NAME = "status", VALUE = $"{(int) resApi.StatusCode} {resApi.StatusCode}" }
-                            });
+                            bool hasilInsert = await _oracle.ExecQueryAsync(
+                                $@"
+                                    INSERT INTO LOG_API_DC (KODEDC, PEMILIKAPI, NAMAMETHOD, DATAKIRIM, DATABALIK, TANGGAL, STATUS)
+                                    VALUES (:kode_dc, :pemilik_api, :nama_method, :data_kirim, :data_balik, :tanggal, :status)
+                                ",
+                                new List<CDbQueryParamBind> {
+                                    new CDbQueryParamBind { NAME = "kode_dc", VALUE = apiDcKode },
+                                    new CDbQueryParamBind { NAME = "pemilik_api", VALUE = apiOwner },
+                                    new CDbQueryParamBind { NAME = "nama_method", VALUE = urlPaths[urlPaths.Length-1] },
+                                    new CDbQueryParamBind { NAME = "data_kirim", VALUE = jsonBody },
+                                    new CDbQueryParamBind { NAME = "data_balik", VALUE = resApiStr },
+                                    new CDbQueryParamBind { NAME = "tanggal", VALUE = DateTime.Now },
+                                    new CDbQueryParamBind { NAME = "status", VALUE = $"{(int) resApi.StatusCode} {resApi.StatusCode}" }
+                                }
+                            );
                             if (!hasilInsert) {
                                 throw new Exception("Gagal Insert Ke LOG_API_DC");
                             }
@@ -1502,7 +1505,7 @@ namespace DCTRNNPBBL.Panels {
                                 b.his_fk_plukode ASC
                         ",
                         new List<CDbQueryParamBind> {
-                        new CDbQueryParamBind { NAME = "npbdc_no", VALUE = selectedNoNpb }
+                            new CDbQueryParamBind { NAME = "npbdc_no", VALUE = selectedNoNpb }
                         }
                     );
                 });
