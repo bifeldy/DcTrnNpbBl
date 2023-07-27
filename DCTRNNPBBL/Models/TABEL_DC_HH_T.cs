@@ -15,9 +15,9 @@ namespace DCTRNNPBBL.Models {
 
     class CMODEL_TABEL_DC_HH_T {
         public string HH { set; get; }
-        public decimal DC_ID { set; get; }
-        public string NO_HH { set; get; }
-        public string BAGIAN { set; get; }
+        // public decimal DC_ID { set; get; }
+        // public string NO_HH { set; get; }
+        // public string BAGIAN { set; get; }
     }
 
 }

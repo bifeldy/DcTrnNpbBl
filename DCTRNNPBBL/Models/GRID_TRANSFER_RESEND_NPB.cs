@@ -38,6 +38,12 @@ namespace DCTRNNPBBL.Models {
         public DateTime NPBDC_DATE { set; get; }
         public string WHK_KODE { set; get; }
         public string TBL_NPWP_DC { set; get; }
+        public DateTime START_PICKING { set; get; }
+        public DateTime TIME_PICKING { set; get; }
+        public DateTime STOP_PICKING { set; get; }
+        public DateTime START_SCANNING { set; get; }
+        public DateTime TIME_SCANNING { set; get; }
+        public DateTime STOP_SCANNING { set; get; }
     }
 
 }

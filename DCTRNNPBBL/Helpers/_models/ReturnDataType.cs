@@ -24,7 +24,7 @@ namespace DCTRNNPBBL.Helpers._models {
         LONG,
         BYTE,
         STR,
-        STRING,
+        STRING
     }
 
 }

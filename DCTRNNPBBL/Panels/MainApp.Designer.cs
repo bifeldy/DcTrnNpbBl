@@ -70,6 +70,7 @@ namespace DCTRNNPBBL.Panels {
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.tabProsesNpb = new System.Windows.Forms.TabPage();
+            this.label11 = new System.Windows.Forms.Label();
             this.cmbBxProsesNpbAllNo = new System.Windows.Forms.ComboBox();
             this.label20 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -621,6 +622,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // tabProsesNpb
             // 
+            this.tabProsesNpb.Controls.Add(this.label11);
             this.tabProsesNpb.Controls.Add(this.cmbBxProsesNpbAllNo);
             this.tabProsesNpb.Controls.Add(this.label20);
             this.tabProsesNpb.Controls.Add(this.panel6);
@@ -639,6 +641,21 @@ namespace DCTRNNPBBL.Panels {
             this.tabProsesNpb.Text = "PROSES NPB";
             this.tabProsesNpb.UseVisualStyleBackColor = true;
             // 
+            // label11
+            // 
+            this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label11.AutoSize = true;
+            this.label11.BackColor = System.Drawing.Color.Transparent;
+            this.label11.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
+            this.label11.Location = new System.Drawing.Point(25, 355);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(471, 13);
+            this.label11.TabIndex = 44;
+            this.label11.Text = "belum selesai pick &&/ scan (ada warna merah) / total pick atau scan 0 (warna kun" +
+    "ing semua)";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // cmbBxProsesNpbAllNo
             // 
             this.cmbBxProsesNpbAllNo.FormattingEnabled = true;
@@ -653,11 +670,11 @@ namespace DCTRNNPBBL.Panels {
             this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label20.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(64)))), ((int)(((byte)(129)))));
-            this.label20.Location = new System.Drawing.Point(17, 348);
+            this.label20.Location = new System.Drawing.Point(17, 342);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(386, 13);
+            this.label20.Size = new System.Drawing.Size(396, 13);
             this.label20.TabIndex = 42;
-            this.label20.Text = "* Tidak dapat membuat NPB jika belum selesai pick &&/ scan (warna merah)";
+            this.label20.Text = "* Syarat membuat NPB min. 1 hijau tanpa merah, tidak dapat dilakukan jika ::";
             this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // panel6
@@ -1020,5 +1037,6 @@ namespace DCTRNNPBBL.Panels {
         private System.Windows.Forms.Button btnReSendNpb;
         private Microsoft.Reporting.WinForms.ReportViewer rptViewer;
         private System.Windows.Forms.DataGridView dtGrdLogs;
+        private System.Windows.Forms.Label label11;
     }
 }

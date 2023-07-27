@@ -283,7 +283,7 @@ namespace DCTRNNPBBL.Panels {
             DataTable dtAllHhPick = new DataTable();
 
             await Task.Run(async () => {
-                dtAllHhPick = await _oracle.GetDataTableAsync($@"SELECT * FROM DC_HH_T");
+                dtAllHhPick = await _oracle.GetDataTableAsync($@"SELECT DISTINCT HH FROM DC_HH_T");
             });
 
             if (dtAllHhPick.Rows.Count <= 0) {
@@ -388,6 +388,25 @@ namespace DCTRNNPBBL.Panels {
             if (!string.IsNullOrEmpty(selectedNoRpb)) {
                 DataTable dtSplit = new DataTable();
                 await Task.Run(async () => {
+                    await _oracle.ExecQueryAsync(
+                        $@"
+                            UPDATE
+                                DC_PICKBL_DTL_T
+                            SET
+                                KETER = :keter
+                            WHERE
+                                (KETER IS NOT NULL OR KETER <> '')
+                                AND SEQ_FK_NO IN (
+                                    SELECT SEQ_NO
+                                    FROM DC_PICKBL_HDR_T
+                                    WHERE DOC_NO = :seq_fk_no
+                                )
+                        ",
+                        new List<CDbQueryParamBind> {
+                            new CDbQueryParamBind { NAME = "keter", VALUE = null },
+                            new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = selectedNoRpb }
+                        }
+                    );
                     dtSplit = await _oracle.GetDataTableAsync(
                         $@"
                             SELECT
@@ -410,12 +429,15 @@ namespace DCTRNNPBBL.Panels {
                                 DC_PICKBL_HDR_T a,
                                 DC_PICKBL_DTL_T b,
                                 DC_BARANG_T c,
-                                DC_PLANOGRAM_T d
+                                (
+                                    SELECT *
+                                    FROM DC_PLANOGRAM_T WHERE PLA_DISPLAY = 'Y'
+                                ) d
                             WHERE
                                 a.DOC_NO = :doc_no AND
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_PLUID AND
-                                b.PLU_ID = d.PLA_FK_PLUID AND
+                                b.PLU_ID = d.PLA_FK_PLUID (+) AND
                                 (a.TGL_SPLIT IS NULL OR a.TGL_SPLIT = '')
                         ",
                         new List<CDbQueryParamBind> {
@@ -465,9 +487,16 @@ namespace DCTRNNPBBL.Panels {
             bindSelectedSplitHhPick.ResetBindings();
             bindSplit.ResetBindings();
             foreach (DataGridViewRow row in dtGrdSplit.Rows) {
-                object keter = row.Cells[dtGrdSplit.Columns["KETER"].Index].Value;
-                object display = row.Cells[dtGrdSplit.Columns["PLA_DISPLAY"].Index].Value;
-                if (!string.IsNullOrEmpty((string) keter) || string.IsNullOrEmpty((string) display)) {
+                decimal cellidPlano = (decimal) row.Cells[dtGrdSplit.Columns["CELLID_PLANO"].Index].Value;
+                decimal plaqtystok = (decimal) row.Cells[dtGrdSplit.Columns["PLA_QTY_STOK"].Index].Value;
+                decimal qtyrpb = (decimal) row.Cells[dtGrdSplit.Columns["QTY_RPB"].Index].Value;
+                if (cellidPlano <= 0) {
+                    row.Cells[dtGrdSplit.Columns["KETER"].Index].Value = "Belum Ada Rak Display / Tablok";
+                }
+                if (qtyrpb > plaqtystok) {
+                    row.Cells[dtGrdSplit.Columns["KETER"].Index].Value = "Stok Plano Tidak Cukup";
+                }
+                if (cellidPlano <= 0 || qtyrpb > plaqtystok) {
                     row.DefaultCellStyle.BackColor = Color.FromArgb(255, 64, 129);
                 }
             }
@@ -540,7 +569,7 @@ namespace DCTRNNPBBL.Panels {
                     bool bolehSplit = true;
                     foreach (CMODEL_GRID_SPLIT data in listSplit) {
                         string stokPlanoRakDisplay = "";
-                        if (data.PLA_DISPLAY != "Y") {
+                        if (data.CELLID_PLANO <= 0) {
                             stokPlanoRakDisplay = "Belum Ada Rak Display / Tablok";
                         }
                         if (data.QTY_RPB > data.PLA_QTY_STOK) {
@@ -717,13 +746,15 @@ namespace DCTRNNPBBL.Panels {
                                 DC_PICKBL_HDR_T a,
                                 DC_PICKBL_DTL_T b,
                                 DC_BARANG_T c,
-                                DC_PLANOGRAM_T d
+                                (
+                                    SELECT *
+                                    FROM DC_PLANOGRAM_T WHERE PLA_DISPLAY = 'Y'
+                                ) d
                             WHERE
                                 a.DOC_NO = :doc_no AND
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_PLUID AND
-                                b.PLU_ID = d.PLA_FK_PLUID AND
-                                d.PLA_DISPLAY = 'Y' AND
+                                b.PLU_ID = d.PLA_FK_PLUID (+) AND
                                 (a.TGL_SPLIT IS NOT NULL OR a.TGL_SPLIT <> '')
                         ",
                         new List<CDbQueryParamBind> {
@@ -1017,19 +1048,27 @@ namespace DCTRNNPBBL.Panels {
                                 a.NPBDC_NO,
                                 a.NPBDC_DATE,
                                 a.WHK_KODE,
-                                e.TBL_NPWP_DC
+                                e.TBL_NPWP_DC,
+                                a.START_PICKING,
+                                b.TIME_PICKING,
+                                a.STOP_PICKING,
+                                a.START_SCANNING,
+                                b.TIME_SCANNING,
+                                a.STOP_SCANNING
                             FROM
                                 DC_PICKBL_HDR_T a,
                                 DC_PICKBL_DTL_T b,
                                 DC_BARANG_DC_V c,
-                                DC_PLANOGRAM_T d,
+                                (
+                                    SELECT *
+                                    FROM DC_PLANOGRAM_T WHERE PLA_DISPLAY = 'Y'
+                                ) d,
                                 DC_TABEL_DC_T e
                             WHERE
                                 a.DOC_NO = :doc_no AND
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_FK_PLUID AND
-                                b.PLU_ID = d.PLA_FK_PLUID AND
-                                d.PLA_DISPLAY = 'Y' AND
+                                b.PLU_ID = d.PLA_FK_PLUID (+) AND
                                 (a.TGL_SPLIT IS NOT NULL OR a.TGL_SPLIT <> '') AND
                                 (a.NPBDC_DATE IS NULL OR a.NPBDC_DATE = '')
                         ",
@@ -1067,13 +1106,18 @@ namespace DCTRNNPBBL.Panels {
             }
             bindTransferNpb.ResetBindings();
             foreach (DataGridViewRow row in dtGrdProsesNpb.Rows) {
+                DateTime pickDate = DateTime.Parse(row.Cells[dtGrdProsesNpb.Columns["STOP_PICKING"].Index].Value.ToString());
+                DateTime scanDate = DateTime.Parse(row.Cells[dtGrdProsesNpb.Columns["STOP_SCANNING"].Index].Value.ToString());
                 decimal pickCount = decimal.Parse(row.Cells[dtGrdProsesNpb.Columns["PICK"].Index].Value.ToString());
                 decimal scanCount = decimal.Parse(row.Cells[dtGrdProsesNpb.Columns["SCAN"].Index].Value.ToString());
-                if (pickCount > 0 && scanCount > 0) {
-                    row.DefaultCellStyle.BackColor = Color.FromArgb(105, 240, 175);
+                if (pickDate <= DateTime.MinValue || scanDate <= DateTime.MinValue) {
+                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 64, 129);
+                }
+                else if (pickCount <= 0 || scanCount <= 0) {
+                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 204, 0);
                 }
                 else {
-                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 64, 129);
+                    row.DefaultCellStyle.BackColor = Color.FromArgb(105, 240, 175);
                 }
             }
             DtClearSelection();
@@ -1084,80 +1128,91 @@ namespace DCTRNNPBBL.Panels {
             SetIdleBusyStatus(false);
             DtClearSelection();
             string ctx = "Proses Transfer NPB ...";
-            bool safeForNpb = false;
+            bool safeForNpb = true;
+            decimal totalPick = 0;
+            decimal totalScan = 0;
             foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in listTransferNpb) {
-                if (data.PICK > 0 && data.SCAN > 0) {
-                    safeForNpb = true;
-                }
-                else {
-                    MessageBox.Show("Masih Ada Yang Belum Selesai Picking &/ Scanning", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                totalPick += data.PICK;
+                totalScan += data.SCAN;
+                if (data.STOP_PICKING <= DateTime.MinValue || data.STOP_SCANNING <= DateTime.MinValue) {
+                    MessageBox.Show("Masih Ada Item Yang Belum Di Picking &/ Scanning", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     safeForNpb = false;
                     break;
                 }
             }
             if (safeForNpb) {
-                decimal dcid = 0;
-                await Task.Run(async () => {
-                    dcid = await _oracle.ExecScalarAsync(
-                        EReturnDataType.INT,
-                        "SELECT get_dcid(:dc_kode) FROM DUAL",
-                        new List<CDbQueryParamBind> {
-                                new CDbQueryParamBind { NAME = "dc_kode", VALUE = listTransferNpb.FirstOrDefault().DC_KODE }
-                        }
-                    );
-                });
-                if (dcid > 0) {
-                    string procName = "DC_ANTARGUDANG_WEB.PROSES_NPBDCBL";
-                    CDbExecProcResult runProc = null;
+                if (totalPick <= 0 || totalScan <= 0) {
+                    MessageBox.Show($"Tidak Ada Pemenuhan.{Environment.NewLine}Gagal Buat NPB DC.{Environment.NewLine}Info WHK Agar Koordinasi Dengan Tim Refund!", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else if (
+                    listTransferNpb.FirstOrDefault().START_PICKING <= DateTime.MinValue ||
+                    listTransferNpb.FirstOrDefault().STOP_PICKING <= DateTime.MinValue ||
+                    listTransferNpb.FirstOrDefault().START_SCANNING <= DateTime.MinValue ||
+                    listTransferNpb.FirstOrDefault().STOP_SCANNING <= DateTime.MinValue
+                ) {
+                    MessageBox.Show($"HandHeld Proses Picking &/ Scanning Masih Berjalan", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else {
+                    decimal dcid = 0;
                     await Task.Run(async () => {
-                        runProc = await _oracle.ExecProcedureAsync(
-                            procName,
+                        dcid = await _oracle.ExecScalarAsync(
+                            EReturnDataType.INT,
+                            "SELECT get_dcid(:dc_kode) FROM DUAL",
                             new List<CDbQueryParamBind> {
-                                new CDbQueryParamBind { NAME = "n_noref", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
-                                new CDbQueryParamBind { NAME = "d_tgl_ref", VALUE = listTransferNpb.FirstOrDefault().SEQ_DATE },
-                                new CDbQueryParamBind { NAME = "n_dcid1", VALUE = dcid },
-                                new CDbQueryParamBind { NAME = "n_hdrid", VALUE = (decimal) 0, DIRECTION = ParameterDirection.Output },
-                                new CDbQueryParamBind { NAME = "p_msg", VALUE = "", DIRECTION = ParameterDirection.Output, SIZE = 2000 }
+                                new CDbQueryParamBind { NAME = "dc_kode", VALUE = listTransferNpb.FirstOrDefault().DC_KODE }
                             }
                         );
                     });
-                    string resProc = $"status = {(runProc.STATUS ? "Berhasil" : "Gagal")} Menjalankan Procedure";
-                    bool npbOk = runProc.STATUS;
-                    if (runProc.PARAMETERS != null) {
-                        resProc += Environment.NewLine + Environment.NewLine;
-                        for (int i = 0; i < runProc.PARAMETERS.Count; i++) {
-                            resProc += $"{runProc.PARAMETERS[i].ParameterName} = {runProc.PARAMETERS[i].Value}";
-                            if (i + 1 < runProc.PARAMETERS.Count) resProc += Environment.NewLine;
-                            if (runProc.PARAMETERS[i].ParameterName == "p_msg") {
-                                npbOk = npbOk && string.IsNullOrEmpty(runProc.PARAMETERS[i].Value.ToString());
-                            }
-                        }
-                    }
-                    MessageBox.Show(resProc, runProc.QUERY, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    if (npbOk) {
-                        decimal npb = 0;
+                    if (dcid > 0) {
+                        string procName = "DC_ANTARGUDANG_WEB.PROSES_NPBDCBL";
+                        CDbExecProcResult runProc = null;
                         await Task.Run(async () => {
-                            npb = await _oracle.ExecScalarAsync(
-                                EReturnDataType.DECIMAL,
-                                "SELECT NPBDC_NO FROM DC_PICKBL_HDR_H WHERE SEQ_NO = :seq_no AND DOC_NO = :doc_no",
+                            runProc = await _oracle.ExecProcedureAsync(
+                                procName,
                                 new List<CDbQueryParamBind> {
-                                    new CDbQueryParamBind { NAME = "seq_no", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
-                                    new CDbQueryParamBind { NAME = "doc_no", VALUE = listTransferNpb.FirstOrDefault().DOC_NO }
+                                    new CDbQueryParamBind { NAME = "n_noref", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
+                                    new CDbQueryParamBind { NAME = "d_tgl_ref", VALUE = listTransferNpb.FirstOrDefault().SEQ_DATE },
+                                    new CDbQueryParamBind { NAME = "n_dcid1", VALUE = dcid },
+                                    new CDbQueryParamBind { NAME = "n_hdrid", VALUE = (decimal) 0, DIRECTION = ParameterDirection.Output },
+                                    new CDbQueryParamBind { NAME = "p_msg", VALUE = "", DIRECTION = ParameterDirection.Output, SIZE = 2000 }
                                 }
                             );
                         });
-                        cmbBxReSendNpbAllNo.Text = npb.ToString();
-                        MessageBox.Show($"No. NPB :: {npb}", "NPB Berhasil Dibuat", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        tabContent.SelectTab(tabReSendNpb);
-                        LoadReSendNpb();
+                        string resProc = $"status = {(runProc.STATUS ? "Berhasil" : "Gagal")} Menjalankan Procedure";
+                        bool npbOk = runProc.STATUS;
+                        if (runProc.PARAMETERS != null) {
+                            resProc += Environment.NewLine + Environment.NewLine;
+                            for (int i = 0; i < runProc.PARAMETERS.Count; i++) {
+                                resProc += $"{runProc.PARAMETERS[i].ParameterName} = {runProc.PARAMETERS[i].Value}";
+                                if (i + 1 < runProc.PARAMETERS.Count) resProc += Environment.NewLine;
+                                if (runProc.PARAMETERS[i].ParameterName == "p_msg") {
+                                    npbOk = npbOk && string.IsNullOrEmpty(runProc.PARAMETERS[i].Value.ToString());
+                                }
+                            }
+                        }
+                        MessageBox.Show(resProc, runProc.QUERY, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (npbOk) {
+                            decimal npb = 0;
+                            await Task.Run(async () => {
+                                npb = await _oracle.ExecScalarAsync(
+                                    EReturnDataType.DECIMAL,
+                                    "SELECT NPBDC_NO FROM DC_PICKBL_HDR_H WHERE SEQ_NO = :seq_no AND DOC_NO = :doc_no",
+                                    new List<CDbQueryParamBind> {
+                                        new CDbQueryParamBind { NAME = "seq_no", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
+                                        new CDbQueryParamBind { NAME = "doc_no", VALUE = listTransferNpb.FirstOrDefault().DOC_NO }
+                                    }
+                                );
+                            });
+                            cmbBxReSendNpbAllNo.Text = npb.ToString();
+                            MessageBox.Show($"No. NPB :: {npb}", "NPB Berhasil Dibuat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            tabContent.SelectTab(tabReSendNpb);
+                            LoadReSendNpb();
+                        }
+                    }
+                    else {
+                        MessageBox.Show("Gagal Mendapatkan DCID", ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                else {
-                    MessageBox.Show("Gagal Mendapatkan DCID", ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else {
-                MessageBox.Show("Tidak Ada Data Yang Di Proses", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             SetIdleBusyStatus(true);
         }
@@ -1228,13 +1283,16 @@ namespace DCTRNNPBBL.Panels {
                                 DC_PICKBL_HDR_H a,
                                 DC_PICKBL_DTL_H b,
                                 DC_BARANG_DC_V c,
-                                DC_PLANOGRAM_T d,
+                                (
+                                    SELECT *
+                                    FROM DC_PLANOGRAM_T WHERE PLA_DISPLAY = 'Y'
+                                ) d,
                                 DC_TABEL_DC_T e
                             WHERE
                                 a.NPBDC_NO = :npbdc_no AND
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_FK_PLUID AND
-                                c.MBR_FK_PLUID = d.PLA_FK_PLUID AND
+                                c.MBR_FK_PLUID = d.PLA_FK_PLUID (+) AND
 		                        d.PLA_DC_KODE = a.DC_KODE
                         ",
                         new List<CDbQueryParamBind> {
@@ -1265,8 +1323,8 @@ namespace DCTRNNPBBL.Panels {
 
         private async void GetApiNpb() {
             SetIdleBusyStatus(false);
-            string apiDcho = _app.GetConfig("api_dcho");
-            string apiTargetUrl = _app.GetConfig("api_dev");
+            string apiDcho = _app.GetConfig("api_dcho_url");
+            string apiTargetUrl = _app.GetConfig("api_dev_url");
             #if DEBUG
                 txtReSendNpbApiTargetDcKode.Text = "G000";
             #endif
@@ -1279,8 +1337,8 @@ namespace DCTRNNPBBL.Panels {
                         }
                     };
                     string jsonBody = _api.ObjectToJson(new CMODEL_JSON_KIRIM_DCHO {
-                        TipeData = "TAG_BL",
-                        JenisIP = "IIS",
+                        TipeData = _app.GetConfig("api_tipe_data"),
+                        JenisIP = _app.GetConfig("api_jenis_ip"),
                         KodeDC = kode_dc
                     });
                     var resApi = await _api.PostData(apiDcho, jsonBody);
@@ -1297,7 +1355,7 @@ namespace DCTRNNPBBL.Panels {
         private async void TransferNpb() {
             SetIdleBusyStatus(false);
             string ctx = "Proses Transfer NPB ...";
-            string apiOwner = "TAG_BL-SHANTI";
+            string apiOwner = "TAG_BL";
             string apiDcKode = txtReSendNpbApiTargetDcKode.Text.ToUpper();
             string apiTarget = txtReSendNpbApiTargetUrl.Text;
             if (string.IsNullOrEmpty(apiDcKode) || string.IsNullOrEmpty(apiTarget)) {
@@ -1335,30 +1393,29 @@ namespace DCTRNNPBBL.Panels {
                             var resApi = await _api.PostData(apiTarget, jsonBody);
                             string apiStatusText = $"{(int)resApi.StatusCode} {resApi.StatusCode} - {ctx}";
                             string resApiStr = await resApi.Content.ReadAsStringAsync();
+                            CMODEL_JSON_TERIMA_NPB_BL resApiObj = _api.JsonToObj<CMODEL_JSON_TERIMA_NPB_BL>(resApiStr);
                             MessageBoxIcon msgBxIco;
                             if (resApi.StatusCode >= System.Net.HttpStatusCode.OK && resApi.StatusCode < System.Net.HttpStatusCode.MultipleChoices) {
                                 msgBxIco = MessageBoxIcon.Information;
-                                CMODEL_JSON_TERIMA_NPB_BL resApiObj = _api.JsonToObj<CMODEL_JSON_TERIMA_NPB_BL>(resApiStr);
-                                MessageBox.Show(resApiObj.Info, apiStatusText, MessageBoxButtons.OK, msgBxIco);
-                                bool hasilInsert = await _oracle.ExecQueryAsync($@"
-                                    INSERT INTO LOG_API_DC (KODEDC, PEMILIKAPI, NAMAMETHOD, DATAKIRIM, DATABALIK, TANGGAL, STATUS)
-                                    VALUES (:kode_dc, :pemilik_api, :nama_method, :data_kirim, :data_balik, :tanggal, :status)
-                                ", new List<CDbQueryParamBind> {
-                                    new CDbQueryParamBind { NAME = "kode_dc", VALUE = apiDcKode },
-                                    new CDbQueryParamBind { NAME = "pemilik_api", VALUE = apiOwner },
-                                    new CDbQueryParamBind { NAME = "nama_method", VALUE = urlPaths[urlPaths.Length-1] },
-                                    new CDbQueryParamBind { NAME = "data_kirim", VALUE = jsonBody },
-                                    new CDbQueryParamBind { NAME = "data_balik", VALUE = resApiStr },
-                                    new CDbQueryParamBind { NAME = "tanggal", VALUE = DateTime.Now },
-                                    new CDbQueryParamBind { NAME = "status", VALUE = $"{(int) resApi.StatusCode} {resApi.StatusCode}" }
-                                });
-                                if (!hasilInsert) {
-                                    throw new Exception("Gagal Insert Ke LOG_API_DC");
-                                }
                             }
                             else {
                                 msgBxIco = MessageBoxIcon.Error;
-                                MessageBox.Show($"Gagal Mengirim Ke API {apiOwner}", apiStatusText, MessageBoxButtons.OK, msgBxIco);
+                            }
+                            MessageBox.Show(resApiObj.Info, apiStatusText, MessageBoxButtons.OK, msgBxIco);
+                            bool hasilInsert = await _oracle.ExecQueryAsync($@"
+                                INSERT INTO LOG_API_DC (KODEDC, PEMILIKAPI, NAMAMETHOD, DATAKIRIM, DATABALIK, TANGGAL, STATUS)
+                                VALUES (:kode_dc, :pemilik_api, :nama_method, :data_kirim, :data_balik, :tanggal, :status)
+                            ", new List<CDbQueryParamBind> {
+                                new CDbQueryParamBind { NAME = "kode_dc", VALUE = apiDcKode },
+                                new CDbQueryParamBind { NAME = "pemilik_api", VALUE = apiOwner },
+                                new CDbQueryParamBind { NAME = "nama_method", VALUE = urlPaths[urlPaths.Length-1] },
+                                new CDbQueryParamBind { NAME = "data_kirim", VALUE = jsonBody },
+                                new CDbQueryParamBind { NAME = "data_balik", VALUE = resApiStr },
+                                new CDbQueryParamBind { NAME = "tanggal", VALUE = DateTime.Now },
+                                new CDbQueryParamBind { NAME = "status", VALUE = $"{(int) resApi.StatusCode} {resApi.StatusCode}" }
+                            });
+                            if (!hasilInsert) {
+                                throw new Exception("Gagal Insert Ke LOG_API_DC");
                             }
                         }
                         catch (Exception ex) {
