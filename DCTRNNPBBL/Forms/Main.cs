@@ -79,9 +79,7 @@ namespace DCTRNNPBBL.Forms {
 
         private void CMain_FormClosed(object sender, FormClosedEventArgs e) {
             string title = "Good Bye~ (｡>﹏<｡)";
-            string msg = "Author :: B. Bias A. Ch." + Environment.NewLine;
-            msg += "Contact :: bias@indomaret.co.id" + Environment.NewLine;
-            msg += "© 2022 :: IT SD 03";
+            string msg = "© 2022 :: IT S/SD 03";
             MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
