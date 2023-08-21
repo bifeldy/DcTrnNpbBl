@@ -70,6 +70,7 @@ namespace DCTRNNPBBL.Panels {
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.tabProsesNpb = new System.Windows.Forms.TabPage();
+            this.btnUnPickRpb = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.cmbBxProsesNpbAllNo = new System.Windows.Forms.ComboBox();
             this.label20 = new System.Windows.Forms.Label();
@@ -409,6 +410,7 @@ namespace DCTRNNPBBL.Panels {
             // btnSplitProses
             // 
             this.btnSplitProses.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSplitProses.Enabled = false;
             this.btnSplitProses.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSplitProses.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnSplitProses.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -536,6 +538,7 @@ namespace DCTRNNPBBL.Panels {
             // btnEditSplitUpdate
             // 
             this.btnEditSplitUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEditSplitUpdate.Enabled = false;
             this.btnEditSplitUpdate.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnEditSplitUpdate.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnEditSplitUpdate.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -622,6 +625,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // tabProsesNpb
             // 
+            this.tabProsesNpb.Controls.Add(this.btnUnPickRpb);
             this.tabProsesNpb.Controls.Add(this.label11);
             this.tabProsesNpb.Controls.Add(this.cmbBxProsesNpbAllNo);
             this.tabProsesNpb.Controls.Add(this.label20);
@@ -640,6 +644,21 @@ namespace DCTRNNPBBL.Panels {
             this.tabProsesNpb.TabIndex = 2;
             this.tabProsesNpb.Text = "PROSES NPB";
             this.tabProsesNpb.UseVisualStyleBackColor = true;
+            // 
+            // btnUnPickRpb
+            // 
+            this.btnUnPickRpb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUnPickRpb.Enabled = false;
+            this.btnUnPickRpb.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnUnPickRpb.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.btnUnPickRpb.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnUnPickRpb.Location = new System.Drawing.Point(719, 342);
+            this.btnUnPickRpb.Name = "btnUnPickRpb";
+            this.btnUnPickRpb.Size = new System.Drawing.Size(100, 25);
+            this.btnUnPickRpb.TabIndex = 45;
+            this.btnUnPickRpb.Text = "Un-Pick RPB";
+            this.btnUnPickRpb.UseVisualStyleBackColor = true;
+            this.btnUnPickRpb.Click += new System.EventHandler(this.btnUnPickRpb_Click);
             // 
             // label11
             // 
@@ -732,6 +751,7 @@ namespace DCTRNNPBBL.Panels {
             // btnProsesNpbBuat
             // 
             this.btnProsesNpbBuat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnProsesNpbBuat.Enabled = false;
             this.btnProsesNpbBuat.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnProsesNpbBuat.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.btnProsesNpbBuat.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -1038,5 +1058,6 @@ namespace DCTRNNPBBL.Panels {
         private Microsoft.Reporting.WinForms.ReportViewer rptViewer;
         private System.Windows.Forms.DataGridView dtGrdLogs;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button btnUnPickRpb;
     }
 }

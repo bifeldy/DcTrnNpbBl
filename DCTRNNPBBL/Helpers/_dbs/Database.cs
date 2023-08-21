@@ -84,13 +84,13 @@ namespace DCTRNNPBBL.Helpers._db {
         protected virtual async Task<DataTable> GetDataTableAsync(DbDataAdapter dataAdapter, bool autoCloseConnection = true) {
             DataTable dataTable = new DataTable();
             try {
-                if (DatabaseConnection.State == ConnectionState.Open) {
-                    throw new Exception("Database Connection Already In Use!");
-                }
-                else {
+                if (autoCloseConnection) {
+                    if (DatabaseConnection.State == ConnectionState.Open) {
+                        throw new Exception("Database Connection Already In Use!");
+                    }
                     await DatabaseConnection.OpenAsync();
-                    dataAdapter.Fill(dataTable);
                 }
+                dataAdapter.Fill(dataTable);
             }
             catch (Exception ex) {
                 _logger.WriteError(ex);
@@ -106,40 +106,40 @@ namespace DCTRNNPBBL.Helpers._db {
         protected virtual async Task<dynamic> ExecScalarAsync(DbCommand databaseCommand, EReturnDataType returnType, bool autoCloseConnection = true) {
             dynamic result = null;
             try {
-                if (DatabaseConnection.State == ConnectionState.Open) {
-                    throw new Exception("Database Connection Already In Use!");
-                }
-                else {
-                    await DatabaseConnection.OpenAsync();
-                    object _obj = await databaseCommand.ExecuteScalarAsync();
-                    switch (returnType) {
-                        case EReturnDataType.FLOAT:
-                            result = (_obj == null) ? 0 : float.Parse(_obj.ToString());
-                            break;
-                        case EReturnDataType.DOUBLE:
-                            result = (_obj == null) ? 0 : double.Parse(_obj.ToString());
-                            break;
-                        case EReturnDataType.DECIMAL:
-                            result = (_obj == null) ? 0 : decimal.Parse(_obj.ToString());
-                            break;
-                        case EReturnDataType.INT:
-                        case EReturnDataType.INT32:
-                        case EReturnDataType.INTEGER:
-                            result = (_obj == null) ? 0 : int.Parse(_obj.ToString());
-                            break;
-                        case EReturnDataType.INT64:
-                        case EReturnDataType.LONG:
-                            result = (_obj == null) ? 0 : long.Parse(_obj.ToString());
-                            break;
-                        case EReturnDataType.BYTE:
-                            result = (_obj == null) ? 0 : byte.Parse(_obj.ToString());
-                            break;
-                        case EReturnDataType.STR:
-                        case EReturnDataType.STRING:
-                        default:
-                            result = _obj?.ToString();
-                            break;
+                if (autoCloseConnection) {
+                    if (DatabaseConnection.State == ConnectionState.Open) {
+                        throw new Exception("Database Connection Already In Use!");
                     }
+                    await DatabaseConnection.OpenAsync();
+                }
+                object _obj = await databaseCommand.ExecuteScalarAsync();
+                switch (returnType) {
+                    case EReturnDataType.FLOAT:
+                        result = (_obj == null) ? 0 : float.Parse(_obj.ToString());
+                        break;
+                    case EReturnDataType.DOUBLE:
+                        result = (_obj == null) ? 0 : double.Parse(_obj.ToString());
+                        break;
+                    case EReturnDataType.DECIMAL:
+                        result = (_obj == null) ? 0 : decimal.Parse(_obj.ToString());
+                        break;
+                    case EReturnDataType.INT:
+                    case EReturnDataType.INT32:
+                    case EReturnDataType.INTEGER:
+                        result = (_obj == null) ? 0 : int.Parse(_obj.ToString());
+                        break;
+                    case EReturnDataType.INT64:
+                    case EReturnDataType.LONG:
+                        result = (_obj == null) ? 0 : long.Parse(_obj.ToString());
+                        break;
+                    case EReturnDataType.BYTE:
+                        result = (_obj == null) ? 0 : byte.Parse(_obj.ToString());
+                        break;
+                    case EReturnDataType.STR:
+                    case EReturnDataType.STRING:
+                    default:
+                        result = _obj?.ToString();
+                        break;
                 }
             }
             catch (Exception ex) {
@@ -194,14 +194,14 @@ namespace DCTRNNPBBL.Helpers._db {
                 PARAMETERS = databaseCommand.Parameters
             };
             try {
-                if (DatabaseConnection.State == ConnectionState.Open) {
-                    throw new Exception("Database Connection Already In Use!");
-                }
-                else {
+                if (autoCloseConnection) {
+                    if (DatabaseConnection.State == ConnectionState.Open) {
+                        throw new Exception("Database Connection Already In Use!");
+                    }
                     await DatabaseConnection.OpenAsync();
-                    result.STATUS = await databaseCommand.ExecuteNonQueryAsync() == -1;
-                    result.PARAMETERS = databaseCommand.Parameters;
                 }
+                result.STATUS = await databaseCommand.ExecuteNonQueryAsync() == -1;
+                result.PARAMETERS = databaseCommand.Parameters;
             }
             catch (Exception ex) {
                 _logger.WriteError(ex);
@@ -217,13 +217,13 @@ namespace DCTRNNPBBL.Helpers._db {
         protected virtual async Task<int> UpdateTable(DbDataAdapter dataAdapter, DataSet dataSet, string dataSetTableName, bool autoCloseConnection = true) {
             int result = 0;
             try {
-                if (DatabaseConnection.State == ConnectionState.Open) {
-                    throw new Exception("Database Connection Already In Use!");
-                }
-                else {
+                if (autoCloseConnection) {
+                    if (DatabaseConnection.State == ConnectionState.Open) {
+                        throw new Exception("Database Connection Already In Use!");
+                    }
                     await DatabaseConnection.OpenAsync();
-                    result = dataAdapter.Update(dataSet, dataSetTableName);
                 }
+                result = dataAdapter.Update(dataSet, dataSetTableName);
             }
             catch (Exception ex) {
                 _logger.WriteError(ex);
@@ -239,13 +239,13 @@ namespace DCTRNNPBBL.Helpers._db {
         protected virtual async Task<DbDataReader> ExecReaderAsync(DbCommand databaseCommand, bool autoCloseConnection = false) {
             DbDataReader result = null;
             try {
-                if (DatabaseConnection.State == ConnectionState.Open) {
-                    throw new Exception("Database Connection Already In Use!");
-                }
-                else {
+                if (autoCloseConnection) {
+                    if (DatabaseConnection.State == ConnectionState.Open) {
+                        throw new Exception("Database Connection Already In Use!");
+                    }
                     await DatabaseConnection.OpenAsync();
-                    result = await databaseCommand.ExecuteReaderAsync();
                 }
+                result = await databaseCommand.ExecuteReaderAsync();
             }
             catch (Exception ex) {
                 _logger.WriteError(ex);
@@ -261,36 +261,36 @@ namespace DCTRNNPBBL.Helpers._db {
         protected virtual async Task<string> RetrieveBlob(DbCommand databaseCommand, string stringPathDownload, string stringFileName, bool autoCloseConnection = false) {
             string result = "";
             try {
-                if (DatabaseConnection.State == ConnectionState.Open) {
-                    throw new Exception("Database Connection Already In Use!");
-                }
-                else {
+                if (autoCloseConnection) {
+                    if (DatabaseConnection.State == ConnectionState.Open) {
+                        throw new Exception("Database Connection Already In Use!");
+                    }
                     await DatabaseConnection.OpenAsync();
-                    DbDataReader rdrGetBlob = await databaseCommand.ExecuteReaderAsync(CommandBehavior.SequentialAccess);
-                    if (!rdrGetBlob.HasRows) {
-                        throw new Exception("Error file not found");
-                    }
-                    while (await rdrGetBlob.ReadAsync()) {
-                        FileStream fs = new FileStream($"{stringPathDownload}/{stringFileName}", FileMode.OpenOrCreate, FileAccess.Write);
-                        BinaryWriter bw = new BinaryWriter(fs);
-                        long startIndex = 0;
-                        int bufferSize = 8192;
-                        byte[] outbyte = new byte[bufferSize - 1];
-                        int retval = (int)rdrGetBlob.GetBytes(0, startIndex, outbyte, 0, bufferSize);
-                        while (retval != bufferSize) {
-                            bw.Write(outbyte);
-                            bw.Flush();
-                            Array.Clear(outbyte, 0, bufferSize);
-                            startIndex += bufferSize;
-                            retval = (int)rdrGetBlob.GetBytes(0, startIndex, outbyte, 0, bufferSize);
-                        }
-                        bw.Write(outbyte, 0, (retval > 0 ? retval : 1) - 1);
-                        bw.Flush();
-                        bw.Close();
-                    }
-                    rdrGetBlob.Close();
-                    rdrGetBlob = null;
                 }
+                DbDataReader rdrGetBlob = await databaseCommand.ExecuteReaderAsync(CommandBehavior.SequentialAccess);
+                if (!rdrGetBlob.HasRows) {
+                    throw new Exception("Error file not found");
+                }
+                while (await rdrGetBlob.ReadAsync()) {
+                    FileStream fs = new FileStream($"{stringPathDownload}/{stringFileName}", FileMode.OpenOrCreate, FileAccess.Write);
+                    BinaryWriter bw = new BinaryWriter(fs);
+                    long startIndex = 0;
+                    int bufferSize = 8192;
+                    byte[] outbyte = new byte[bufferSize - 1];
+                    int retval = (int)rdrGetBlob.GetBytes(0, startIndex, outbyte, 0, bufferSize);
+                    while (retval != bufferSize) {
+                        bw.Write(outbyte);
+                        bw.Flush();
+                        Array.Clear(outbyte, 0, bufferSize);
+                        startIndex += bufferSize;
+                        retval = (int)rdrGetBlob.GetBytes(0, startIndex, outbyte, 0, bufferSize);
+                    }
+                    bw.Write(outbyte, 0, (retval > 0 ? retval : 1) - 1);
+                    bw.Flush();
+                    bw.Close();
+                }
+                rdrGetBlob.Close();
+                rdrGetBlob = null;
             }
             catch (Exception ex) {
                 _logger.WriteError(ex);

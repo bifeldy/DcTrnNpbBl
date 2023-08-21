@@ -179,14 +179,15 @@ namespace DCTRNNPBBL.Panels {
 
             cmbBxEditSplitAllNo.Enabled = isEnabled;
             btnEditSplitLoad.Enabled = isEnabled;
-            btnEditSplitUpdate.Enabled = isEnabled;
+            btnEditSplitUpdate.Enabled = btnEditSplitUpdate.Enabled && isEnabled;
             dtGrdEditSplit.Enabled = isEnabled;
 
             /* Transfer NPB */
 
             cmbBxProsesNpbAllNo.Enabled = isEnabled;
             btnProsesNpbLoad.Enabled = isEnabled;
-            btnProsesNpbBuat.Enabled = isEnabled;
+            btnProsesNpbBuat.Enabled = btnProsesNpbBuat.Enabled && isEnabled;
+            btnUnPickRpb.Enabled = btnUnPickRpb.Enabled && isEnabled;
             dtGrdProsesNpb.Enabled = isEnabled;
 
             /* Resend NPB */
@@ -340,6 +341,7 @@ namespace DCTRNNPBBL.Panels {
                 listSelectedSplitHhPick.Sort((x, y) => x.HH.CompareTo(y.HH));
                 bindAvailableSplitHh.ResetBindings();
                 bindSelectedSplitHhPick.ResetBindings();
+                btnSplitProses.Enabled = listSplit.Count > 0;
                 SetIdleBusyStatus(true);
             }
         }
@@ -373,6 +375,7 @@ namespace DCTRNNPBBL.Panels {
                     s.HH_SCAN = z.HH;
                 }
                 bindAvailableSplitHh.ResetBindings();
+                btnSplitProses.Enabled = listSplit.Count > 0;
                 SetIdleBusyStatus(true);
             }
         }
@@ -480,6 +483,7 @@ namespace DCTRNNPBBL.Panels {
                         });
                     }
                 }
+                btnSplitProses.Enabled = dtSplit.Rows.Count > 0;
             }
             else {
                 MessageBox.Show("Harap Isi DOC_NO Rpb", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -547,6 +551,7 @@ namespace DCTRNNPBBL.Panels {
                     listSplit[i].HH_PICK = listSelectedSplitHhPick[i % listSelectedSplitHhPick.Count].HH;
                 }
             }
+            btnSplitProses.Enabled = listSplit.Count > 0;
             bindSplit.ResetBindings();
         }
 
@@ -810,6 +815,7 @@ namespace DCTRNNPBBL.Panels {
                         });
                     }
                 }
+                btnEditSplitUpdate.Enabled = dtEditSplit.Rows.Count > 0;
             }
             else {
                 MessageBox.Show("Harap Isi DOC_NO Rpb", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -1100,6 +1106,8 @@ namespace DCTRNNPBBL.Panels {
                     dtGrdProsesNpb.Columns["PPN"].DefaultCellStyle.Format = "c2";
                     dtGrdProsesNpb.Columns["PPN"].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("id-ID");
                 }
+                btnProsesNpbBuat.Enabled = dtTransferNpb.Rows.Count > 0;
+                btnUnPickRpb.Enabled = dtTransferNpb.Rows.Count > 0;
             }
             else {
                 MessageBox.Show("Harap Isi DOC_NO Rpb", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -1127,7 +1135,7 @@ namespace DCTRNNPBBL.Panels {
         private async void btnProsesBuatNpb_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             DtClearSelection();
-            string ctx = "Proses Transfer NPB ...";
+            string ctx = "Proses & Transfer NPB ...";
             bool safeForNpb = true;
             decimal totalPick = 0;
             decimal totalScan = 0;
@@ -1142,15 +1150,7 @@ namespace DCTRNNPBBL.Panels {
             }
             if (safeForNpb) {
                 if (totalPick <= 0 || totalScan <= 0) {
-                    MessageBox.Show($"Tidak Ada Pemenuhan.{Environment.NewLine}Gagal Buat NPB DC.{Environment.NewLine}Info WHK Agar Koordinasi Dengan Tim Refund!", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-                else if (
-                    listTransferNpb.FirstOrDefault().START_PICKING <= DateTime.MinValue ||
-                    listTransferNpb.FirstOrDefault().STOP_PICKING <= DateTime.MinValue ||
-                    listTransferNpb.FirstOrDefault().START_SCANNING <= DateTime.MinValue ||
-                    listTransferNpb.FirstOrDefault().STOP_SCANNING <= DateTime.MinValue
-                ) {
-                    MessageBox.Show($"HandHeld Proses Picking &/ Scanning Masih Berjalan", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show($"Tidak Ada Pemenuhan.{Environment.NewLine}Gagal Buat NPB DC.{Environment.NewLine}Silahkan Load Ulang Untuk Refresh.{Environment.NewLine}Gunakan Tombol Un-Pick Untuk Membatalkan RPB.", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 else {
                     decimal dcid = 0;
@@ -1211,6 +1211,186 @@ namespace DCTRNNPBBL.Panels {
                     }
                     else {
                         MessageBox.Show("Gagal Mendapatkan DCID", ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            SetIdleBusyStatus(true);
+        }
+
+        private async void btnUnPickRpb_Click(object sender, EventArgs e) {
+            SetIdleBusyStatus(false);
+            DtClearSelection();
+            string ctx = "Un-Pick RPB ...";
+            bool safeForUnPick = true;
+            decimal totalPick = 0;
+            decimal totalScan = 0;
+            foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in listTransferNpb) {
+                totalPick += data.PICK;
+                totalScan += data.SCAN;
+                if (data.STOP_PICKING <= DateTime.MinValue || data.STOP_SCANNING <= DateTime.MinValue) {
+                    MessageBox.Show("Masih Ada Item Yang Belum Di Picking &/ Scanning", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    safeForUnPick = false;
+                    break;
+                }
+            }
+            if (safeForUnPick) {
+                if (totalPick > 0 || totalScan > 0) {
+                    MessageBox.Show($"Gagal Un-Pick RPB.{Environment.NewLine}Dapat Memenuhi Kebutuhan.{Environment.NewLine}Silahkan Load Ulang Untuk Refresh.{Environment.NewLine}Kemudian Lanjut Membuat NPB DC.", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else {
+                    string doc_no = listTransferNpb.FirstOrDefault().DOC_NO;
+                    decimal seq_no = listTransferNpb.FirstOrDefault().SEQ_NO;
+                    DialogResult dialogResult = MessageBox.Show(
+                        $"Yakin Akan Un-Pick Batal RPB '{doc_no}' (?)",
+                        ctx,
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question
+                    );
+                    if (dialogResult == DialogResult.Yes) {
+                        try {
+                            await _oracle.MarkBeforeExecQueryCommitAndRollback();
+                            string no_pesanan = string.Empty;
+                            await Task.Run(async () => {
+                                no_pesanan = await _oracle.ExecScalarAsync(
+                                    EReturnDataType.STRING,
+                                    $@"
+                                        SELECT
+                                            NO_PESANAN
+                                        FROM
+                                            DC_PICKBL_DTLBL_T
+                                        WHERE
+                                            SEQ_FK_NO = :seq_fk_no
+                                    ",
+                                    new List<CDbQueryParamBind> {
+                                        new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = seq_no }
+                                    },
+                                    false
+                                );
+                            });
+                            if (string.IsNullOrEmpty(no_pesanan)) {
+                                throw new Exception($"No Pesanan Tidak Ditemukan");
+                            }
+                            bool update1 = false;
+                            await Task.Run(async () => {
+                                update1 = await _oracle.ExecQueryAsync(
+                                    $@"
+                                        UPDATE
+                                            DC_PICKBL_T
+                                        SET
+                                            UNPICK = 'Y'
+                                        WHERE
+                                            NO_PESANAN = :no_pesanan
+                                    ",
+                                    new List<CDbQueryParamBind> {
+                                        new CDbQueryParamBind { NAME = "no_pesanan", VALUE = no_pesanan }
+                                    },
+                                    false
+                                );
+                            });
+                            if (!update1) {
+                                throw new Exception($"Gagal Set Un-Pick Pesanan '{no_pesanan}'");
+                            }
+                            bool delete1 = false;
+                            await Task.Run(async () => {
+                                delete1 = await _oracle.ExecQueryAsync(
+                                    $@"
+                                        DELETE FROM
+                                            DC_PICKBL_T
+                                        WHERE
+                                            NO_PESANAN = :no_pesanan AND
+                                            UNPICK = 'Y'
+                                    ",
+                                    new List<CDbQueryParamBind> {
+                                        new CDbQueryParamBind { NAME = "no_pesanan", VALUE = no_pesanan }
+                                    },
+                                    false
+                                );
+                            });
+                            if (!delete1) {
+                                throw new Exception($"Gagal Menghapus Header Pesanan '{no_pesanan}'");
+                            }
+                            bool delete2 = false;
+                            await Task.Run(async () => {
+                                delete2 = await _oracle.ExecQueryAsync(
+                                    $@"
+                                        DELETE FROM
+                                            DC_PICKBL_DTLBL_T
+                                        WHERE
+                                            SEQ_FK_NO = :seq_fk_no
+                                    ",
+                                    new List<CDbQueryParamBind> {
+                                        new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = seq_no }
+                                    },
+                                    false
+                                );
+                            });
+                            if (!delete2) {
+                                throw new Exception($"Gagal Menghapus Detail Pesanan '{no_pesanan}'");
+                            }
+                            bool delete3 = false;
+                            await Task.Run(async () => {
+                                delete3 = await _oracle.ExecQueryAsync(
+                                    $@"
+                                        DELETE FROM
+                                            DC_PICKBL_DTL_T
+                                        WHERE
+                                            SEQ_FK_NO = :seq_fk_no
+                                    ",
+                                    new List<CDbQueryParamBind> {
+                                        new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = seq_no }
+                                    },
+                                    false
+                                );
+                            });
+                            if (!delete3) {
+                                throw new Exception($"Gagal Menghapus Detail RPB '{seq_no}'");
+                            }
+                            bool update2 = false;
+                            await Task.Run(async () => {
+                                update2 = await _oracle.ExecQueryAsync(
+                                    $@"
+                                        UPDATE
+                                            DC_PICKBL_HDR_T
+                                        SET
+                                            UNPICK = 'Y'
+                                        WHERE
+                                            DOC_NO = :doc_no
+                                    ",
+                                    new List<CDbQueryParamBind> {
+                                        new CDbQueryParamBind { NAME = "doc_no", VALUE = doc_no }
+                                    },
+                                    false
+                                );
+                            });
+                            if (!update2) {
+                                throw new Exception($"Gagal Set Un-Pick Header RPB '{doc_no}'");
+                            }
+                            bool delete4 = false;
+                            await Task.Run(async () => {
+                                delete4 = await _oracle.ExecQueryAsync(
+                                    $@"
+                                        DELETE FROM
+                                            DC_PICKBL_HDR_T
+                                        WHERE
+                                            DOC_NO = :doc_no AND
+                                            UNPICK = 'Y'
+                                    ",
+                                    new List<CDbQueryParamBind> {
+                                        new CDbQueryParamBind { NAME = "doc_no", VALUE = doc_no }
+                                    },
+                                    false
+                                );
+                            });
+                            if (!delete4) {
+                                throw new Exception($"Gagal Menghapus Header RPB '{doc_no}'");
+                            }
+                            _oracle.MarkSuccessExecQueryAndCommit();
+                            MessageBox.Show("Selesai Un-Pick", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex) {
+                            _oracle.MarkFailExecQueryAndRollback();
+                            MessageBox.Show(ex.Message, ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
             }
@@ -1551,7 +1731,7 @@ namespace DCTRNNPBBL.Panels {
                 SetIdleBusyStatus(false);
                 DataTable dtLogs = new DataTable();
                 await Task.Run(async () => {
-                    dtLogs = await _oracle.GetDataTableAsync($@"SELECT * FROM LOG_API_DC ORDER BY TANGGAL DESC");
+                    dtLogs = await _oracle.GetDataTableAsync($@"SELECT * FROM ( SELECT * FROM LOG_API_DC WHERE PEMILIKAPI = 'TAG_BL' ORDER BY TANGGAL DESC ) WHERE ROWNUM <= 50");
                 });
                 List<CMODEL_TABEL_LOG_API_DC> logs = _converter.ConvertDataTableToList<CMODEL_TABEL_LOG_API_DC>(dtLogs);
                 foreach (CMODEL_TABEL_LOG_API_DC l in logs) {
