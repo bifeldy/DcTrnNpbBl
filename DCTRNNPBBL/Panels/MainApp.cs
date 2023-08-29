@@ -1149,7 +1149,7 @@ namespace DCTRNNPBBL.Panels {
                 }
             }
             if (safeForNpb) {
-                if (totalPick <= 0 || totalScan <= 0) {
+                if (totalScan <= 0) {
                     MessageBox.Show($"Tidak Ada Pemenuhan.{Environment.NewLine}Gagal Buat NPB DC.{Environment.NewLine}Silahkan Load Ulang Untuk Refresh.{Environment.NewLine}Gunakan Tombol Un-Pick Untuk Membatalkan RPB.", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 else {
@@ -1234,7 +1234,7 @@ namespace DCTRNNPBBL.Panels {
                 }
             }
             if (safeForUnPick) {
-                if (totalPick > 0 || totalScan > 0) {
+                if (totalScan > 0) {
                     MessageBox.Show($"Gagal Un-Pick RPB.{Environment.NewLine}Dapat Memenuhi Kebutuhan.{Environment.NewLine}Silahkan Load Ulang Untuk Refresh.{Environment.NewLine}Kemudian Lanjut Membuat NPB DC.", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 else {
