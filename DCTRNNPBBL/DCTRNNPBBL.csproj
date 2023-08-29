@@ -204,6 +204,7 @@
     <Compile Include="Models\TABEL_DC_PICKBL_DTL_T.cs" />
     <Compile Include="Models\TABEL_DC_PICKBL_HDR_T.cs" />
     <Compile Include="Models\TABEL_LOG_API_DC.cs" />
+    <Compile Include="Models\UNPICK.cs" />
     <Compile Include="Panels\CekProgram.cs">
       <SubType>UserControl</SubType>
     </Compile>

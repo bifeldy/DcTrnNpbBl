@@ -1249,12 +1249,11 @@ namespace DCTRNNPBBL.Panels {
                     if (dialogResult == DialogResult.Yes) {
                         try {
                             await _oracle.MarkBeforeExecQueryCommitAndRollback();
-                            string no_pesanan = string.Empty;
+                            DataTable dt_no_pesanan = new DataTable();
                             await Task.Run(async () => {
-                                no_pesanan = await _oracle.ExecScalarAsync(
-                                    EReturnDataType.STRING,
+                                dt_no_pesanan = await _oracle.GetDataTableAsync(
                                     $@"
-                                        SELECT
+                                        SELECT DISTINCT
                                             NO_PESANAN
                                         FROM
                                             DC_PICKBL_DTLBL_T
@@ -1267,9 +1266,11 @@ namespace DCTRNNPBBL.Panels {
                                     false
                                 );
                             });
-                            if (string.IsNullOrEmpty(no_pesanan)) {
-                                throw new Exception($"No Pesanan Tidak Ditemukan");
+                            if (dt_no_pesanan.Rows.Count <= 0) {
+                                throw new Exception($"Tidak Ada No Pesanan");
                             }
+                            List<CMODEL_UNPICK> ls_no_pesanan = _converter.ConvertDataTableToList<CMODEL_UNPICK>(dt_no_pesanan);
+                            string[] arr_no_pesanan = ls_no_pesanan.Select(l => l.NO_PESANAN).ToArray();
                             bool update1 = false;
                             await Task.Run(async () => {
                                 update1 = await _oracle.ExecQueryAsync(
@@ -1279,16 +1280,16 @@ namespace DCTRNNPBBL.Panels {
                                         SET
                                             UNPICK = 'Y'
                                         WHERE
-                                            NO_PESANAN = :no_pesanan
+                                            NO_PESANAN IN (:arr_no_pesanan)
                                     ",
                                     new List<CDbQueryParamBind> {
-                                        new CDbQueryParamBind { NAME = "no_pesanan", VALUE = no_pesanan }
+                                        new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
                                     },
                                     false
                                 );
                             });
                             if (!update1) {
-                                throw new Exception($"Gagal Set Un-Pick Pesanan '{no_pesanan}'");
+                                throw new Exception($"Gagal Set Un-Pick Pesanan '{string.Join(", ", arr_no_pesanan)}'");
                             }
                             bool delete1 = false;
                             await Task.Run(async () => {
@@ -1297,17 +1298,17 @@ namespace DCTRNNPBBL.Panels {
                                         DELETE FROM
                                             DC_PICKBL_T
                                         WHERE
-                                            NO_PESANAN = :no_pesanan AND
+                                            NO_PESANAN IN (:arr_no_pesanan) AND
                                             UNPICK = 'Y'
                                     ",
                                     new List<CDbQueryParamBind> {
-                                        new CDbQueryParamBind { NAME = "no_pesanan", VALUE = no_pesanan }
+                                        new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
                                     },
                                     false
                                 );
                             });
                             if (!delete1) {
-                                throw new Exception($"Gagal Menghapus Header Pesanan '{no_pesanan}'");
+                                throw new Exception($"Gagal Menghapus Header Pesanan '{string.Join(", ", arr_no_pesanan)}'");
                             }
                             bool delete2 = false;
                             await Task.Run(async () => {
@@ -1325,7 +1326,7 @@ namespace DCTRNNPBBL.Panels {
                                 );
                             });
                             if (!delete2) {
-                                throw new Exception($"Gagal Menghapus Detail Pesanan '{no_pesanan}'");
+                                throw new Exception($"Gagal Menghapus Detail Pesanan '{string.Join(", ", arr_no_pesanan)}'");
                             }
                             bool delete3 = false;
                             await Task.Run(async () => {
