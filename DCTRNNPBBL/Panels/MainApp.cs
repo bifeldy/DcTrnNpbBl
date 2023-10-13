@@ -1038,7 +1038,7 @@ namespace DCTRNNPBBL.Panels {
                                 b.QTY_SCANNING AS SCAN,
                                 CAST(b.HPP as DECIMAL(30,3)) AS HPP,
                                 CAST(NVL(c.mbr_acost, NVL(c.mbr_lcost, 0)) as DECIMAL(30,3)) AS PRICE,
-                                CAST(b.QTY_RPB *
+                                CAST(b.QTY_SCANNING *
                                     NVL (c.mbr_acost, NVL(c.mbr_lcost, 0))
                                         as DECIMAL(30,3))
                                             AS GROSS,
