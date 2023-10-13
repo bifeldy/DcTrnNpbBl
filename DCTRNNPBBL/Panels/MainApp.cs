@@ -262,7 +262,8 @@ namespace DCTRNNPBBL.Panels {
                         FROM
                             DC_PICKBL_HDR_T
                         WHERE
-                            (TGL_SPLIT IS NULL OR TGL_SPLIT = '')
+                            (TGL_SPLIT IS NULL OR TGL_SPLIT = '') AND
+                            (UNPICK IS NULL OR UNPICK <> 'Y')
                     "
                     );
                 });
@@ -438,6 +439,7 @@ namespace DCTRNNPBBL.Panels {
                                 ) d
                             WHERE
                                 a.DOC_NO = :doc_no AND
+                                (a.UNPICK IS NULL OR a.UNPICK <> 'Y') AND
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_PLUID AND
                                 b.PLU_ID = d.PLA_FK_PLUID (+) AND
@@ -703,7 +705,8 @@ namespace DCTRNNPBBL.Panels {
                         FROM
                             DC_PICKBL_HDR_T
                         WHERE
-                            (TGL_SPLIT IS NOT NULL OR TGL_SPLIT <> '')
+                            (TGL_SPLIT IS NOT NULL OR TGL_SPLIT <> '') AND
+                            (UNPICK IS NULL OR UNPICK <> 'Y')
                     ");
                 });
                 List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = _converter.ConvertDataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllRpb);
@@ -757,6 +760,7 @@ namespace DCTRNNPBBL.Panels {
                                 ) d
                             WHERE
                                 a.DOC_NO = :doc_no AND
+                                (a.UNPICK IS NULL OR a.UNPICK <> 'Y') AND
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_PLUID AND
                                 b.PLU_ID = d.PLA_FK_PLUID (+) AND
@@ -986,14 +990,15 @@ namespace DCTRNNPBBL.Panels {
                 await Task.Run(async () => {
                     dtAllRpb = await _oracle.GetDataTableAsync(
                         $@"
-                        SELECT
-                            DOC_NO
-                        FROM
-                            DC_PICKBL_HDR_T
-                        WHERE
-                            (TGL_SPLIT IS NOT NULL OR TGL_SPLIT <> '') AND
-                            (NPBDC_DATE IS NULL OR NPBDC_DATE = '')
-                    "
+                            SELECT
+                                DOC_NO
+                            FROM
+                                DC_PICKBL_HDR_T
+                            WHERE
+                                (TGL_SPLIT IS NOT NULL OR TGL_SPLIT <> '') AND
+                                (NPBDC_DATE IS NULL OR NPBDC_DATE = '') AND
+                                (UNPICK IS NULL OR UNPICK <> 'Y')
+                        "
                     );
                 });
                 List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = _converter.ConvertDataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllRpb);
@@ -1072,6 +1077,7 @@ namespace DCTRNNPBBL.Panels {
                                 DC_TABEL_DC_T e
                             WHERE
                                 a.DOC_NO = :doc_no AND
+                                (a.UNPICK IS NULL OR a.UNPICK <> 'Y') AND
                                 a.SEQ_NO = b.SEQ_FK_NO AND
                                 b.PLU_ID = c.MBR_FK_PLUID AND
                                 b.PLU_ID = d.PLA_FK_PLUID (+) AND
@@ -1280,11 +1286,12 @@ namespace DCTRNNPBBL.Panels {
                                         SET
                                             UNPICK = 'Y'
                                         WHERE
-                                            NO_PESANAN IN (:arr_no_pesanan)
+                                            NO_PESANAN IN ({string.Join(",", arr_no_pesanan.Select(n => $"'{n}'"))})
                                     ",
-                                    new List<CDbQueryParamBind> {
-                                        new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
-                                    },
+                                    null,
+                                    // new List<CDbQueryParamBind> {
+                                    //     new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
+                                    // },
                                     false
                                 );
                             });
@@ -1298,12 +1305,13 @@ namespace DCTRNNPBBL.Panels {
                                         DELETE FROM
                                             DC_PICKBL_T
                                         WHERE
-                                            NO_PESANAN IN (:arr_no_pesanan) AND
+                                            NO_PESANAN IN ({string.Join(",", arr_no_pesanan.Select(n => $"'{n}'"))}) AND
                                             UNPICK = 'Y'
                                     ",
-                                    new List<CDbQueryParamBind> {
-                                        new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
-                                    },
+                                    null,
+                                    // new List<CDbQueryParamBind> {
+                                    //     new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
+                                    // },
                                     false
                                 );
                             });
@@ -1411,7 +1419,8 @@ namespace DCTRNNPBBL.Panels {
                         $@"
                             SELECT NPBDC_NO FROM DC_PICKBL_HDR_H
                             WHERE
-                                (NPBDC_DATE IS NOT NULL OR NPBDC_DATE <> '')
+                                (NPBDC_DATE IS NOT NULL OR NPBDC_DATE <> '') AND
+                                (UNPICK IS NULL OR UNPICK <> 'Y')
                         "
                         );
                 });
