@@ -561,6 +561,7 @@ namespace DCTRNNPBBL.Panels {
             DtClearSelection();
             string ctx = "Proses Split ...";
             bool safeForUpdate = false;
+            bool bolehSplit = true;
             foreach (CMODEL_GRID_SPLIT data in listSplit) {
                 if (string.IsNullOrEmpty(data.HH_PICK) || string.IsNullOrEmpty(data.HH_SCAN)) {
                     MessageBox.Show("Masih Ada Yang Belum Di Assign HH", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -572,7 +573,6 @@ namespace DCTRNNPBBL.Panels {
             if (safeForUpdate && listSplit.Count > 0) {
                 try {
                     await _oracle.MarkBeforeExecQueryCommitAndRollback();
-                    bool bolehSplit = true;
                     foreach (CMODEL_GRID_SPLIT data in listSplit) {
                         string stokPlanoRakDisplay = "";
                         if (data.CELLID_PLANO <= 0) {
@@ -616,7 +616,6 @@ namespace DCTRNNPBBL.Panels {
                     if (!bolehSplit) {
                         _oracle.MarkSuccessExecQueryAndCommit();
                         MessageBox.Show("Silahkan Cek Kolom Keterangan", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        btnSplitLoad_Click(null, EventArgs.Empty);
                     }
                     else {
                         foreach (CMODEL_GRID_SPLIT data in listSplit) {
@@ -687,6 +686,9 @@ namespace DCTRNNPBBL.Panels {
                 MessageBox.Show("Tidak Ada Data Yang Di Proses", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             SetIdleBusyStatus(true);
+            if (!bolehSplit) {
+                btnSplitLoad_Click(null, EventArgs.Empty);
+            }
         }
 
         /* Edit Split */
