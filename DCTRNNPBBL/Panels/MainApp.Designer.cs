@@ -95,6 +95,7 @@ namespace DCTRNNPBBL.Panels {
             this.dtGrdLogs = new System.Windows.Forms.DataGridView();
             this.userInfo = new System.Windows.Forms.Label();
             this.chkSemuaKolom = new System.Windows.Forms.CheckBox();
+            this.btnTidakPick = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dtGrdSplitHhPicking)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgDomar)).BeginInit();
             this.tabContent.SuspendLayout();
@@ -239,6 +240,7 @@ namespace DCTRNNPBBL.Panels {
             // 
             // tabSplit
             // 
+            this.tabSplit.Controls.Add(this.btnTidakPick);
             this.tabSplit.Controls.Add(this.label16);
             this.tabSplit.Controls.Add(this.cmbBxSplitAllNo);
             this.tabSplit.Controls.Add(this.lblSplitRecHh);
@@ -954,6 +956,21 @@ namespace DCTRNNPBBL.Panels {
             this.chkSemuaKolom.Text = "Tampilkan Semua Kolom";
             this.chkSemuaKolom.UseVisualStyleBackColor = true;
             // 
+            // btnTidakPick
+            // 
+            this.btnTidakPick.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTidakPick.Enabled = false;
+            this.btnTidakPick.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnTidakPick.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.btnTidakPick.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnTidakPick.Location = new System.Drawing.Point(719, 342);
+            this.btnTidakPick.Name = "btnTidakPick";
+            this.btnTidakPick.Size = new System.Drawing.Size(100, 25);
+            this.btnTidakPick.TabIndex = 46;
+            this.btnTidakPick.Text = "Tidak Pick";
+            this.btnTidakPick.UseVisualStyleBackColor = true;
+            this.btnTidakPick.Click += new System.EventHandler(this.btnTidakPick_Click);
+            // 
             // MainApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1059,5 +1076,6 @@ namespace DCTRNNPBBL.Panels {
         private System.Windows.Forms.DataGridView dtGrdLogs;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button btnUnPickRpb;
+        private System.Windows.Forms.Button btnTidakPick;
     }
 }

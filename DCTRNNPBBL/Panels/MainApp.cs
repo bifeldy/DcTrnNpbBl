@@ -171,7 +171,6 @@ namespace DCTRNNPBBL.Panels {
             btnSplitAddHhPicking.Enabled = isEnabled;
             btnSplitHhPicking.Enabled = isEnabled;
             btnSplitSetHhScanning.Enabled = isEnabled;
-            btnSplitProses.Enabled = isEnabled;
             dtGrdSplit.Enabled = isEnabled;
             dtGrdSplitHhPicking.Enabled = isEnabled;
 
@@ -238,6 +237,156 @@ namespace DCTRNNPBBL.Panels {
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );
+        }
+
+        private async Task BatalPick(string ctx, string doc_no, decimal seq_no) {
+            try {
+                await _oracle.MarkBeforeExecQueryCommitAndRollback();
+                DataTable dt_no_pesanan = new DataTable();
+                await Task.Run(async () => {
+                    dt_no_pesanan = await _oracle.GetDataTableAsync(
+                        $@"
+                            SELECT DISTINCT
+                                NO_PESANAN
+                            FROM
+                                DC_PICKBL_DTLBL_T
+                            WHERE
+                                SEQ_FK_NO = :seq_fk_no
+                        ",
+                        new List<CDbQueryParamBind> {
+                            new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = seq_no }
+                        },
+                        false
+                    );
+                });
+                if (dt_no_pesanan.Rows.Count <= 0) {
+                    throw new Exception($"Tidak Ada No Pesanan");
+                }
+                List<CMODEL_UNPICK> ls_no_pesanan = _converter.ConvertDataTableToList<CMODEL_UNPICK>(dt_no_pesanan);
+                string[] arr_no_pesanan = ls_no_pesanan.Select(l => l.NO_PESANAN).ToArray();
+                bool update1 = false;
+                await Task.Run(async () => {
+                    update1 = await _oracle.ExecQueryAsync(
+                        $@"
+                            UPDATE
+                                DC_PICKBL_T
+                            SET
+                                UNPICK = 'Y'
+                            WHERE
+                                NO_PESANAN IN ({string.Join(",", arr_no_pesanan.Select(n => $"'{n}'"))})
+                        ",
+                        null,
+                        // new List<CDbQueryParamBind> {
+                        //     new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
+                        // },
+                        false
+                    );
+                });
+                if (!update1) {
+                    throw new Exception($"Gagal Set Un-Pick Pesanan '{string.Join(", ", arr_no_pesanan)}'");
+                }
+                bool delete1 = false;
+                await Task.Run(async () => {
+                    delete1 = await _oracle.ExecQueryAsync(
+                        $@"
+                            DELETE FROM
+                                DC_PICKBL_T
+                            WHERE
+                                NO_PESANAN IN ({string.Join(",", arr_no_pesanan.Select(n => $"'{n}'"))}) AND
+                                UNPICK = 'Y'
+                        ",
+                        null,
+                        // new List<CDbQueryParamBind> {
+                        //     new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
+                        // },
+                        false
+                    );
+                });
+                if (!delete1) {
+                    throw new Exception($"Gagal Menghapus Header Pesanan '{string.Join(", ", arr_no_pesanan)}'");
+                }
+                bool delete2 = false;
+                await Task.Run(async () => {
+                    delete2 = await _oracle.ExecQueryAsync(
+                        $@"
+                            DELETE FROM
+                                DC_PICKBL_DTLBL_T
+                            WHERE
+                                SEQ_FK_NO = :seq_fk_no
+                        ",
+                        new List<CDbQueryParamBind> {
+                            new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = seq_no }
+                        },
+                        false
+                    );
+                });
+                if (!delete2) {
+                    throw new Exception($"Gagal Menghapus Detail Pesanan '{string.Join(", ", arr_no_pesanan)}'");
+                }
+                bool delete3 = false;
+                await Task.Run(async () => {
+                    delete3 = await _oracle.ExecQueryAsync(
+                        $@"
+                            DELETE FROM
+                                DC_PICKBL_DTL_T
+                            WHERE
+                                SEQ_FK_NO = :seq_fk_no
+                        ",
+                        new List<CDbQueryParamBind> {
+                            new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = seq_no }
+                        },
+                        false
+                    );
+                });
+                if (!delete3) {
+                    throw new Exception($"Gagal Menghapus Detail RPB '{seq_no}'");
+                }
+                bool update2 = false;
+                await Task.Run(async () => {
+                    update2 = await _oracle.ExecQueryAsync(
+                        $@"
+                            UPDATE
+                                DC_PICKBL_HDR_T
+                            SET
+                                UNPICK = 'Y'
+                            WHERE
+                                DOC_NO = :doc_no
+                        ",
+                        new List<CDbQueryParamBind> {
+                            new CDbQueryParamBind { NAME = "doc_no", VALUE = doc_no }
+                        },
+                        false
+                    );
+                });
+                if (!update2) {
+                    throw new Exception($"Gagal Set Un-Pick Header RPB '{doc_no}'");
+                }
+                bool delete4 = false;
+                await Task.Run(async () => {
+                    delete4 = await _oracle.ExecQueryAsync(
+                        $@"
+                            DELETE FROM
+                                DC_PICKBL_HDR_T
+                            WHERE
+                                DOC_NO = :doc_no AND
+                                UNPICK = 'Y'
+                        ",
+                        new List<CDbQueryParamBind> {
+                            new CDbQueryParamBind { NAME = "doc_no", VALUE = doc_no }
+                        },
+                        false
+                    );
+                });
+                if (!delete4) {
+                    throw new Exception($"Gagal Menghapus Header RPB '{doc_no}'");
+                }
+                _oracle.MarkSuccessExecQueryAndCommit();
+                MessageBox.Show("Selesai Un-Pick", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex) {
+                _oracle.MarkFailExecQueryAndRollback();
+                MessageBox.Show(ex.Message, ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /* Split */
@@ -486,6 +635,7 @@ namespace DCTRNNPBBL.Panels {
                     }
                 }
                 btnSplitProses.Enabled = dtSplit.Rows.Count > 0;
+                btnTidakPick.Enabled = dtSplit.Rows.Count > 0;
             }
             else {
                 MessageBox.Show("Harap Isi DOC_NO Rpb", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -556,21 +706,12 @@ namespace DCTRNNPBBL.Panels {
             bindSplit.ResetBindings();
         }
 
-        private async void btnSplitProses_Click(object sender, EventArgs e) {
+        private async void btnTidakPick_Click(object sender, EventArgs e) {
             SetIdleBusyStatus(false);
             DtClearSelection();
-            string ctx = "Proses Split ...";
-            bool safeForUpdate = false;
-            bool bolehSplit = true;
-            foreach (CMODEL_GRID_SPLIT data in listSplit) {
-                if (string.IsNullOrEmpty(data.HH_PICK) || string.IsNullOrEmpty(data.HH_SCAN)) {
-                    MessageBox.Show("Masih Ada Yang Belum Di Assign HH", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    safeForUpdate = false;
-                    break;
-                }
-                safeForUpdate = true;
-            }
-            if (safeForUpdate && listSplit.Count > 0) {
+            string ctx = "Tidak Pick ...";
+            if (listSplit.Count > 0) {
+                decimal totalStok = 0;
                 try {
                     await _oracle.MarkBeforeExecQueryCommitAndRollback();
                     foreach (CMODEL_GRID_SPLIT data in listSplit) {
@@ -579,11 +720,107 @@ namespace DCTRNNPBBL.Panels {
                             stokPlanoRakDisplay = "Belum Ada Rak Display / Tablok";
                         }
                         else if (data.QTY_RPB > data.PLA_QTY_STOK) {
+                            stokPlanoRakDisplay = $"Stok Plano Tidak Cukup, Tersisa {data.PLA_QTY_STOK}";
+                        }
+                        totalStok += (data.QTY_RPB > data.PLA_QTY_STOK) ? data.PLA_QTY_STOK : data.QTY_RPB;
+                        bool update = false;
+                        await Task.Run(async () => {
+                            update = await _oracle.ExecQueryAsync(
+                                $@"
+                                    UPDATE
+                                        DC_PICKBL_DTL_T
+                                    SET
+                                        KETER = :keter
+                                    WHERE
+                                        SEQ_FK_NO = :seq_fk_no AND
+                                        PLU_ID = :plu_id
+                                ",
+                                new List<CDbQueryParamBind> {
+                                    new CDbQueryParamBind { NAME = "keter", VALUE = stokPlanoRakDisplay },
+                                    new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = data.SEQ_NO },
+                                    new CDbQueryParamBind { NAME = "plu_id", VALUE = data.PLU_ID }
+                                },
+                                false
+                            );
+                        });
+                        if (!update) {
+                            throw new Exception($"Gagal Mengubah Keterangan Untuk {data.SINGKATAN}");
+                        }
+                    }
+                    _oracle.MarkSuccessExecQueryAndCommit();
+                }
+                catch (Exception ex) {
+                    _oracle.MarkFailExecQueryAndRollback();
+                    MessageBox.Show(ex.Message, ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                if (totalStok > 0) {
+                    MessageBox.Show(
+                        "Tidak Bisa Menolak Permintaan" + Environment.NewLine + "Ada Stok Yang Mencukupi",
+                        ctx,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation
+                    );
+                }
+                else {
+                    string doc_no = listSplit.FirstOrDefault().DOC_NO;
+                    decimal seq_no = listSplit.FirstOrDefault().SEQ_NO;
+                    DialogResult dialogResult = MessageBox.Show(
+                        $"Yakin Akan Tidak Pick RPB '{doc_no}' (?)",
+                        ctx,
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question
+                    );
+                    if (dialogResult == DialogResult.Yes) {
+                        await BatalPick(ctx, doc_no, seq_no);
+                    }
+                }
+            }
+            else {
+                MessageBox.Show("Tidak Ada Data Yang Di Proses", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            SetIdleBusyStatus(true);
+        }
+
+        private async void btnSplitProses_Click(object sender, EventArgs e) {
+            SetIdleBusyStatus(false);
+            DtClearSelection();
+            string ctx = "Proses Split ...";
+            bool safeForUpdate = false;
+            bool bolehSplit = true;
+            decimal totalStok = 0;
+            foreach (CMODEL_GRID_SPLIT data in listSplit) {
+                totalStok += (data.QTY_RPB > data.PLA_QTY_STOK) ? data.PLA_QTY_STOK : data.QTY_RPB;
+                if (string.IsNullOrEmpty(data.HH_PICK) || string.IsNullOrEmpty(data.HH_SCAN)) {
+                    MessageBox.Show("Masih Ada Yang Belum Di Assign HH", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    safeForUpdate = false;
+                    break;
+                }
+                safeForUpdate = true;
+            }
+            if (safeForUpdate && totalStok <= 0) {
+                MessageBox.Show(
+                    "Semua Item Tidak Memiliki Stok Tersedia" + Environment.NewLine + "Silahkan Gunakan Tombol Tidak Pick Untuk Membatalkan",
+                    ctx,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation
+                );
+                safeForUpdate = false;
+            }
+            if (safeForUpdate && listSplit.Count > 0) {
+                try {
+                    await _oracle.MarkBeforeExecQueryCommitAndRollback();
+                    foreach (CMODEL_GRID_SPLIT data in listSplit) {
+                        string stokPlanoRakDisplay = "";
+                        if (data.CELLID_PLANO <= 0) {
+                            bolehSplit = false;
+                            stokPlanoRakDisplay = "Belum Ada Rak Display / Tablok";
+                        }
+                        else if (data.QTY_RPB > data.PLA_QTY_STOK) {
                             MessageBox.Show(
                                 data.SINGKATAN + Environment.NewLine + $"Menggunakan Stok Yang Tersisa = {data.PLA_QTY_STOK}",
                                 "Stok Plano Tidak Cukup",
                                 MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning
+                                MessageBoxIcon.Exclamation
                             );
                         }
                         bool update = false;
@@ -608,9 +845,6 @@ namespace DCTRNNPBBL.Panels {
                         });
                         if (!update) {
                             throw new Exception($"Gagal Mengubah Keterangan Untuk {data.SINGKATAN}");
-                        }
-                        if (!string.IsNullOrEmpty(stokPlanoRakDisplay)) {
-                            bolehSplit = false;
                         }
                     }
                     if (!bolehSplit) {
@@ -686,7 +920,7 @@ namespace DCTRNNPBBL.Panels {
                 MessageBox.Show("Tidak Ada Data Yang Di Proses", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             SetIdleBusyStatus(true);
-            if (!bolehSplit) {
+            if (!bolehSplit || totalStok <= 0) {
                 btnSplitLoad_Click(null, EventArgs.Empty);
             }
         }
@@ -1259,153 +1493,7 @@ namespace DCTRNNPBBL.Panels {
                         MessageBoxIcon.Question
                     );
                     if (dialogResult == DialogResult.Yes) {
-                        try {
-                            await _oracle.MarkBeforeExecQueryCommitAndRollback();
-                            DataTable dt_no_pesanan = new DataTable();
-                            await Task.Run(async () => {
-                                dt_no_pesanan = await _oracle.GetDataTableAsync(
-                                    $@"
-                                        SELECT DISTINCT
-                                            NO_PESANAN
-                                        FROM
-                                            DC_PICKBL_DTLBL_T
-                                        WHERE
-                                            SEQ_FK_NO = :seq_fk_no
-                                    ",
-                                    new List<CDbQueryParamBind> {
-                                        new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = seq_no }
-                                    },
-                                    false
-                                );
-                            });
-                            if (dt_no_pesanan.Rows.Count <= 0) {
-                                throw new Exception($"Tidak Ada No Pesanan");
-                            }
-                            List<CMODEL_UNPICK> ls_no_pesanan = _converter.ConvertDataTableToList<CMODEL_UNPICK>(dt_no_pesanan);
-                            string[] arr_no_pesanan = ls_no_pesanan.Select(l => l.NO_PESANAN).ToArray();
-                            bool update1 = false;
-                            await Task.Run(async () => {
-                                update1 = await _oracle.ExecQueryAsync(
-                                    $@"
-                                        UPDATE
-                                            DC_PICKBL_T
-                                        SET
-                                            UNPICK = 'Y'
-                                        WHERE
-                                            NO_PESANAN IN ({string.Join(",", arr_no_pesanan.Select(n => $"'{n}'"))})
-                                    ",
-                                    null,
-                                    // new List<CDbQueryParamBind> {
-                                    //     new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
-                                    // },
-                                    false
-                                );
-                            });
-                            if (!update1) {
-                                throw new Exception($"Gagal Set Un-Pick Pesanan '{string.Join(", ", arr_no_pesanan)}'");
-                            }
-                            bool delete1 = false;
-                            await Task.Run(async () => {
-                                delete1 = await _oracle.ExecQueryAsync(
-                                    $@"
-                                        DELETE FROM
-                                            DC_PICKBL_T
-                                        WHERE
-                                            NO_PESANAN IN ({string.Join(",", arr_no_pesanan.Select(n => $"'{n}'"))}) AND
-                                            UNPICK = 'Y'
-                                    ",
-                                    null,
-                                    // new List<CDbQueryParamBind> {
-                                    //     new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
-                                    // },
-                                    false
-                                );
-                            });
-                            if (!delete1) {
-                                throw new Exception($"Gagal Menghapus Header Pesanan '{string.Join(", ", arr_no_pesanan)}'");
-                            }
-                            bool delete2 = false;
-                            await Task.Run(async () => {
-                                delete2 = await _oracle.ExecQueryAsync(
-                                    $@"
-                                        DELETE FROM
-                                            DC_PICKBL_DTLBL_T
-                                        WHERE
-                                            SEQ_FK_NO = :seq_fk_no
-                                    ",
-                                    new List<CDbQueryParamBind> {
-                                        new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = seq_no }
-                                    },
-                                    false
-                                );
-                            });
-                            if (!delete2) {
-                                throw new Exception($"Gagal Menghapus Detail Pesanan '{string.Join(", ", arr_no_pesanan)}'");
-                            }
-                            bool delete3 = false;
-                            await Task.Run(async () => {
-                                delete3 = await _oracle.ExecQueryAsync(
-                                    $@"
-                                        DELETE FROM
-                                            DC_PICKBL_DTL_T
-                                        WHERE
-                                            SEQ_FK_NO = :seq_fk_no
-                                    ",
-                                    new List<CDbQueryParamBind> {
-                                        new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = seq_no }
-                                    },
-                                    false
-                                );
-                            });
-                            if (!delete3) {
-                                throw new Exception($"Gagal Menghapus Detail RPB '{seq_no}'");
-                            }
-                            bool update2 = false;
-                            await Task.Run(async () => {
-                                update2 = await _oracle.ExecQueryAsync(
-                                    $@"
-                                        UPDATE
-                                            DC_PICKBL_HDR_T
-                                        SET
-                                            UNPICK = 'Y'
-                                        WHERE
-                                            DOC_NO = :doc_no
-                                    ",
-                                    new List<CDbQueryParamBind> {
-                                        new CDbQueryParamBind { NAME = "doc_no", VALUE = doc_no }
-                                    },
-                                    false
-                                );
-                            });
-                            if (!update2) {
-                                throw new Exception($"Gagal Set Un-Pick Header RPB '{doc_no}'");
-                            }
-                            bool delete4 = false;
-                            await Task.Run(async () => {
-                                delete4 = await _oracle.ExecQueryAsync(
-                                    $@"
-                                        DELETE FROM
-                                            DC_PICKBL_HDR_T
-                                        WHERE
-                                            DOC_NO = :doc_no AND
-                                            UNPICK = 'Y'
-                                    ",
-                                    new List<CDbQueryParamBind> {
-                                        new CDbQueryParamBind { NAME = "doc_no", VALUE = doc_no }
-                                    },
-                                    false
-                                );
-                            });
-                            if (!delete4) {
-                                throw new Exception($"Gagal Menghapus Header RPB '{doc_no}'");
-                            }
-                            _oracle.MarkSuccessExecQueryAndCommit();
-                            MessageBox.Show("Selesai Un-Pick", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (Exception ex) {
-                            _oracle.MarkFailExecQueryAndRollback();
-                            MessageBox.Show(ex.Message, ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                        await BatalPick(ctx, doc_no, seq_no);
                     }
                 }
             }
