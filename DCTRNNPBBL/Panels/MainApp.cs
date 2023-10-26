@@ -233,7 +233,7 @@ namespace DCTRNNPBBL.Panels {
 
         private void dtGrd_DataError(object sender, DataGridViewDataErrorEventArgs e) {
             MessageBox.Show(
-                $"Data Tembakan / Editan DB Langsung (?)\r\n1. Pastikan IP HH Terdaftar Di Tabel\r\n2. IP HH Pick Harus Berbeda Dengan IP HH Scan",
+                $"Data Tembakan / Editan DB Langsung (?)\r\n\r\nPastikan IP HH Pada DC_PICKBL_DTL_T Terdaftar Di Tabel DC_HH_T\r\n\r\nIP HH Pick Harus Berbeda Dengan IP HH Scan",
                 "Bind UI Tampilan IP HH Bermasalah",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
@@ -498,12 +498,11 @@ namespace DCTRNNPBBL.Panels {
                 decimal qtyrpb = (decimal) row.Cells[dtGrdSplit.Columns["QTY_RPB"].Index].Value;
                 if (cellidPlano <= 0) {
                     row.Cells[dtGrdSplit.Columns["KETER"].Index].Value = "Belum Ada Rak Display / Tablok";
-                }
-                if (qtyrpb > plaqtystok) {
-                    row.Cells[dtGrdSplit.Columns["KETER"].Index].Value = "Stok Plano Tidak Cukup";
-                }
-                if (cellidPlano <= 0 || qtyrpb > plaqtystok) {
                     row.DefaultCellStyle.BackColor = Color.FromArgb(255, 64, 129);
+                }
+                else if (qtyrpb > plaqtystok) {
+                    row.Cells[dtGrdSplit.Columns["KETER"].Index].Value = $"Stok Plano Tidak Cukup, Tersisa {plaqtystok}";
+                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 204, 0);
                 }
             }
             DtClearSelection();
@@ -579,8 +578,13 @@ namespace DCTRNNPBBL.Panels {
                         if (data.CELLID_PLANO <= 0) {
                             stokPlanoRakDisplay = "Belum Ada Rak Display / Tablok";
                         }
-                        if (data.QTY_RPB > data.PLA_QTY_STOK) {
-                            stokPlanoRakDisplay = "Stok Plano Tidak Cukup";
+                        else if (data.QTY_RPB > data.PLA_QTY_STOK) {
+                            MessageBox.Show(
+                                data.SINGKATAN + Environment.NewLine + $"Menggunakan Stok Yang Tersisa = {data.PLA_QTY_STOK}",
+                                "Stok Plano Tidak Cukup",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning
+                            );
                         }
                         bool update = false;
                         await Task.Run(async () => {
@@ -634,7 +638,7 @@ namespace DCTRNNPBBL.Panels {
                                             PLU_ID = :plu_id
                                     ",
                                     new List<CDbQueryParamBind> {
-                                        new CDbQueryParamBind { NAME = "qty_rpb", VALUE = data.QTY_RPB },
+                                        new CDbQueryParamBind { NAME = "qty_rpb", VALUE = (data.QTY_RPB > data.PLA_QTY_STOK) ? data.PLA_QTY_STOK : data.QTY_RPB },
                                         new CDbQueryParamBind { NAME = "rak_plano", VALUE = data.LOKASI },
                                         new CDbQueryParamBind { NAME = "cellid_plano", VALUE = data.CELLID_PLANO },
                                         new CDbQueryParamBind { NAME = "ip_picking", VALUE = data.HH_PICK },
