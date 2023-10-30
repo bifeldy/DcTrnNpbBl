@@ -229,18 +229,19 @@ namespace DcTrnNpbBl.Handlers {
                         b.IP_SCANNING AS HH_SCAN
                     FROM
                         DC_PICKBL_HDR_T a,
-                        DC_PICKBL_DTL_T b,
                         DC_BARANG_T c,
+                        DC_PICKBL_DTL_T b
+                        {(_app.IsUsingPostgres ? "LEFT OUTER JOIN" : ",")}
                         (
                             SELECT *
                             FROM DC_PLANOGRAM_T WHERE PLA_DISPLAY = 'Y'
-                        ) d
+                        ) d {(_app.IsUsingPostgres ? "ON b.PLU_ID = d.PLA_FK_PLUID" : "")}
                     WHERE
                         a.DOC_NO = :doc_no AND
                         (a.UNPICK IS NULL OR a.UNPICK <> 'Y') AND
                         a.SEQ_NO = b.SEQ_FK_NO AND
                         b.PLU_ID = c.MBR_PLUID AND
-                        b.PLU_ID = d.PLA_FK_PLUID (+) AND
+                        {(_app.IsUsingPostgres ? "" : "b.PLU_ID = d.PLA_FK_PLUID (+) AND")}
                         (a.TGL_SPLIT IS NULL OR a.TGL_SPLIT = '')
                 ",
                 new List<CDbQueryParamBind> {
@@ -303,7 +304,7 @@ namespace DcTrnNpbBl.Handlers {
                     UPDATE
                         DC_PICKBL_HDR_T
                     SET
-                        TGL_SPLIT = SYSDATE
+                        TGL_SPLIT = {(_app.IsUsingPostgres ? "NOW()" : "SYSDATE")}
                     WHERE
                         SEQ_NO = :seq_no
                 ",
@@ -347,18 +348,19 @@ namespace DcTrnNpbBl.Handlers {
                         b.IP_SCANNING AS HH_SCAN
                     FROM
                         DC_PICKBL_HDR_T a,
-                        DC_PICKBL_DTL_T b,
                         DC_BARANG_T c,
+                        DC_PICKBL_DTL_T b
+                        {(_app.IsUsingPostgres ? "LEFT OUTER JOIN" : ",")}
                         (
                             SELECT *
                             FROM DC_PLANOGRAM_T WHERE PLA_DISPLAY = 'Y'
-                        ) d
+                        ) d {(_app.IsUsingPostgres ? "ON b.PLU_ID = d.PLA_FK_PLUID" : "")}
                     WHERE
                         a.DOC_NO = :doc_no AND
                         (a.UNPICK IS NULL OR a.UNPICK <> 'Y') AND
                         a.SEQ_NO = b.SEQ_FK_NO AND
                         b.PLU_ID = c.MBR_PLUID AND
-                        b.PLU_ID = d.PLA_FK_PLUID (+) AND
+                        {(_app.IsUsingPostgres ? "" : "b.PLU_ID = d.PLA_FK_PLUID (+) AND")}
                         (a.TGL_SPLIT IS NOT NULL OR a.TGL_SPLIT <> '')
                 ",
                 new List<CDbQueryParamBind> {
@@ -429,19 +431,20 @@ namespace DcTrnNpbBl.Handlers {
                         a.STOP_SCANNING
                     FROM
                         DC_PICKBL_HDR_T a,
-                        DC_PICKBL_DTL_T b,
                         DC_BARANG_DC_V c,
+                        DC_TABEL_DC_T e,
+                        DC_PICKBL_DTL_T b
+                        {(_app.IsUsingPostgres ? "LEFT OUTER JOIN" : ",")}
                         (
                             SELECT *
                             FROM DC_PLANOGRAM_T WHERE PLA_DISPLAY = 'Y'
-                        ) d,
-                        DC_TABEL_DC_T e
+                        ) d {(_app.IsUsingPostgres ? "ON b.PLU_ID = d.PLA_FK_PLUID" : "")}
                     WHERE
                         a.DOC_NO = :doc_no AND
                         (a.UNPICK IS NULL OR a.UNPICK <> 'Y') AND
                         a.SEQ_NO = b.SEQ_FK_NO AND
                         b.PLU_ID = c.MBR_FK_PLUID AND
-                        b.PLU_ID = d.PLA_FK_PLUID (+) AND
+                        {(_app.IsUsingPostgres ? "" : "b.PLU_ID = d.PLA_FK_PLUID (+) AND")}
                         (a.TGL_SPLIT IS NOT NULL OR a.TGL_SPLIT <> '') AND
                         (a.NPBDC_DATE IS NULL OR a.NPBDC_DATE = '')
                 ",
@@ -491,17 +494,18 @@ namespace DcTrnNpbBl.Handlers {
                     FROM
                         DC_PICKBL_HDR_H a,
                         DC_PICKBL_DTL_H b,
-                        DC_BARANG_DC_V c,
+                        DC_TABEL_DC_T e,
+                        DC_BARANG_DC_V c
+                        {(_app.IsUsingPostgres ? "LEFT OUTER JOIN" : ",")}
                         (
                             SELECT *
                             FROM DC_PLANOGRAM_T WHERE PLA_DISPLAY = 'Y'
-                        ) d,
-                        DC_TABEL_DC_T e
+                        ) d {(_app.IsUsingPostgres ? "ON c.MBR_FK_PLUID = d.PLA_FK_PLUID" : "")}
                     WHERE
                         a.NPBDC_NO = :npbdc_no AND
                         a.SEQ_NO = b.SEQ_FK_NO AND
                         b.PLU_ID = c.MBR_FK_PLUID AND
-                        c.MBR_FK_PLUID = d.PLA_FK_PLUID (+) AND
+                        {(_app.IsUsingPostgres ? "" : "c.MBR_FK_PLUID = d.PLA_FK_PLUID (+) AND")}
 		                d.PLA_DC_KODE = a.DC_KODE
                 ",
                 new List<CDbQueryParamBind> {
@@ -550,16 +554,7 @@ namespace DcTrnNpbBl.Handlers {
                         ROUND(((b.his_price + b.his_ppn) * b.his_qty), 5) AS total
                     FROM
                         DC_HEADER_TRANSAKSI_T a,
-                        DC_HISTORY_TRANSAKSI_T b,
                         dc_barang_dc_v c,
-                        (
-                            SELECT
-                                *
-                            FROM
-                                DC_BRG_DIMENSI_T
-                            WHERE
-                                mbr_flag_pcs = 'Y'
-                        ) d,
                         DC_PICKBL_HDR_H e,
                         DC_PICKBL_DTL_H f,
                         (
@@ -573,22 +568,32 @@ namespace DcTrnNpbBl.Handlers {
                                 y.NPBDC_NO = :npbdc_no
                                 AND z.HDR_NO_INV = y.SEQ_NO
                                 AND z.hdr_type_trans = 'NPB DC'
-                        ) g
+                        ) g,
+                        DC_HISTORY_TRANSAKSI_T b
+                        {(_app.IsUsingPostgres ? "LEFT OUTER JOIN" : ",")}
+                        (
+                            SELECT
+                                *
+                            FROM
+                                DC_BRG_DIMENSI_T
+                            WHERE
+                                mbr_flag_pcs = 'Y'
+                        ) d {(_app.IsUsingPostgres ? "ON b.his_fk_pluid = d.mbr_fk_pluid" : "")}
                     WHERE
-                        a.hdr_hdr_id = b.his_hdr_fk_id
-                        AND a.hdr_tbl_lokasiid = b.his_tbl_lokasiid
-                        AND b.his_fk_pluid = c.mbr_fk_pluid
-                        AND a.hdr_fk_dcid = c.mbr_fk_dcid
-                        AND b.his_fk_pluid = d.mbr_fk_pluid(+)
-                        AND a.hdr_no_inv = e.seq_no
-                        AND b.his_fk_pluid = f.plu_id
-                        AND e.seq_no = f.seq_fk_no
-                        AND a.hdr_type_trans = 'NPB DC'
-                        AND b.his_type_trans = 'NPB DC'
-                        /* AND a.hdr_hdr_id = '13315752' --param */
-                        AND a.hdr_hdr_id = g.hdr_hdr_id
-                        /* AND a.hdr_tbl_lokasiid = '124' --param */
-                        AND a.hdr_tbl_lokasiid = g.hdr_tbl_lokasiid
+                        a.hdr_hdr_id = b.his_hdr_fk_id AND
+                        a.hdr_tbl_lokasiid = b.his_tbl_lokasiid AND
+                        b.his_fk_pluid = c.mbr_fk_pluid AND
+                        a.hdr_fk_dcid = c.mbr_fk_dcid AND
+                        {(_app.IsUsingPostgres ? "" : "b.his_fk_pluid = d.mbr_fk_pluid (+) AND")}
+                        a.hdr_no_inv = e.seq_no AND
+                        b.his_fk_pluid = f.plu_id AND
+                        e.seq_no = f.seq_fk_no AND
+                        a.hdr_type_trans = 'NPB DC' AND
+                        b.his_type_trans = 'NPB DC' AND
+                        /* a.hdr_hdr_id = '13315752' AND --param */
+                        a.hdr_hdr_id = g.hdr_hdr_id AND
+                        /* a.hdr_tbl_lokasiid = '124' AND --param */
+                        a.hdr_tbl_lokasiid = g.hdr_tbl_lokasiid
                     ORDER BY
                         b.his_fk_plukode ASC
                 ",
