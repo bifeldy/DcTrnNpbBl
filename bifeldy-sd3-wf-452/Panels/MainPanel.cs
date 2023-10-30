@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -28,8 +30,6 @@ using DcTrnNpbBl.Forms;
 using DcTrnNpbBl.Handlers;
 using DcTrnNpbBl.Utilities;
 using DcTrnNpbBl.Models;
-using System.Linq;
-using System.Globalization;
 
 namespace DcTrnNpbBl.Panels {
 
