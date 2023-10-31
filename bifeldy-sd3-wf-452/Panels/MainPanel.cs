@@ -343,6 +343,7 @@ namespace DcTrnNpbBl.Panels {
                 bindAvailableSplitHh.ResetBindings();
                 bindSelectedSplitHhPick.ResetBindings();
                 btnSplitProses.Enabled = listSplit.Count > 0;
+                btnTidakPick.Enabled = listSplit.Count > 0;
                 SetIdleBusyStatus(true);
             }
         }
@@ -377,6 +378,7 @@ namespace DcTrnNpbBl.Panels {
                 }
                 bindAvailableSplitHh.ResetBindings();
                 btnSplitProses.Enabled = listSplit.Count > 0;
+                btnTidakPick.Enabled = listSplit.Count > 0;
                 SetIdleBusyStatus(true);
             }
         }
@@ -493,11 +495,23 @@ namespace DcTrnNpbBl.Panels {
                 MessageBox.Show("Harap Input HH Picking", ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else {
+                List<string> line = new List<string>();
+                foreach (CMODEL_GRID_SPLIT d in listSplit) {
+                    line.Add(d.LOKASI.Split('.')[0]);
+                }
+                IDictionary<string, string> hhPickMap = new Dictionary<string, string>();
+                List<string> ln = line.Distinct().ToList();
+                for (int i = 0; i < ln.Count; i++) {
+                    if (!hhPickMap.ContainsKey(ln[i])) {
+                        hhPickMap.Add(ln[i], listSelectedSplitHhPick[i % listSelectedSplitHhPick.Count].HH);
+                    }
+                }
                 for (int i = 0; i < listSplit.Count; i++) {
-                    listSplit[i].HH_PICK = listSelectedSplitHhPick[i % listSelectedSplitHhPick.Count].HH;
+                    listSplit[i].HH_PICK = hhPickMap[listSplit[i].LOKASI.Split('.')[0]];
                 }
             }
             btnSplitProses.Enabled = listSplit.Count > 0;
+            btnTidakPick.Enabled = listSplit.Count > 0;
             bindSplit.ResetBindings();
         }
 
