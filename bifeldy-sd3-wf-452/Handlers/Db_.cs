@@ -69,7 +69,7 @@ namespace DcTrnNpbBl.Handlers {
                             SEQ_FK_NO = :seq_fk_no
                     ",
                     new List<CDbQueryParamBind> {
-                            new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = seq_no }
+                        new CDbQueryParamBind { NAME = "seq_fk_no", VALUE = seq_no }
                     }
                 );
                 if (dt_no_pesanan.Rows.Count <= 0) {
@@ -87,7 +87,7 @@ namespace DcTrnNpbBl.Handlers {
                             NO_PESANAN IN (:arr_no_pesanan)
                     ",
                     new List<CDbQueryParamBind> {
-                            new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
+                        new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
                     }
                 );
                 if (!update1) {
@@ -102,7 +102,7 @@ namespace DcTrnNpbBl.Handlers {
                             UNPICK = 'Y'
                     ",
                     new List<CDbQueryParamBind> {
-                            new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
+                        new CDbQueryParamBind { NAME = "arr_no_pesanan", VALUE = arr_no_pesanan }
                     }
                 );
                 if (!delete1) {
