@@ -114,7 +114,7 @@ namespace DcTrnNpbBl.Panels {
             // 
             this.chkWindowsStartup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkWindowsStartup.AutoSize = true;
-            this.chkWindowsStartup.Location = new System.Drawing.Point(775, 68);
+            this.chkWindowsStartup.Location = new System.Drawing.Point(776, 68);
             this.chkWindowsStartup.Name = "chkWindowsStartup";
             this.chkWindowsStartup.Size = new System.Drawing.Size(143, 17);
             this.chkWindowsStartup.TabIndex = 0;
@@ -186,7 +186,7 @@ namespace DcTrnNpbBl.Panels {
             // 
             this.chkSemuaKolom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkSemuaKolom.AutoSize = true;
-            this.chkSemuaKolom.Location = new System.Drawing.Point(775, 87);
+            this.chkSemuaKolom.Location = new System.Drawing.Point(776, 86);
             this.chkSemuaKolom.Name = "chkSemuaKolom";
             this.chkSemuaKolom.Size = new System.Drawing.Size(143, 17);
             this.chkSemuaKolom.TabIndex = 13;
