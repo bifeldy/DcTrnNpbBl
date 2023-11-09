@@ -40,7 +40,7 @@ namespace DcTrnNpbBl.Utilities {
             ScreenWidth = Screen.PrimaryScreen.WorkingArea.Width;
             ScreenHeight = Screen.PrimaryScreen.WorkingArea.Height;
             Author = "B. Bias A. Ch. :: bias@indomaret.co.id";
-            ListDcCanUse = new List<string> { /* SEMUA DC BISA */ };
+            ListDcCanUse = new List<string> { /* "HO", "INDUK", "DEPO", "SEWA", "FROZEN" */ };
         }
 
         public void Exit() => Application.Exit();
