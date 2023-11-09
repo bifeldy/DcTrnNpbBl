@@ -1052,8 +1052,8 @@ namespace DcTrnNpbBl.Panels {
                                     new CDbQueryParamBind { NAME = "n_noref", VALUE = listTransferNpb.FirstOrDefault().SEQ_NO },
                                     new CDbQueryParamBind { NAME = "d_tgl_ref", VALUE = listTransferNpb.FirstOrDefault().SEQ_DATE },
                                     new CDbQueryParamBind { NAME = "n_dcid1", VALUE = dcid },
-                                    new CDbQueryParamBind { NAME = "n_hdrid", VALUE = (decimal) 0, DIRECTION = ParameterDirection.Output },
-                                    new CDbQueryParamBind { NAME = "p_msg", VALUE = "", DIRECTION = ParameterDirection.Output, SIZE = 2000 }
+                                    new CDbQueryParamBind { NAME = "n_hdrid", VALUE = (decimal) 0, DIRECTION = _app.IsUsingPostgres ? ParameterDirection.InputOutput : ParameterDirection.Output },
+                                    new CDbQueryParamBind { NAME = "p_msg", VALUE = "", DIRECTION = _app.IsUsingPostgres ? ParameterDirection.InputOutput : ParameterDirection.Output, SIZE = 2000 }
                                 }
                             );
                         });
