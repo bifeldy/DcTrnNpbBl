@@ -51,7 +51,15 @@ namespace DcTrnNpbBl.Handlers {
         private readonly IApp _app;
         private readonly IConverter _converter;
 
-        public CDb(IApp app, IOracle oracle, IPostgres postgres, IMsSQL mssql, IConverter converter) : base(app, oracle, postgres, mssql) {
+        public CDb(
+            IApp app,
+            IConfig config,
+            IOracle oracle,
+            IPostgres postgres,
+            IMsSQL mssql,
+            ISqlite sqlite,
+            IConverter converter
+        ) : base(app, config, oracle, postgres, mssql, sqlite) {
             _app = app;
             _converter = converter;
         }

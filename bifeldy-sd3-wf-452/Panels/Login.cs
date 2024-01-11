@@ -29,15 +29,17 @@ namespace DcTrnNpbBl.Panels {
 
         private readonly IApp _app;
         private readonly IDb _db;
+        private readonly IUpdater _updater;
 
         private CMainForm mainForm;
 
         private bool isInitialized = false;
 
-        public CLogin(IConfig config, IApp app, IDb db) {
+        public CLogin(IConfig config, IApp app, IDb db, IUpdater updater) {
             _config = config;
             _app = app;
             _db = db;
+            _updater = updater;
 
             InitializeComponent();
             OnInit();
@@ -81,7 +83,7 @@ namespace DcTrnNpbBl.Panels {
         private void ShowMainPanel() {
 
             // Change Window Size & Position To Middle Screen
-            mainForm.Width = 1000;
+            mainForm.Width = 800;
             mainForm.Height = 600;
             mainForm.SetDesktopLocation((_app.ScreenWidth - mainForm.Width) / 2, (_app.ScreenHeight - mainForm.Height) / 2);
 
@@ -186,6 +188,10 @@ namespace DcTrnNpbBl.Panels {
 
         private void Txt_KeyDown(object sender, KeyEventArgs e) {
             CheckKeyboard(sender, e);
+        }
+
+        private void BtnPaksaUpdate_Click(object sender, EventArgs e) {
+            _updater.CheckUpdater();
         }
 
     }
