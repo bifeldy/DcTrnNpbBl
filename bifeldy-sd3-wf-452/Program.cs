@@ -17,8 +17,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
-using Autofac;
-
 using bifeldy_sd3_lib_452;
 
 using DcTrnNpbBl.Forms;
@@ -75,7 +73,7 @@ namespace DcTrnNpbBl {
                     //
                     Bifeldyz.RegisterDiClass<CMainForm>();
 
-                    using (ILifetimeScope lifetimeScope = Bifeldyz.BeginLifetimeScope()) {
+                    using (dynamic lifetimeScope = Bifeldyz.BeginLifetimeScope()) {
                         Application.Run(Bifeldyz.ResolveClass<CMainForm>());
                     }
                 }
