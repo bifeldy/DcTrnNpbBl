@@ -36,11 +36,11 @@ namespace DcTrnNpbBl.Utilities {
 
         public List<string> ListDcCanUse { get; }
 
-        public CApp() : base() {
+        public CApp(IConfig config) : base(config) {
             ScreenWidth = Screen.PrimaryScreen.WorkingArea.Width;
             ScreenHeight = Screen.PrimaryScreen.WorkingArea.Height;
             Author = "B. Bias A. Ch. :: bias@indomaret.co.id";
-            ListDcCanUse = new List<string> { /* "HO", "INDUK", "DEPO", "SEWA", "FROZEN" */ };
+            ListDcCanUse = new List<string> { "INDUK", "DEPO", "SEWA", "FROZEN" };
         }
 
         public void Exit() => Application.Exit();
