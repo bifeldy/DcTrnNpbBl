@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using Microsoft.Reporting.WinForms;
 
+using bifeldy_sd3_lib_452.Extensions;
 using bifeldy_sd3_lib_452.Models;
 using bifeldy_sd3_lib_452.Utilities;
 
@@ -267,7 +268,7 @@ namespace DcTrnNpbBl.Panels {
                 await Task.Run(async () => {
                     dtAllRpb = await _db.LoadDocNoSplit();
                 });
-                List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = _converter.DataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllRpb);
+                List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = dtAllRpb.ToList<CMODEL_TABEL_DC_PICKBL_HDR_T>();
                 lsDtAllRpb.Sort((x, y) => x.DOC_NO.CompareTo(y.DOC_NO));
                 foreach (CMODEL_TABEL_DC_PICKBL_HDR_T rpb in lsDtAllRpb) {
                     listSplitAllNo.Add(rpb);
@@ -292,7 +293,7 @@ namespace DcTrnNpbBl.Panels {
                 MessageBox.Show("Tidak Ada Data Hand-Held", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
             }
             else {
-                lsAllHh = _converter.DataTableToList<CMODEL_TABEL_DC_HH_T>(dtAllHhPick);
+                lsAllHh = dtAllHhPick.ToList<CMODEL_TABEL_DC_HH_T>();
                 lsAllHh.Sort((x, y) => x.HH.CompareTo(y.HH));
             }
         }
@@ -401,7 +402,7 @@ namespace DcTrnNpbBl.Panels {
                     MessageBox.Show("Tidak Ada Data Split", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
                 else {
-                    List<CMODEL_GRID_SPLIT> lsSplit = _converter.DataTableToList<CMODEL_GRID_SPLIT>(dtSplit);
+                    List<CMODEL_GRID_SPLIT> lsSplit = dtSplit.ToList<CMODEL_GRID_SPLIT>();
                     lsSplit.Sort((x, y) => x.PLU_ID.CompareTo(y.PLU_ID));
                     List<string> line = new List<string>();
                     foreach (CMODEL_GRID_SPLIT d in lsSplit) {
@@ -696,7 +697,7 @@ namespace DcTrnNpbBl.Panels {
                 await Task.Run(async () => {
                     dtAllRpb = await _db.LoadDocNoEditSplit();
                 });
-                List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = _converter.DataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllRpb);
+                List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = dtAllRpb.ToList<CMODEL_TABEL_DC_PICKBL_HDR_T>();
                 lsDtAllRpb.Sort((x, y) => x.DOC_NO.CompareTo(y.DOC_NO));
                 foreach (CMODEL_TABEL_DC_PICKBL_HDR_T rpb in lsDtAllRpb) {
                     listEditSplitAllNo.Add(rpb);
@@ -726,7 +727,7 @@ namespace DcTrnNpbBl.Panels {
                     MessageBox.Show("Tidak Ada Data Edit Split", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
                 else {
-                    List<CMODEL_GRID_EDIT_SPLIT> lsEditSplit = _converter.DataTableToList<CMODEL_GRID_EDIT_SPLIT>(dtEditSplit);
+                    List<CMODEL_GRID_EDIT_SPLIT> lsEditSplit = dtEditSplit.ToList<CMODEL_GRID_EDIT_SPLIT>();
                     lsEditSplit.Sort((x, y) => x.PLU_ID.CompareTo(y.PLU_ID));
                     lsEditSplit.Sort((x, y) => x.TIME_SCANNING.CompareTo(y.TIME_SCANNING));
                     lsEditSplit.Sort((x, y) => x.TIME_PICKING.CompareTo(y.TIME_PICKING));
@@ -940,7 +941,7 @@ namespace DcTrnNpbBl.Panels {
                 await Task.Run(async () => {
                     dtAllRpb = await _db.LoadDocNoProsesNpb();
                 });
-                List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = _converter.DataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllRpb);
+                List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllRpb = dtAllRpb.ToList<CMODEL_TABEL_DC_PICKBL_HDR_T>();
                 lsDtAllRpb.Sort((x, y) => x.DOC_NO.CompareTo(y.DOC_NO));
                 foreach (CMODEL_TABEL_DC_PICKBL_HDR_T rpb in lsDtAllRpb) {
                     listTransferNpbAllNo.Add(rpb);
@@ -967,7 +968,7 @@ namespace DcTrnNpbBl.Panels {
                     MessageBox.Show("Tidak Ada Data Transfer NPB", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
                 else {
-                    List<CMODEL_GRID_TRANSFER_RESEND_NPB> lsTransferNpb = _converter.DataTableToList<CMODEL_GRID_TRANSFER_RESEND_NPB>(dtTransferNpb);
+                    List<CMODEL_GRID_TRANSFER_RESEND_NPB> lsTransferNpb = dtTransferNpb.ToList<CMODEL_GRID_TRANSFER_RESEND_NPB>();
                     lsTransferNpb.Sort((x, y) => x.PLU_ID.CompareTo(y.PLU_ID));
                     lsTransferNpb.Sort((x, y) => x.SCAN.CompareTo(y.SCAN));
                     lsTransferNpb.Sort((x, y) => x.PICK.CompareTo(y.PICK));
@@ -1151,7 +1152,7 @@ namespace DcTrnNpbBl.Panels {
                 await Task.Run(async () => {
                     dtAllNpb = await _db.LoadNpbDcNoReSend();
                 });
-                List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllNpb = _converter.DataTableToList<CMODEL_TABEL_DC_PICKBL_HDR_T>(dtAllNpb);
+                List<CMODEL_TABEL_DC_PICKBL_HDR_T> lsDtAllNpb = dtAllNpb.ToList<CMODEL_TABEL_DC_PICKBL_HDR_T>();
                 foreach (CMODEL_TABEL_DC_PICKBL_HDR_T npb in lsDtAllNpb) {
                     listResendNpbAllNo.Add(npb);
                 }
@@ -1177,7 +1178,7 @@ namespace DcTrnNpbBl.Panels {
                     MessageBox.Show("Tidak Ada Data Re/Send NPB", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
                 else {
-                    List<CMODEL_GRID_TRANSFER_RESEND_NPB> lsResendNpb = _converter.DataTableToList<CMODEL_GRID_TRANSFER_RESEND_NPB>(dtResendNpb);
+                    List<CMODEL_GRID_TRANSFER_RESEND_NPB> lsResendNpb = dtResendNpb.ToList<CMODEL_GRID_TRANSFER_RESEND_NPB>();
                     lsResendNpb.Sort((x, y) => x.PLU_ID.CompareTo(y.PLU_ID));
                     lsResendNpb.Sort((x, y) => x.SCAN.CompareTo(y.SCAN));
                     lsResendNpb.Sort((x, y) => x.PICK.CompareTo(y.PICK));
@@ -1315,7 +1316,7 @@ namespace DcTrnNpbBl.Panels {
                     MessageBox.Show("Tidak Ada Data Untuk Laporan", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
                 else {
-                    List<CMODEL_DS_NPBTAGBL> lsReport = _converter.DataTableToList<CMODEL_DS_NPBTAGBL>(dtReport);
+                    List<CMODEL_DS_NPBTAGBL> lsReport = dtReport.ToList<CMODEL_DS_NPBTAGBL>();
                     List<ReportParameter> paramList = new List<ReportParameter> {
                         new ReportParameter("user", $"{_db.LoggedInUsername}"),
                         new ReportParameter("dc_kode_nama_pengirim", $"{lsReport.FirstOrDefault().PENGIRIM}"),
@@ -1353,7 +1354,7 @@ namespace DcTrnNpbBl.Panels {
                 await Task.Run(async () => {
                     dtLogs = await _db.ViewLogApi();
                 });
-                List<CMODEL_TABEL_LOG_API_DC> logs = _converter.DataTableToList<CMODEL_TABEL_LOG_API_DC>(dtLogs);
+                List<CMODEL_TABEL_LOG_API_DC> logs = dtLogs.ToList<CMODEL_TABEL_LOG_API_DC>();
                 foreach (CMODEL_TABEL_LOG_API_DC l in logs) {
                     try {
                         CMODEL_JSON_TERIMA_NPB_BL resApiObj = _converter.JsonToObject<CMODEL_JSON_TERIMA_NPB_BL>(l.DATABALIK);

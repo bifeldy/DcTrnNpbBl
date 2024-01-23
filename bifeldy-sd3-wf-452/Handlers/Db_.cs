@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using bifeldy_sd3_lib_452.Databases;
+using bifeldy_sd3_lib_452.Extensions;
 using bifeldy_sd3_lib_452.Handlers;
 using bifeldy_sd3_lib_452.Models;
 using bifeldy_sd3_lib_452.Utilities;
@@ -49,7 +50,6 @@ namespace DcTrnNpbBl.Handlers {
     public sealed class CDb : CDbHandler, IDb {
 
         private readonly IApp _app;
-        private readonly IConverter _converter;
 
         public CDb(
             IApp app,
@@ -57,11 +57,9 @@ namespace DcTrnNpbBl.Handlers {
             IOracle oracle,
             IPostgres postgres,
             IMsSQL mssql,
-            ISqlite sqlite,
-            IConverter converter
+            ISqlite sqlite
         ) : base(app, config, oracle, postgres, mssql, sqlite) {
             _app = app;
-            _converter = converter;
         }
 
         public async Task BatalPick(string doc_no, decimal seq_no) {
@@ -83,7 +81,7 @@ namespace DcTrnNpbBl.Handlers {
                 if (dt_no_pesanan.Rows.Count <= 0) {
                     throw new Exception($"Tidak Ada No Pesanan");
                 }
-                List<CMODEL_UNPICK> ls_no_pesanan = _converter.DataTableToList<CMODEL_UNPICK>(dt_no_pesanan);
+                List<CMODEL_UNPICK> ls_no_pesanan = dt_no_pesanan.ToList<CMODEL_UNPICK>();
                 string[] arr_no_pesanan = ls_no_pesanan.Select(l => l.NO_PESANAN).ToArray();
                 bool update1 = await OraPg.ExecQueryAsync(
                     $@"
