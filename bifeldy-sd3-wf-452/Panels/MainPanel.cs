@@ -17,6 +17,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -1325,7 +1326,7 @@ namespace DcTrnNpbBl.Panels {
                         new ReportParameter("dc_kode_nama_penerima", $"{lsReport.FirstOrDefault().PENERIMA}"),
                         new ReportParameter("rpb_no_tgl", $"{lsReport.FirstOrDefault().DOC_NO}/{lsReport.FirstOrDefault().NO_REF}")
                     };
-                    rptViewer.LocalReport.ReportPath = _app.AppLocation + "/Rdlcs/NpbTagBl.rdlc";
+                    rptViewer.LocalReport.ReportPath = Path.Combine(_app.AppLocation, "Rdlcs", "NpbTagBl.rdlc");
                     rptViewer.LocalReport.DataSources.Add(new ReportDataSource("NpbTagBl", dtReport));
                     rptViewer.LocalReport.SetParameters(paramList);
                     rptViewer.RefreshReport();
