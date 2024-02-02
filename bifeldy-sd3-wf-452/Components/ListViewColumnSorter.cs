@@ -58,8 +58,8 @@ namespace DcTrnNpbBl.Components {
             ListViewItem listviewX, listviewY;
 
             // Cast the objects to be compared to ListViewItem objects
-            listviewX = (ListViewItem)x;
-            listviewY = (ListViewItem)y;
+            listviewX = (ListViewItem) x;
+            listviewY = (ListViewItem) y;
 
             decimal num = 0;
             if (decimal.TryParse(listviewX.SubItems[ColumnToSort].Text, out num)) {
