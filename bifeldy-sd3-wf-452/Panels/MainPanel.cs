@@ -1200,9 +1200,10 @@ namespace DcTrnNpbBl.Panels {
             SetIdleBusyStatus(false);
             string apiDcho = _config.Get<string>("ApiDchoUrl", _app.GetConfig("api_dcho_url"));
             string apiTargetUrl = _config.Get<string>("ApiDevUrl", _app.GetConfig("api_dev_url"));
-            #if DEBUG
+            txtReSendNpbApiTargetUrl.Text = null;
+            if (_app.DebugMode) {
                 txtReSendNpbApiTargetDcKode.Text = "G000";
-            #endif
+            }
             string apiTargetKodeDc = txtReSendNpbApiTargetDcKode.Text.ToUpper();
             if (!string.IsNullOrEmpty(apiTargetKodeDc) && apiTargetKodeDc != "G000") {
                 await Task.Run(async () => {
