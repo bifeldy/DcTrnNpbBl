@@ -450,7 +450,8 @@ namespace DcTrnNpbBl.Panels {
                     row.DefaultCellStyle.BackColor = Color.FromArgb(255, 64, 129);
                 }
                 else if (qtyrpb > plaqtystok) {
-                    row.Cells[dtGrdSplit.Columns["KETER"].Index].Value = $"Stok Plano Tidak Cukup, Tersisa {plaqtystok}";
+                    string ket = plaqtystok <= 0 ? "Habis / Minus ::" : "Tidak Cukup, Tersisa";
+                    row.Cells[dtGrdSplit.Columns["KETER"].Index].Value = $"Stok Plano {ket} {plaqtystok}";
                     row.DefaultCellStyle.BackColor = Color.FromArgb(255, 204, 0);
                 }
             }
@@ -531,9 +532,10 @@ namespace DcTrnNpbBl.Panels {
                             stokPlanoRakDisplay = "Belum Ada Rak Display / Tablok";
                         }
                         else if (data.QTY_RPB > data.PLA_QTY_STOK) {
-                            stokPlanoRakDisplay = $"Stok Plano Tidak Cukup, Tersisa {data.PLA_QTY_STOK}";
+                            string ket = data.PLA_QTY_STOK <= 0 ? "Habis / Minus ::" : "Tidak Cukup, Tersisa";
+                            stokPlanoRakDisplay = $"Stok Plano {ket} {data.PLA_QTY_STOK}";
                         }
-                        totalStok += (data.QTY_RPB > data.PLA_QTY_STOK) ? data.PLA_QTY_STOK : data.QTY_RPB;
+                        totalStok += (data.QTY_RPB > data.PLA_QTY_STOK) ? Math.Max(data.PLA_QTY_STOK, 0) : data.QTY_RPB;
                         bool update = false;
                         await Task.Run(async () => {
                             update = await _db.UpdateKeterItem(stokPlanoRakDisplay, data.SEQ_NO, data.PLU_ID);
@@ -592,7 +594,7 @@ namespace DcTrnNpbBl.Panels {
             bool bolehSplit = true;
             decimal totalStok = 0;
             foreach (CMODEL_GRID_SPLIT data in listSplit) {
-                totalStok += (data.QTY_RPB > data.PLA_QTY_STOK) ? data.PLA_QTY_STOK : data.QTY_RPB;
+                totalStok += (data.QTY_RPB > data.PLA_QTY_STOK) ? Math.Max(data.PLA_QTY_STOK, 0) : data.QTY_RPB;
                 if (string.IsNullOrEmpty(data.HH_PICK) || string.IsNullOrEmpty(data.HH_SCAN)) {
                     MessageBox.Show("Masih Ada Yang Belum Di Assign HH", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     safeForUpdate = false;
@@ -619,12 +621,22 @@ namespace DcTrnNpbBl.Panels {
                             stokPlanoRakDisplay = "Belum Ada Rak Display / Tablok";
                         }
                         else if (data.QTY_RPB > data.PLA_QTY_STOK) {
-                            MessageBox.Show(
-                                data.SINGKATAN + Environment.NewLine + $"Menggunakan Stok Yang Tersisa = {data.PLA_QTY_STOK}",
-                                "Stok Plano Tidak Cukup",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Exclamation
-                            );
+                            if (data.PLA_QTY_STOK > 0) {
+                                MessageBox.Show(
+                                    data.SINGKATAN + Environment.NewLine + $"Menggunakan Stok Yang Tersisa = {data.PLA_QTY_STOK}",
+                                    "Stok Plano Tidak Cukup",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Exclamation
+                                );
+                            }
+                            else {
+                                MessageBox.Show(
+                                    $"{data.SINGKATAN} Tidak Bisa Di Pick (Qty RPB Akan Di 0-kan)" + Environment.NewLine + $"Stok Tidak Tersedia :: {data.PLA_QTY_STOK}",
+                                    "Stok Plano Habis / Minus",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error
+                                );
+                            }
                         }
                         bool update = false;
                         await Task.Run(async () => {
@@ -643,7 +655,7 @@ namespace DcTrnNpbBl.Panels {
                             bool update1 = false;
                             await Task.Run(async () => {
                                 update1 = await _db.ProsesSplit1(
-                                    (data.QTY_RPB > data.PLA_QTY_STOK) ? data.PLA_QTY_STOK : data.QTY_RPB,
+                                    (data.QTY_RPB > data.PLA_QTY_STOK) ? Math.Max(data.PLA_QTY_STOK, 0) : data.QTY_RPB,
                                     data.LOKASI,
                                     data.CELLID_PLANO,
                                     data.HH_PICK,
