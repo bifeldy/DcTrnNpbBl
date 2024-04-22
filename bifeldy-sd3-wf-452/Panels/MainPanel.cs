@@ -80,15 +80,15 @@ namespace DcTrnNpbBl.Panels {
         /* Transfer NPB */
 
         private List<CMODEL_TABEL_DC_PICKBL_HDR_T> listTransferNpbAllNo = null;
-        private List<CMODEL_GRID_TRANSFER_RESEND_NPB> listTransferNpb = null;
+        private List<CMODEL_GRID_PROSES_NPB> listTransferNpb = null;
 
         private BindingList<CMODEL_TABEL_DC_PICKBL_HDR_T> bindTransferNpbAllNo = null;
-        private BindingList<CMODEL_GRID_TRANSFER_RESEND_NPB> bindTransferNpb = null;
+        private BindingList<CMODEL_GRID_PROSES_NPB> bindTransferNpb = null;
 
         /* Resend NPB */
 
         private List<CMODEL_TABEL_DC_PICKBL_HDR_T> listResendNpbAllNo = null;
-        private List<CMODEL_GRID_TRANSFER_RESEND_NPB> listResendNpb = null;
+        private List<CMODEL_DS_NPBTAGBL> listResendNpb = null;
 
         private BindingList<CMODEL_TABEL_DC_PICKBL_HDR_T> bindResendNpbAllNo = null;
 
@@ -173,15 +173,15 @@ namespace DcTrnNpbBl.Panels {
                 /* Transfer NPB */
 
                 listTransferNpbAllNo = new List<CMODEL_TABEL_DC_PICKBL_HDR_T>();
-                listTransferNpb = new List<CMODEL_GRID_TRANSFER_RESEND_NPB>();
+                listTransferNpb = new List<CMODEL_GRID_PROSES_NPB>();
 
                 bindTransferNpbAllNo = new BindingList<CMODEL_TABEL_DC_PICKBL_HDR_T>(listTransferNpbAllNo);
-                bindTransferNpb = new BindingList<CMODEL_GRID_TRANSFER_RESEND_NPB>(listTransferNpb);
+                bindTransferNpb = new BindingList<CMODEL_GRID_PROSES_NPB>(listTransferNpb);
 
                 /* Resend NPB */
 
                 listResendNpbAllNo = new List<CMODEL_TABEL_DC_PICKBL_HDR_T>();
-                listResendNpb = new List<CMODEL_GRID_TRANSFER_RESEND_NPB>();
+                listResendNpb = new List<CMODEL_DS_NPBTAGBL>();
 
                 bindResendNpbAllNo = new BindingList<CMODEL_TABEL_DC_PICKBL_HDR_T>(listResendNpbAllNo);
 
@@ -969,12 +969,12 @@ namespace DcTrnNpbBl.Panels {
                     MessageBox.Show("Tidak Ada Data Transfer NPB", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
                 else {
-                    List<CMODEL_GRID_TRANSFER_RESEND_NPB> lsTransferNpb = dtTransferNpb.ToList<CMODEL_GRID_TRANSFER_RESEND_NPB>();
+                    List<CMODEL_GRID_PROSES_NPB> lsTransferNpb = dtTransferNpb.ToList<CMODEL_GRID_PROSES_NPB>();
                     lsTransferNpb.Sort((x, y) => x.PLU_ID.CompareTo(y.PLU_ID));
                     lsTransferNpb.Sort((x, y) => x.SCAN.CompareTo(y.SCAN));
                     lsTransferNpb.Sort((x, y) => x.PICK.CompareTo(y.PICK));
                     dtPckrProsesNpbTglRpb.Value = lsTransferNpb.FirstOrDefault().DOC_DATE;
-                    foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in lsTransferNpb) {
+                    foreach (CMODEL_GRID_PROSES_NPB data in lsTransferNpb) {
                         listTransferNpb.Add(data);
                     }
                     dtGrdProsesNpb.DataSource = bindTransferNpb;
@@ -1021,7 +1021,7 @@ namespace DcTrnNpbBl.Panels {
             bool safeForNpb = true;
             decimal totalPick = 0;
             decimal totalScan = 0;
-            foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in listTransferNpb) {
+            foreach (CMODEL_GRID_PROSES_NPB data in listTransferNpb) {
                 totalPick += data.PICK;
                 totalScan += data.SCAN;
                 if (data.STOP_PICKING <= DateTime.MinValue || data.STOP_SCANNING <= DateTime.MinValue) {
@@ -1104,7 +1104,7 @@ namespace DcTrnNpbBl.Panels {
             bool safeForUnPick = true;
             decimal totalPick = 0;
             decimal totalScan = 0;
-            foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in listTransferNpb) {
+            foreach (CMODEL_GRID_PROSES_NPB data in listTransferNpb) {
                 totalPick += data.PICK;
                 totalScan += data.SCAN;
                 if (data.STOP_PICKING <= DateTime.MinValue || data.STOP_SCANNING <= DateTime.MinValue) {
@@ -1173,18 +1173,16 @@ namespace DcTrnNpbBl.Panels {
             if (!string.IsNullOrEmpty(selectedNoNpb)) {
                 DataTable dtResendNpb = new DataTable();
                 await Task.Run(async () => {
-                    dtResendNpb = await _db.LoadResendByNpbDcNo(selectedNoNpb);
+                    dtResendNpb = await _db.ReSendViewLaporanByNpbDcNo(selectedNoNpb);
                 });
                 if (dtResendNpb.Rows.Count <= 0) {
                     MessageBox.Show("Tidak Ada Data Re/Send NPB", ctx, MessageBoxButtons.OK, MessageBoxIcon.Question);
                 }
                 else {
-                    List<CMODEL_GRID_TRANSFER_RESEND_NPB> lsResendNpb = dtResendNpb.ToList<CMODEL_GRID_TRANSFER_RESEND_NPB>();
-                    lsResendNpb.Sort((x, y) => x.PLU_ID.CompareTo(y.PLU_ID));
-                    lsResendNpb.Sort((x, y) => x.SCAN.CompareTo(y.SCAN));
-                    lsResendNpb.Sort((x, y) => x.PICK.CompareTo(y.PICK));
-                    txtReSendNpbApiTargetDcKode.Text = lsResendNpb.FirstOrDefault().WHK_KODE;
-                    foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in lsResendNpb) {
+                    List<CMODEL_DS_NPBTAGBL> lsResendNpb = dtResendNpb.ToList<CMODEL_DS_NPBTAGBL>();
+                    lsResendNpb.Sort((x, y) => x.PLUID.CompareTo(y.PLUID));
+                    txtReSendNpbApiTargetDcKode.Text = lsResendNpb.FirstOrDefault().PENERIMA;
+                    foreach (CMODEL_DS_NPBTAGBL data in lsResendNpb) {
                         listResendNpb.Add(data);
                     }
                 }
@@ -1241,9 +1239,9 @@ namespace DcTrnNpbBl.Panels {
                 if (listResendNpb.Count > 0) {
                     await Task.Run(async () => {
                         List<CMODEL_JSON_KIRIM_NPB_BL_DETAIL> blDetail = new List<CMODEL_JSON_KIRIM_NPB_BL_DETAIL>();
-                        foreach (CMODEL_GRID_TRANSFER_RESEND_NPB data in listResendNpb) {
+                        foreach (CMODEL_DS_NPBTAGBL data in listResendNpb) {
                             CMODEL_JSON_KIRIM_NPB_BL_DETAIL detail = new CMODEL_JSON_KIRIM_NPB_BL_DETAIL {
-                                plu_id = Convert.ToInt32(data.PLU_ID),
+                                plu_id = Convert.ToInt32(data.PLUID),
                                 sj_qty = Convert.ToInt32(data.SJ_QTY),
                                 hpp = data.HPP,
                                 price = data.PRICE,
@@ -1254,13 +1252,13 @@ namespace DcTrnNpbBl.Panels {
                             blDetail.Add(detail);
                         }
                         CMODEL_JSON_KIRIM_NPB_BL bl = new CMODEL_JSON_KIRIM_NPB_BL {
-                            dc_kode = listResendNpb.FirstOrDefault().DC_KODE,
+                            dc_kode = listResendNpb.FirstOrDefault().PENGIRIM,
                             doc_date = listResendNpb.FirstOrDefault().DOC_DATE,
                             dc_npwp = listResendNpb.FirstOrDefault().TBL_NPWP_DC,
                             doc_no = listResendNpb.FirstOrDefault().DOC_NO,
                             npbdc_no = listResendNpb.FirstOrDefault().NPBDC_NO,
                             npbdc_date = listResendNpb.FirstOrDefault().NPBDC_DATE,
-                            whk_kode = listResendNpb.FirstOrDefault().WHK_KODE,
+                            whk_kode = listResendNpb.FirstOrDefault().PENERIMA,
                             detail = blDetail
                         };
                         try {
@@ -1310,7 +1308,7 @@ namespace DcTrnNpbBl.Panels {
             if (!string.IsNullOrEmpty(selectedNoNpb)) {
                 DataTable dtReport = new DataTable();
                 await Task.Run(async () => {
-                    dtReport = await _db.ViewLaporanByNpbDcNo(selectedNoNpb);
+                    dtReport = await _db.ReSendViewLaporanByNpbDcNo(selectedNoNpb);
                 });
                 rptViewer.Reset();
                 rptViewer.Clear();

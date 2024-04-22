@@ -119,7 +119,7 @@
     <Compile Include="Models\DS_NPBTAGBL.cs" />
     <Compile Include="Models\GRID_EDIT_SPLIT.cs" />
     <Compile Include="Models\GRID_SPLIT.cs" />
-    <Compile Include="Models\GRID_TRANSFER_RESEND_NPB.cs" />
+    <Compile Include="Models\GRID_PROSES_NPB.cs" />
     <Compile Include="Models\JSON.cs" />
     <Compile Include="Models\TABEL_DC_HH_T.cs" />
     <Compile Include="Models\TABEL_DC_PICKBL_DTL_T.cs" />
@@ -214,6 +214,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ChangeLog.txt" />
     <Content Include="Images\domar.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

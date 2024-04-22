@@ -41,9 +41,8 @@ namespace DcTrnNpbBl.Handlers {
         Task<DataTable> LoadDocNoProsesNpb();
         Task<DataTable> LoadProsesNpbByDocNo(string selectedNoRpb);
         Task<DataTable> LoadNpbDcNoReSend();
-        Task<DataTable> LoadResendByNpbDcNo(string selectedNoNpb);
         Task<bool> SaveLogApi(string apiDcKode, string apiOwner, string apiPath, string jsonBody, string resApiStr, string status);
-        Task<DataTable> ViewLaporanByNpbDcNo(string selectedNoNpb);
+        Task<DataTable> ReSendViewLaporanByNpbDcNo(string selectedNoNpb);
         Task<DataTable> ViewLogApi();
     }
 
@@ -471,55 +470,6 @@ namespace DcTrnNpbBl.Handlers {
             );
         }
 
-        public async Task<DataTable> LoadResendByNpbDcNo(string selectedNoNpb) {
-            return await OraPg.GetDataTableAsync(
-                $@"
-                    SELECT
-                        a.DC_KODE,
-                        a.SEQ_NO,
-                        a.SEQ_DATE,
-                        a.DOC_NO,
-                        a.DOC_DATE,
-                        b.PLU_ID,
-                        c.MBR_SINGKATAN AS SINGKATAN,
-                        (d.PLA_LINE || '.' || d.PLA_RAK || '.' || d.PLA_SHELF || '.' || d.PLA_CELL) AS LOKASI,
-                        b.QTY_RPB AS QTY,
-                        b.QTY_PICKING AS PICK,
-                        b.QTY_SCANNING AS SCAN,
-                        CAST(b.HPP as DECIMAL(30,3)) AS HPP,
-                        CAST(b.PRICE as DECIMAL(30,3)) AS PRICE,
-                        CAST(b.GROSS as DECIMAL(30,3)) AS GROSS,
-                        CAST(b.PPN as DECIMAL(30,3)) AS PPN,
-                        b.PPN_RATE,
-                        b.SJ_QTY,
-                        b.TGLEXP,
-                        a.NPBDC_NO,
-                        a.NPBDC_DATE,
-                        a.WHK_KODE,
-                        e.TBL_NPWP_DC
-                    FROM
-                        DC_PICKBL_HDR_H a,
-                        DC_PICKBL_DTL_H b,
-                        DC_TABEL_DC_T e,
-                        DC_BARANG_DC_V c
-                        {(_app.IsUsingPostgres ? "LEFT OUTER JOIN" : ",")}
-                        (
-                            SELECT *
-                            FROM DC_PLANOGRAM_T WHERE PLA_DISPLAY = 'Y'
-                        ) d {(_app.IsUsingPostgres ? "ON c.MBR_FK_PLUID = d.PLA_FK_PLUID" : "")}
-                    WHERE
-                        a.NPBDC_NO = :npbdc_no AND
-                        a.SEQ_NO = b.SEQ_FK_NO AND
-                        b.PLU_ID = c.MBR_FK_PLUID AND
-                        {(_app.IsUsingPostgres ? "" : "c.MBR_FK_PLUID = d.PLA_FK_PLUID (+) AND")}
-		                d.PLA_DC_KODE = a.DC_KODE
-                ",
-                new List<CDbQueryParamBind> {
-                    new CDbQueryParamBind { NAME = "npbdc_no", VALUE = selectedNoNpb }
-                }
-            );
-        }
-
         public async Task<bool> SaveLogApi(string apiDcKode, string apiOwner, string apiPath, string jsonBody, string resApiStr, string status) {
             return await OraPg.ExecQueryAsync(
                 $@"
@@ -538,11 +488,22 @@ namespace DcTrnNpbBl.Handlers {
             );
         }
 
-        public async Task<DataTable> ViewLaporanByNpbDcNo(string selectedNoNpb) {
+        public async Task<DataTable> ReSendViewLaporanByNpbDcNo(string selectedNoNpb) {
             return await OraPg.GetDataTableAsync(
-                $@"
-                    SELECT
-                        e.doc_no as doc_no,
+                $@"SELECT
+                        /* Data API */
+                        f.sj_qty,
+                        e.DOC_DATE,
+                        h.TBL_NPWP_DC,
+                        e.NPBDC_NO,
+                        e.NPBDC_DATE,
+                        CAST(f.HPP AS DECIMAL(30,3)) AS HPP,
+                        CAST(f.PRICE AS DECIMAL(30,3)) AS PRICE,
+                        CAST(f.GROSS AS DECIMAL(30,3)) AS GROSS,
+                        f.PPN_RATE,
+                        f.TGLEXP,
+                        /* Report RDLC */
+                        e.doc_no AS doc_no,
                         a.hdr_no_doc AS no_npb,
                         TO_CHAR (a.hdr_tgl_doc, 'dd-mm-yyyy') AS tgl_npb, 
                         e.dc_kode AS pengirim,
@@ -559,6 +520,7 @@ namespace DcTrnNpbBl.Handlers {
                         b.his_ppn AS ppn,
                         ROUND(((b.his_price + b.his_ppn) * b.his_qty), 5) AS total
                     FROM
+                        DC_TABEL_DC_T h,
                         DC_HEADER_TRANSAKSI_T a,
                         dc_barang_dc_v c,
                         DC_PICKBL_HDR_H e,

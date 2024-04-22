@@ -15,7 +15,7 @@ using System;
 
 namespace DcTrnNpbBl.Models {
 
-    class CMODEL_GRID_TRANSFER_RESEND_NPB {
+    class CMODEL_GRID_PROSES_NPB {
         public string DC_KODE { set; get; }
         public decimal SEQ_NO { set; get; }
         public DateTime SEQ_DATE { set; get; }
