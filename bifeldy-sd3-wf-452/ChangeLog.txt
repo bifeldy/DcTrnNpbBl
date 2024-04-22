@@ -12,4 +12,4 @@ v1006
 [=] Kirim API :: 10 item, yang di proses 3, yang di kirim 3 saja
 
 v1007
-[=] Jagaan Stok :: Jika QTY_RPB > PLA_QTY_STOK Pakai data.PLA_QTY_STOK (Kalau Minus Di 0-kan)
+[=] Jagaan Stok :: Jika QTY_RPB > PLA_QTY_STOK Pakai PLA_QTY_STOK (Kalau Minus Di 0-kan)
