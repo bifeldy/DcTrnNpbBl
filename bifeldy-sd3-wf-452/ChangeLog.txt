@@ -1,0 +1,15 @@
+﻿v1003
+[=] Tidak Pick (Belum Split)
+[=] Un-Pick (Sudah Split & Pick Tapi Mau Dibatalkan)
+
+v1004
+[=] Ganti Library (Untuk Testing Uji Coba Postgre)
+
+v1005
+[=] Fix Postgre (Meskipun Belum Kepakai Di Dc PG)
+
+v1006
+[=] Kirim API :: 10 item, yang di proses 3, yang di kirim 3 saja
+
+v1007
+[=] Jagaan Stok :: Jika QTY_RPB > PLA_QTY_STOK Pakai data.PLA_QTY_STOK (Kalau Minus Di 0-kan)
