@@ -214,7 +214,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ChangeLog.txt" />
+    <Content Include="ChangeLog.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\domar.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
