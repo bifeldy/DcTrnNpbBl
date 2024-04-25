@@ -26,9 +26,9 @@ namespace DcTrnNpbBl.Panels {
 
     public sealed partial class CCekProgram : UserControl {
 
+        private readonly IApplication _application;
         private readonly IUpdater _updater;
         private readonly IConfig _config;
-
         private readonly IApp _app;
         private readonly IDb _db;
 
@@ -36,7 +36,8 @@ namespace DcTrnNpbBl.Panels {
 
         private bool isInitialized = false;
 
-        public CCekProgram(IUpdater updater, IApp app, IDb db, IConfig config) {
+        public CCekProgram(IApplication application, IUpdater updater, IApp app, IDb db, IConfig config) {
+            _application = application;
             _updater = updater;
             _config = config;
             _app = app;
@@ -91,6 +92,7 @@ namespace DcTrnNpbBl.Panels {
                 catch (Exception ex1) {
                     if (autoDb) {
                         _app.IsUsingPostgres = false;
+                        _application.IsUsingPostgres = _app.IsUsingPostgres;
                         try {
                             jenisDc = await _db.GetJenisDc();
                             dbAvailable = true;

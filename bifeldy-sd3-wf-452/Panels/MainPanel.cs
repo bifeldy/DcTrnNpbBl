@@ -37,6 +37,7 @@ namespace DcTrnNpbBl.Panels {
 
     public sealed partial class CMainPanel : UserControl {
 
+        private readonly IApplication _application;
         private readonly IApp _app;
         private readonly ILogger _logger;
         private readonly IDb _db;
@@ -92,7 +93,17 @@ namespace DcTrnNpbBl.Panels {
 
         private BindingList<CMODEL_TABEL_DC_PICKBL_HDR_T> bindResendNpbAllNo = null;
 
-        public CMainPanel(IApp app, ILogger logger, IDb db, IConfig config, IWinReg winreg, IConverter converter, IApi api) {
+        public CMainPanel(
+            IApplication application,
+            IApp app,
+            ILogger logger,
+            IDb db,
+            IConfig config,
+            IWinReg winreg,
+            IConverter converter,
+            IApi api
+        ) {
+            _application = application;
             _app = app;
             _logger = logger;
             _db = db;
@@ -195,6 +206,7 @@ namespace DcTrnNpbBl.Panels {
 
         public void SetIdleBusyStatus(bool isIdle) {
             _app.IsIdle = isIdle;
+            _application.IsIdle = _app.IsIdle;
             LabelStatus.Text = $"Program {(isIdle ? "Idle" : "Sibuk")} ...";
             ProgressBarStatus.Style = isIdle ? ProgressBarStyle.Continuous : ProgressBarStyle.Marquee;
             EnableDisableControl(Controls, isIdle);

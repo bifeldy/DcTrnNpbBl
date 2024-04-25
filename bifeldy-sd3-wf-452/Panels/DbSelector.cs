@@ -14,6 +14,8 @@
 using System;
 using System.Windows.Forms;
 
+using bifeldy_sd3_lib_452.Utilities;
+
 using DcTrnNpbBl.Forms;
 using DcTrnNpbBl.Utilities;
 
@@ -21,13 +23,15 @@ namespace DcTrnNpbBl.Panels {
 
     public sealed partial class CDbSelector : UserControl {
 
+        private readonly IApplication _application;
         private readonly IApp _app;
 
         private CMainForm mainForm;
 
         private bool isInitialized = false;
 
-        public CDbSelector(IApp app) {
+        public CDbSelector(IApplication application, IApp app) {
+            _application = application;
             _app = app;
 
             InitializeComponent();
@@ -65,11 +69,13 @@ namespace DcTrnNpbBl.Panels {
 
         private void BtnOracle_Click(object sender, EventArgs e) {
             _app.IsUsingPostgres = false;
+            _application.IsUsingPostgres = _app.IsUsingPostgres;
             ShowCheckProgramPanel();
         }
 
         private void BtnPostgre_Click(object sender, EventArgs e) {
             _app.IsUsingPostgres = true;
+            _application.IsUsingPostgres = _app.IsUsingPostgres;
             ShowCheckProgramPanel();
         }
 
