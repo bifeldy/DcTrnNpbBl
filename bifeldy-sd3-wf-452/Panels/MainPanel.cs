@@ -537,7 +537,7 @@ namespace DcTrnNpbBl.Panels {
             if (listSplit.Count > 0) {
                 decimal totalStok = 0;
                 try {
-                    await _db.MarkBeforeCommitRollback();
+                    await _db.OraPg_MsSqlLiteMarkBeforeCommitRollback();
                     foreach (CMODEL_GRID_SPLIT data in listSplit) {
                         string stokPlanoRakDisplay = "";
                         if (data.CELLID_PLANO <= 0) {
@@ -556,10 +556,10 @@ namespace DcTrnNpbBl.Panels {
                             throw new Exception($"Gagal Mengubah Keterangan Untuk {data.SINGKATAN}");
                         }
                     }
-                    _db.MarkSuccessCommitAndClose();
+                    _db.OraPg_MsSqlLiteMarkSuccessCommitAndClose();
                 }
                 catch (Exception ex) {
-                    _db.MarkFailedRollbackAndClose();
+                    _db.OraPg_MsSqlLiteMarkFailedRollbackAndClose();
                     MessageBox.Show(ex.Message, ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 if (totalStok > 0) {
@@ -625,7 +625,7 @@ namespace DcTrnNpbBl.Panels {
             }
             if (safeForUpdate && listSplit.Count > 0) {
                 try {
-                    await _db.MarkBeforeCommitRollback();
+                    await _db.OraPg_MsSqlLiteMarkBeforeCommitRollback();
                     foreach (CMODEL_GRID_SPLIT data in listSplit) {
                         string stokPlanoRakDisplay = "";
                         if (data.CELLID_PLANO <= 0) {
@@ -659,7 +659,7 @@ namespace DcTrnNpbBl.Panels {
                         }
                     }
                     if (!bolehSplit) {
-                        _db.MarkSuccessCommitAndClose();
+                        _db.OraPg_MsSqlLiteMarkSuccessCommitAndClose();
                         MessageBox.Show("Silahkan Cek Kolom Keterangan", ctx, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                     else {
@@ -688,12 +688,12 @@ namespace DcTrnNpbBl.Panels {
                         if (!update2) {
                             throw new Exception($"Gagal Set Tanggal Split");
                         }
-                        _db.MarkSuccessCommitAndClose();
+                        _db.OraPg_MsSqlLiteMarkSuccessCommitAndClose();
                         MessageBox.Show("Selesai Proses", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 catch (Exception ex) {
-                    _db.MarkFailedRollbackAndClose();
+                    _db.OraPg_MsSqlLiteMarkFailedRollbackAndClose();
                     MessageBox.Show(ex.Message, ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -906,7 +906,7 @@ namespace DcTrnNpbBl.Panels {
             }
             if (safeForUpdate && updateAbleSplit.Count > 0) {
                 try {
-                    await _db.MarkBeforeCommitRollback();
+                    await _db.OraPg_MsSqlLiteMarkBeforeCommitRollback();
                     foreach (CMODEL_GRID_EDIT_SPLIT data in updateAbleSplit) {
                         bool update1 = false;
                         await Task.Run(async () => {
@@ -940,11 +940,11 @@ namespace DcTrnNpbBl.Panels {
                             throw new Exception($"Gagal Mengatur HH Untuk {data.SINGKATAN}");
                         }
                     }
-                    _db.MarkSuccessCommitAndClose();
+                    _db.OraPg_MsSqlLiteMarkSuccessCommitAndClose();
                     MessageBox.Show("Selesai Update", ctx, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex) {
-                    _db.MarkFailedRollbackAndClose();
+                    _db.OraPg_MsSqlLiteMarkFailedRollbackAndClose();
                     MessageBox.Show(ex.Message, ctx, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
