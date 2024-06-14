@@ -1062,7 +1062,7 @@ namespace DcTrnNpbBl.Panels {
                     decimal dcid = 0;
                     await Task.Run(async () => {
                         dcid = await _db.OraPg_ExecScalar<decimal>(
-                            "SELECT get_dcid(:dc_kode) FROM DUAL",
+                            $"SELECT get_dcid(:dc_kode) {(this._app.IsUsingPostgres ? "" : "FROM DUAL")}",
                             new List<CDbQueryParamBind> {
                                 new CDbQueryParamBind { NAME = "dc_kode", VALUE = listTransferNpb.FirstOrDefault().DC_KODE }
                             }
